@@ -102,6 +102,36 @@ void mergeSortDown(vector<int> & v, vector<taskInfo> & task) {
 		printVector(task);
 }
 
+/* 自顶向下的归并(但是题目并不是这个) */
+void mergeSortUp(vector<int> & v, vector<taskInfo> & task) {
+	if(task.size() == 0) {
+		task.resize(v.size());
+		for(int i = task.size() - 1; i >= 0; i--) {
+			task[i].begin = i;
+			task[i].end = i + 1;
+		}
+		if(DEBUG) {
+			cout << "Reset Task" << endl;
+			printVector(task);
+			cout << endl;
+		}
+	}
+	if(task.size() <= 1) return;
+	int a = 0, b = 0;
+	for(int i = 0; i + 1 < task.size(); i++) {
+		if(getTaskSize(task[i]) == getTaskSize(task[i + 1]) || task.size() == 2) {
+			a = i;
+			b = i + 1;
+			merge(v, task, a, b);
+			if(DEBUG) {
+				printVector(task);
+				printVector(v);
+				cout << endl;
+			}
+		}
+	}
+
+}
 
 int main() {
 	int n;
@@ -115,7 +145,7 @@ int main() {
 	vector<taskInfo> mergeTask;
 	for(int i = 1; i < n; i++) {
 		insertionSort(insert, 0, i);
-		mergeSortDown(merge, mergeTask);
+		mergeSortUp(merge, mergeTask);
         if(DEBUG)
 			printVector(merge);
 		if(insert == vs) {
@@ -124,7 +154,7 @@ int main() {
 			printVector(insert);
 		} else if(merge == vs) {
 			cout << "Merge Sort" << endl;
-			mergeSortDown(merge, mergeTask);
+			mergeSortUp(merge, mergeTask);
 			printVector(merge);
 		} else {
 			continue;
@@ -132,3 +162,9 @@ int main() {
 		break;
 	}
 }
+
+/*
+	Reference
+	https://www.jianshu.com/p/8342e60aae4f
+	https://www.jianshu.com/p/33cffa1ce613
+*/
