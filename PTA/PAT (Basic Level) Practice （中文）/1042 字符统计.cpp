@@ -4,23 +4,36 @@
 #include <algorithm>
 using namespace std;
 
-void countChar(string s, map<char, int> & chars) {
+void countChar(string s, int chars[]) {
 	for(int i = s.length() - 1; i >= 0; i--) {
 		if(isalpha(s[i]))
-			chars[tolower(s[i])]++;
+			chars[tolower(s[i]) - 'a']++;
 	}
 }
 
-bool cmp(pair<char, int> a, pair<char, int> b) {
-	return (a.second > b.second || (a.second == b.second && a.first < b.first));
+void printChars(const int * chars) {
+	for(int i = 0; i < 26; i++) {
+		if(chars[i] > 0) {
+			printf("%c: %d\n", 'a' + i, chars[i]);
+		}
+	}
+}
+
+int findMax(const int * chars) {
+	int max = 0;
+	for(int i = 0; i < 26; i++) {
+		if(chars[i] > chars[max])
+			max = i;
+	}
+	return max;
 }
 
 int main() {
 	string s;
 	getline(cin, s);
-	map<char, int> chars;
+	int chars[26] = {0};
 	countChar(s, chars);
-	vector< pair<char, int> > v(chars.begin(), chars.end());
-	sort(v.begin(), v.end(), cmp);
-	printf("%c %d", v[0].first, v[0].second);
+//	printChars(chars);
+	int max = findMax(chars);
+	printf("%c %d", 'a' + max, chars[max]);
 }
