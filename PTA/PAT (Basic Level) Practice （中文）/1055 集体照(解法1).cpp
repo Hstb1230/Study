@@ -42,7 +42,7 @@ int main() {
 //			cout << m << endl;
 			highest = i;
 			center = m / 2;
-			begin = i + m - 1 - ((m % 2 == 0) ? 0 : 1);
+			begin = i + m - 1 - (m % 2);
 		} else {
 			printf(" ");
 		}

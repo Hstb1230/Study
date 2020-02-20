@@ -32,7 +32,6 @@ void printPeople(vector<people> p, int K) {
 int main() {
 	int N, K;
 	cin >> N >> K;
-	if(K > N) K = N;
 	int length = N / K;
 	vector<people> p(N);
 	for(int i = 0; i < N; i++) {
