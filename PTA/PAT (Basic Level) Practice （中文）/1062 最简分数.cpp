@@ -25,26 +25,33 @@ int main() {
 	scanf("%d/%d", &n2, &m2);
 	scanf("%d", &k);
 
-	int factor1 = get_min_multiple(m1, m2) / m1;
-	int factor2 = get_min_multiple(m1, m2) / m2;
-//	printf("%d %d\n", factor1, factor2);
-
+	int factor1 = get_min_multiple(k, m1 * m2) / m1;
+	int factor2 = get_min_multiple(k, m1 * m2) / m2;
+//	int factor3 = get_min_multiple(k, m1 * m2);
+//	printf("%d %d %d\n", factor1, factor2, factor3);
+	// 化成以 K和m1*m2的最小公倍数 为分母的分数形式
 	n1 *= factor1;
-	m2 = m1 *= factor1;
 	n2 *= factor2;
+	m2 = m1 = get_min_multiple(k, m1 * m2);
+	// 因为分数1可能小于分数2, 交互
+	if(n1 > n2) {
+		int tmp = n1;
+		n1 = n2;
+		n2 = tmp;
+	}
 //	printf("%d/%d %d/%d\n", n1, m1, n2, m2);
 
 	int diff = m1 / k;
 	int t = 0;
 	int a[10000];
-	// 找最小符合条件的数
-	int first = n1 + 1;
-	for(; first < n2; first++) {
-		if(first % diff == 0) break;
-	}
-	for(int i = first; i < n2; i += diff) {
-		if(get_max_factor(i, m1) == diff) {
-			a[t++] = i / diff;
+	// 找第一个最简分数的分子
+	int first = n1 / diff + 1;
+	int end = n2 / diff + 1;
+	if(n2 % diff == 0) end--;
+//	printf("%d\n", first);
+	for(int i = first; i < end; i++) {
+		if(get_max_factor(i, k) == 1) {
+			a[t++] = i;
 		}
 	}
 	
