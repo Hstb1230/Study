@@ -4,10 +4,19 @@
 #include <map>
 using namespace std;
 
-typedef struct {
+struct question{
+	// member
 	int full_score, answer_count, true_answer_count;
 	vector<char> true_answer;
-} question;
+	// construct function
+	question() {}
+	question(int _full_score, int _answer_count, int _true_answer_count) {
+		full_score = _full_score;
+		answer_count = _answer_count;
+		true_answer_count = _true_answer_count;
+		true_answer.resize(true_answer_count);
+	}
+};
 
 typedef pair<double, int> mp;
 
@@ -37,15 +46,18 @@ int main() {
 	cin >> n >> m;
 	vector<question> q(m);
 	map<double, int> wrong;
-	for(int i = 0; i < m; i++) {
-		cin >> q[i].full_score >> q[i].answer_count >> q[i].true_answer_count;
-		q[i].true_answer.resize(q[i].true_answer_count);
-		for(int j = 0; j < q[i].true_answer_count; j++) {
-			cin >> q[i].true_answer[j];
-			wrong[(i + 1 + 0.1 * (q[i].true_answer[j] - 'a'))] = n;
+	{
+		int full_score, answer_count, true_answer_count;
+		for(int i = 0; i < m; i++) {
+			cin >> full_score >> answer_count >> true_answer_count;
+			q[i] = question(full_score, answer_count, true_answer_count);
+			for(int j = 0; j < q[i].true_answer_count; j++) {
+				cin >> q[i].true_answer[j];
+				wrong[(i + 1 + 0.1 * (q[i].true_answer[j] - 'a'))] = n;
+			}
 		}
+		// print_wrong(wrong);
 	}
-//	print_wrong(wrong);
 	
 	string all_answers;
 	const char * loc;
