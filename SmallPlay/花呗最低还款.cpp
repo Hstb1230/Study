@@ -48,6 +48,9 @@ int main()
 	while(bill > 0)
 	{
 		repay_month++;
+		// 花呗最低还款也会计算首月消费账单的利息
+		// 如上月花了1663, 但最低还款会变成169.3, 多了3.3的利息
+		// 也许是手续费, 但并不重要, 都是坑钱就对了
 		if(flag_first_month++ > 0)
 			interest = ceil(month_size[month] * interest_rate * bill, 2);
 		bill += interest;
