@@ -1,0 +1,17 @@
+Description
+===
+English
+---
+Code a linked-list program in Linux with C language.
+* Define the struct of unidirectional linked-list.
+* Create linked-list.
+* Insert node to linked-list.
+* Traverse all node in linked-list.
+
+Chinese 
+---
+在Linux下通过C语言程序设计链表应用程序
+* 定义单向链表的数据结构
+* 创建链表
+* 插入结点
+* 遍历结点等 
