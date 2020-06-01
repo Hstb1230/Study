@@ -1,12 +1,12 @@
-var canvas1 = document.getElementById("canvas1");
+var canvas1 = document.getElementById('canvas1');
 var context = canvas1.getContext('2d');
-var canvasbig = document.getElementsByClassName("canvasbig")[0];
+var canvasbig = document.getElementsByClassName('canvasbig')[0];
 //背景图片
 var bg = new Image();
-bg.src = "img/bg.jpg";
+bg.src = 'img/bg.jpg';
 //全民飞机大战标题
 var starthead = new Image();
-starthead.src = "img/starthead.png";
+starthead.src = 'img/starthead.png';
 //加载时候的狗子和文字
 var load = new Image();
 var loadnum = 1,
@@ -17,12 +17,12 @@ var loadtextblur = true,
     pointnum = 1;
 //我方战斗机
 var myplane = new Image();
-myplane.src = "img/myplane1.png";
+myplane.src = 'img/myplane1.png';
 var myplaneX = canvas1.width / 2,
     myplaneY = 730;
 //战斗机子弹
 var bullet = new Image();
-bullet.src = "img/bullet.png";
+bullet.src = 'img/bullet.png';
 var bullettime = 0,
     bulletnum = 0,
     bulletarr = [];
@@ -46,58 +46,64 @@ var myboomnum = 1,
 var enemychangearr = [];
 //boss警告
 var warning1 = new Image();
-warning1.src = "img/warning1.png"
+warning1.src = 'img/warning1.png';
 var warning2 = new Image();
-warning2.src = "img/warning2.png";
+warning2.src = 'img/warning2.png';
 var warningtime = 0,
     warningchange = 0;
 //boss出场背景
 var bossbg = new Image();
-bossbg.src = "img/bg2.jpg";
+bossbg.src = 'img/bg2.jpg';
 var boss = new Image();
-boss.src = "img/planeboss.png";
+boss.src = 'img/planeboss.png';
 //boss改变飞机速度
 var bossattacktime = 0;
 var bossattacknum = 1;
 
 var obj = {
-    gamestart: 1,
-    gameload: 0,
-    gamerun: 0,
-    gameover: 0,
-    dead: 0,
-    score: 0,
-    life: 3,
-    bgy1: -854,
-    bgy2: 0,
-    warnon: 0,
-    bosstime: 0,
-    bossattack: 0,
-    bgon: function () {
+    gamestart : 1,
+    gameload : 0,
+    gamerun : 0,
+    gameover : 0,
+    dead : 0,
+    score : 0,
+    life : 3,
+    bgy1 : -854,
+    bgy2 : 0,
+    warnon : 0,
+    bosstime : 0,
+    bossattack : 0,
+    bgon : function ()
+    {
         context.drawImage(bg, 0, this.bgy1, 520, 854);
         context.drawImage(bg, 0, this.bgy2, 520, 854);
     },
-    bgchange: function () {
+    bgchange : function ()
+    {
         this.bgy1++;
         this.bgy2++;
-        if (this.bgy1 == 0) {
+        if( this.bgy1 == 0 )
+        {
             this.bgy1 = -854;
             this.bgy2 = 0;
         }
     },
-    scoring: function () {
+    scoring : function ()
+    {
         var gradient = context.createLinearGradient(0, 0, 120, 60);
         gradient.addColorStop(0, '#ff9569');
         gradient.addColorStop(1, '#e92758');
         context.font = '30px  sans-serif';
         context.fillStyle = gradient;
-        context.fillText("SCORE:" + this.score, 10, 50);
+        context.fillText('SCORE:' + this.score, 10, 50);
     },
-    lifeing: function () {
+    lifeing : function ()
+    {
         context.font = '30px  sans-serif';
-        context.fillStyle = "#D28140";
-        context.fillText("LIFE:" + this.life, 400, 50);
-        if (obj.dead == 1 && myboomnum == 9 && obj.life > 0) {
+        context.fillStyle = '#D28140';
+        context.fillText('LIFE:' + this.life, 400, 50);
+        if( obj.dead == 1 && myboomnum == 9 && obj.life > 0 )
+        {
             obj.dead = 0;
             bullettime = 0;
             bulletnum = 0;
@@ -108,20 +114,25 @@ var obj = {
             myboomtime = 0;
             enemychangearr = [];
             myplane1boom.src = `img/myplane1boom${myboomnum}.png`;
-        } else if (obj.dead == 1 && obj.life == 0) {
+        }
+        else if( obj.dead == 1 && obj.life == 0 )
+        {
             obj.gameover = 1;
         }
     },
-    gameovering: function () {
-        if (obj.gameover == 1) {
+    gameovering : function ()
+    {
+        if( obj.gameover == 1 )
+        {
             obj.gamestart = 1;
             obj.gameover = 0;
             obj.dead = 0;
             obj.gamerun = 0;
         }
     },
-    starting: function () {
-        canvasdiv.className = "canvasdiv";
+    starting : function ()
+    {
+        canvasdiv.className = 'canvasdiv';
         obj.life = 3;
         obj.score = 0;
         loadnum = 1;
@@ -145,20 +156,23 @@ var obj = {
         bossattacktime = 0;
         bossattacknum = 1;
         obj.bossbgy1 = -2420,
-        obj.bossbgy2 = -1640,
-        obj.bossbgy3 = -860,
-        obj.bg2boss = -262,
-        obj.bosstimeblur = true,
-        obj.bossattack = 0;
+            obj.bossbgy2 = -1640,
+            obj.bossbgy3 = -860,
+            obj.bg2boss = -262,
+            obj.bosstimeblur = true,
+            obj.bossattack = 0;
         context.drawImage(starthead, 110, 200);
     },
-    loading: function () {
+    loading : function ()
+    {
         loadtime++;
         loadrect++;
-        if (loadtime == 5) {
+        if( loadtime == 5 )
+        {
             loadtime = 0;
             loadnum++;
-            if (loadnum == 10) {
+            if( loadnum == 10 )
+            {
                 loadnum = 1;
             }
             load.src = `img/load${loadnum}.png`;
@@ -175,80 +189,107 @@ var obj = {
         context.drawImage(load, loadrect + 20, 480, 102, 72);
 
     },
-    loadtext: function () {
-        if (loadtextblur == false) {
+    loadtext : function ()
+    {
+        if( loadtextblur == false )
+        {
             loadtextnum--;
-        } else if (loadtextblur == true) {
+        }
+        else if( loadtextblur == true )
+        {
             loadtextnum += 2;
         }
         context.beginPath();
         context.font = '40px  sans-serif';
         context.fillStyle = 'black';
-        context.fillText("加载中 ", 50, 450);
+        context.fillText('加载中 ', 50, 450);
         context.beginPath();
         context.font = '80px  sans-serif';
-        if (pointnum == 1) {
-            context.fillText(". ", 200, 450 - loadtextnum);
-            context.fillText(". ", 240, 450);
-            context.fillText(". ", 280, 450);
-            if (loadtextnum < 0) {
+        if( pointnum == 1 )
+        {
+            context.fillText('. ', 200, 450 - loadtextnum);
+            context.fillText('. ', 240, 450);
+            context.fillText('. ', 280, 450);
+            if( loadtextnum < 0 )
+            {
                 pointnum = 2;
                 loadtextnum = 0;
                 loadtextblur = true;
-            } else if (loadtextnum > 39) {
+            }
+            else if( loadtextnum > 39 )
+            {
                 loadtextblur = false;
             }
-        } else if (pointnum == 2) {
-            context.fillText(". ", 200, 450);
-            context.fillText(". ", 240, 450 - loadtextnum);
-            context.fillText(". ", 280, 450);
-            if (loadtextnum < 0) {
+        }
+        else if( pointnum == 2 )
+        {
+            context.fillText('. ', 200, 450);
+            context.fillText('. ', 240, 450 - loadtextnum);
+            context.fillText('. ', 280, 450);
+            if( loadtextnum < 0 )
+            {
                 pointnum = 3;
                 loadtextnum = 0;
                 loadtextblur = true;
-            } else if (loadtextnum > 39) {
+            }
+            else if( loadtextnum > 39 )
+            {
                 loadtextblur = false;
             }
-        } else if (pointnum == 3) {
-            context.fillText(". ", 200, 450);
-            context.fillText(". ", 240, 450);
-            context.fillText(". ", 280, 450 - loadtextnum);
-            if (loadtextnum < 0) {
+        }
+        else if( pointnum == 3 )
+        {
+            context.fillText('. ', 200, 450);
+            context.fillText('. ', 240, 450);
+            context.fillText('. ', 280, 450 - loadtextnum);
+            if( loadtextnum < 0 )
+            {
                 pointnum = 1;
                 loadtextnum = 0;
                 loadtextblur = true;
-            } else if (loadtextnum > 39) {
+            }
+            else if( loadtextnum > 39 )
+            {
                 loadtextblur = false;
             }
         }
         context.closePath();
     },
-    myplane: function (e) {
+    myplane : function ( e )
+    {
 
         myplaneX = e.offsetX;
         myplaneY = e.offsetY;
         context.drawImage(myplane, myplaneX - myplane.width / 2, myplaneY - myplane.height / 2);
     },
-    bulleton: function () {
+    bulleton : function ()
+    {
         bullettime++;
         var bulletX = myplaneX - bullet.width / 2;
         var bulletY = myplaneY - myplane.height / 2 - bullet.height;
         var num;
-        if (obj.bossattack == 1) {
-            num = 10
-        }else{
-            num = 20
+        if( obj.bossattack == 1 )
+        {
+            num = 10;
         }
-        if (bullettime >= num) {
+        else
+        {
+            num = 20;
+        }
+        if( bullettime >= num )
+        {
             var changearr = [bulletX, bulletY, 0];
             bulletarr.push(changearr);
             bullettime = 0;
         }
     },
-    bulletchange: function () {
+    bulletchange : function ()
+    {
         var result = [];
-        for (var i = 0; i < bulletarr.length; i++) {
-            if (bulletarr[i][1] - bulletarr[i][2] >= 0) {
+        for(var i = 0; i < bulletarr.length; i++)
+        {
+            if( bulletarr[i][1] - bulletarr[i][2] >= 0 )
+            {
                 context.drawImage(bullet, bulletarr[i][0], bulletarr[i][1] - bulletarr[i][2]);
                 bulletarr[i][2] += 4;
                 result.push(bulletarr[i]);
@@ -256,61 +297,84 @@ var obj = {
         }
         bulletarr = result;
     },
-    
-    enemy: function () {
+
+    enemy : function ()
+    {
         enemytime++;
         var enemynum = parseInt(Math.random() * 4);
-        if (obj.bossattack == 1) {
-            num = 10
-        }else{
-            num = 25
+        if( obj.bossattack == 1 )
+        {
+            num = 10;
         }
-        if (enemytime >= num) {
-            if (enemynum == 3 && Math.random() < 0.9) {
+        else
+        {
+            num = 25;
+        }
+        if( enemytime >= num )
+        {
+            if( enemynum == 3 && Math.random() < 0.9 )
+            {
                 return;
-            } else {
-                var enemylife = 1
-                if (enemynum == 3) {
-                    enemylife = 5
+            }
+            else
+            {
+                var enemylife = 1;
+                if( enemynum == 3 )
+                {
+                    enemylife = 5;
                 }
-                var changearr = [Math.random() * 520 - enemyall[enemynum].width / 2, -enemyall[enemynum].height, 0, enemynum, enemylife];
+                var changearr = [
+                    Math.random() * 520 - enemyall[enemynum].width / 2, -enemyall[enemynum].height, 0, enemynum,
+                    enemylife,
+                ];
                 enemyarr.push(changearr);
                 enemytime = 0;
             }
         }
     },
-    enemychange: function () {
+    enemychange : function ()
+    {
         var result = [];
-        if (obj.bossattack == 1) {
+        if( obj.bossattack == 1 )
+        {
             bossattacktime++;
-            if (bossattacktime == 80) {
+            if( bossattacktime == 80 )
+            {
                 bossattacknum += 0.05;
                 bossattacktime = 0;
             }
         }
-        for (let i = 0; i < enemyarr.length; i++) {
-            if (enemyarr[i][1] + enemyarr[i][2] <= canvas1.height) {
+        for(let i = 0; i < enemyarr.length; i++)
+        {
+            if( enemyarr[i][1] + enemyarr[i][2] <= canvas1.height )
+            {
                 context.drawImage(enemyall[enemyarr[i][3]], enemyarr[i][0], enemyarr[i][1] + enemyarr[i][2]);
-                if (enemyall[enemyarr[i][3]] == enemy4) {
-                    enemyarr[i][2] += 1.5* bossattacknum;
-                } else {
-                    enemyarr[i][2] += 2* bossattacknum;
+                if( enemyall[enemyarr[i][3]] == enemy4 )
+                {
+                    enemyarr[i][2] += 1.5 * bossattacknum;
+                }
+                else
+                {
+                    enemyarr[i][2] += 2 * bossattacknum;
                 }
                 result.push(enemyarr[i]);
             }
         }
         enemyarr = result;
     },
-    myplaneboom: function () {
+    myplaneboom : function ()
+    {
         obj.dead = 1;
         myboomtime++;
-        if (myboomtime >= 10) {
+        if( myboomtime >= 10 )
+        {
             myplane1boom.src = `img/myplane1boom${myboomnum}.png`;
             myboomnum++;
             myboomtime = 0;
         }
         context.drawImage(myplane1boom, myplaneX - myplane.width / 2, myplaneY - myplane.height / 2);
-        if (myboomnum == 9) {
+        if( myboomnum == 9 )
+        {
             obj.life -= 1;
             bulletarr = [];
             enemyarr = [];
@@ -318,62 +382,94 @@ var obj = {
             myplaneY = 750;
         }
     },
-    myplaneisbroke: function () {
-        for (let i = 0; i < enemyarr.length; i++) {
-            if (enemyarr[i][0] < myplaneX - myplane.width / 2 && enemyarr[i][1] + enemyarr[i][2] < myplaneY - myplane.height / 2 + myplane.height) {
-                if (enemyarr[i][0] + enemyall[enemyarr[i][3]].width > myplaneX - myplane.width / 2 && enemyarr[i][1] + enemyarr[i][2] + enemyall[enemyarr[i][3]].height > myplaneY - myplane.height / 2) {
+    myplaneisbroke : function ()
+    {
+        for(let i = 0; i < enemyarr.length; i++)
+        {
+            if( enemyarr[i][0] < myplaneX - myplane.width / 2 && enemyarr[i][1] + enemyarr[i][2] < myplaneY - myplane.height / 2 + myplane.height )
+            {
+                if( enemyarr[i][0] + enemyall[enemyarr[i][3]].width > myplaneX - myplane.width / 2 && enemyarr[i][1] + enemyarr[i][2] + enemyall[enemyarr[i][3]].height > myplaneY - myplane.height / 2 )
+                {
                     obj.myplaneboom();
                 }
-            } else if (enemyarr[i][0] > myplaneX - myplane.width / 2 && enemyarr[i][1] + enemyarr[i][2] < myplaneY - myplane.height / 2 + myplane.height) {
-                if (enemyarr[i][0] < myplaneX - myplane.width / 2 + myplane.width && enemyarr[i][1] + enemyarr[i][2] + enemyall[enemyarr[i][3]].height > myplaneY - myplane.height / 2) {
+            }
+            else if( enemyarr[i][0] > myplaneX - myplane.width / 2 && enemyarr[i][1] + enemyarr[i][2] < myplaneY - myplane.height / 2 + myplane.height )
+            {
+                if( enemyarr[i][0] < myplaneX - myplane.width / 2 + myplane.width && enemyarr[i][1] + enemyarr[i][2] + enemyall[enemyarr[i][3]].height > myplaneY - myplane.height / 2 )
+                {
                     obj.myplaneboom();
                 }
             }
         }
     },
-    enemyboom: function () {
+    enemyboom : function ()
+    {
         var result = [];
-        for (let i = 0; i < enemychangearr.length; i++) {
+        for(let i = 0; i < enemychangearr.length; i++)
+        {
             enemychangearr[i][3]++;
-            if (enemychangearr[i][3] >= 10) {
+            if( enemychangearr[i][3] >= 10 )
+            {
                 enemychangearr[i][5].src = `img/enemy${enemychangearr[i][2]}boom${enemychangearr[i][4]}.png`;
                 enemychangearr[i][4]++;
                 enemychangearr[i][3] = 0;
             }
             context.drawImage(enemychangearr[i][5], enemychangearr[i][0], enemychangearr[i][1]);
-            if (enemychangearr[i][4] < 6) {
+            if( enemychangearr[i][4] < 6 )
+            {
                 result.push(enemychangearr[i]);
             }
-        };
+        }
+        ;
         enemychangearr = result;
     },
-    enemyisbroke: function () {
-        for (let i = 0; i < bulletarr.length; i++) {
-            for (let x = 0; x < enemyarr.length; x++) {
-                if (bulletarr[i][0] < enemyarr[x][0] && bulletarr[i][1] - bulletarr[i][2] < enemyarr[x][1] + enemyarr[x][2] + enemyall[enemyarr[x][3]].height && bulletarr[i][1] - bulletarr[i][2] > enemyarr[x][1] + enemyarr[x][2]) {
-                    if (bulletarr[i][0] + bullet.width > enemyarr[x][0]) {
+    enemyisbroke : function ()
+    {
+        for(let i = 0; i < bulletarr.length; i++)
+        {
+            for(let x = 0; x < enemyarr.length; x++)
+            {
+                if( bulletarr[i][0] < enemyarr[x][0] && bulletarr[i][1] - bulletarr[i][2] < enemyarr[x][1] + enemyarr[x][2] + enemyall[enemyarr[x][3]].height && bulletarr[i][1] - bulletarr[i][2] > enemyarr[x][1] + enemyarr[x][2] )
+                {
+                    if( bulletarr[i][0] + bullet.width > enemyarr[x][0] )
+                    {
                         enemyarr[x][4]--;
-                        if (enemyarr[x][4] == 0) {
+                        if( enemyarr[x][4] == 0 )
+                        {
                             var enemyboom = new Image();
-                            enemychangearr.push([enemyarr[x][0], enemyarr[x][1] + enemyarr[x][2], enemyarr[x][3] + 1, 0, 1, enemyboom]);
-                            if (enemyarr[x][3] == 3) {
+                            enemychangearr.push([
+                                enemyarr[x][0], enemyarr[x][1] + enemyarr[x][2], enemyarr[x][3] + 1, 0, 1, enemyboom,
+                            ]);
+                            if( enemyarr[x][3] == 3 )
+                            {
                                 obj.score += 10;
-                            } else {
+                            }
+                            else
+                            {
                                 obj.score += 2;
                             }
                             enemyarr.splice(x, 1);
                         }
                         bulletarr.splice(i, 1);
                     }
-                } else if (bulletarr[i][0] > enemyarr[x][0] && bulletarr[i][1] - bulletarr[i][2] < enemyarr[x][1] + enemyarr[x][2] + enemyall[enemyarr[x][3]].height && bulletarr[i][1] - bulletarr[i][2] > enemyarr[x][1] + enemyarr[x][2]) {
-                    if (bulletarr[i][0] < enemyarr[x][0] + enemyall[enemyarr[x][3]].width) {
+                }
+                else if( bulletarr[i][0] > enemyarr[x][0] && bulletarr[i][1] - bulletarr[i][2] < enemyarr[x][1] + enemyarr[x][2] + enemyall[enemyarr[x][3]].height && bulletarr[i][1] - bulletarr[i][2] > enemyarr[x][1] + enemyarr[x][2] )
+                {
+                    if( bulletarr[i][0] < enemyarr[x][0] + enemyall[enemyarr[x][3]].width )
+                    {
                         enemyarr[x][4]--;
-                        if (enemyarr[x][4] == 0) {
+                        if( enemyarr[x][4] == 0 )
+                        {
                             var enemyboom = new Image();
-                            enemychangearr.push([enemyarr[x][0], enemyarr[x][1] + enemyarr[x][2], enemyarr[x][3] + 1, 0, 1, enemyboom]);
-                            if (enemyarr[x][3] == 3) {
+                            enemychangearr.push([
+                                enemyarr[x][0], enemyarr[x][1] + enemyarr[x][2], enemyarr[x][3] + 1, 0, 1, enemyboom,
+                            ]);
+                            if( enemyarr[x][3] == 3 )
+                            {
                                 obj.score += 10;
-                            } else {
+                            }
+                            else
+                            {
                                 obj.score += 2;
                             }
                             enemyarr.splice(x, 1);
@@ -384,46 +480,56 @@ var obj = {
             }
         }
     },
-    warning: function () {
+    warning : function ()
+    {
         warningchange++;
         warningtime++;
-        if (warningtime >= 20) {
+        if( warningtime >= 20 )
+        {
             context.drawImage(warning1, 150, 200);
             context.drawImage(warning2, 190, 400);
-            if (warningtime >= 80) {
+            if( warningtime >= 80 )
+            {
                 warningtime = 0;
             }
         }
-        if (warningchange == 500) {
+        if( warningchange == 500 )
+        {
             obj.warnon = 0;
             obj.bosstime = 1;
         }
 
     },
-    bossbgy1: -2420,
-    bossbgy2: -1640,
-    bossbgy3: -860,
-    bg2boss: -262,
-    bosstimeblur: true,
-    bossbgon: function () {
-        context.drawImage(bossbg, 0, this.bossbgy1)
+    bossbgy1 : -2420,
+    bossbgy2 : -1640,
+    bossbgy3 : -860,
+    bg2boss : -262,
+    bosstimeblur : true,
+    bossbgon : function ()
+    {
+        context.drawImage(bossbg, 0, this.bossbgy1);
         context.drawImage(bossbg, 0, this.bossbgy2);
         context.drawImage(bossbg, 0, this.bossbgy3);
-        if (obj.bosstime == 1) {
+        if( obj.bosstime == 1 )
+        {
             context.drawImage(boss, 0, this.bg2boss);
         }
 
     },
-    bossbgchange: function () {
+    bossbgchange : function ()
+    {
         this.bossbgy1 += 2;
         this.bossbgy2 += 2;
         this.bossbgy3 += 2;
         this.bg2boss += 2;
-        if (this.bg2boss == 800) {
+        if( this.bg2boss == 800 )
+        {
             this.bosstime = 0;
             this.bossattack = 1;
-        };
-        if (this.bossbgy3 == 800) {
+        }
+        ;
+        if( this.bossbgy3 == 800 )
+        {
             this.bossbgy1 = -1540;
             this.bossbgy2 = -760;
             this.bossbgy3 = 20;
@@ -451,49 +557,61 @@ var obj = {
     // },
 
 
-    gua: function () {
+    gua : function ()
+    {
         enemychangearr = [];
-        for (let x = 0; x < enemyarr.length; x++) {
+        for(let x = 0; x < enemyarr.length; x++)
+        {
             var enemyboom = new Image();
             enemychangearr.push([enemyarr[x][0], enemyarr[x][1] + enemyarr[x][2], enemyarr[x][3] + 1, 0, 1, enemyboom]);
         }
         enemyarr = [];
-    }
-}
+    },
+};
 
-setInterval(function () {
+setInterval(function ()
+{
     obj.bgon();
     obj.bgchange();
-    if (obj.gamestart == 1) {
+    if( obj.gamestart == 1 )
+    {
         obj.starting();
     }
-    if (obj.gameload == 1) {
-        if (loadrect >= 397) {
+    if( obj.gameload == 1 )
+    {
+        if( loadrect >= 397 )
+        {
             obj.gameload = 0;
             obj.gamerun = 1;
         }
         obj.loading();
         obj.loadtext();
     }
-    if (obj.gamerun == 1) {
-        if (obj.score >= 300 && obj.bosstimeblur == true) {
+    if( obj.gamerun == 1 )
+    {
+        if( obj.score >= 300 && obj.bosstimeblur == true )
+        {
             obj.warnon = 1;
             obj.gua();
             obj.bosstimeblur = false;
         }
-        if (obj.bosstime == 1 || obj.bossattack == 1) {
+        if( obj.bosstime == 1 || obj.bossattack == 1 )
+        {
             obj.bossbgon();
             obj.bossbgchange();
         }
-        if (obj.dead == 0) {
+        if( obj.dead == 0 )
+        {
             context.drawImage(myplane, myplaneX - myplane.width / 2, myplaneY - myplane.height / 2);
-            if (obj.bosstime == 0 && obj.warnon == 0) {
+            if( obj.bosstime == 0 && obj.warnon == 0 )
+            {
                 obj.enemy();
                 obj.enemychange();
             }
             obj.bulleton();
             obj.bulletchange();
-            if (obj.warnon == 1) {
+            if( obj.warnon == 1 )
+            {
                 obj.warning();
             }
         }
@@ -505,25 +623,33 @@ setInterval(function () {
         obj.scoring();
     }
 
-}, 10)
+}, 10);
 
-var canvasdiv = document.getElementsByClassName("canvasdiv")[0];
-canvasdiv.onclick = function () {
-    canvasdiv.className = "canvasdiv none";
+var canvasdiv = document.getElementsByClassName('canvasdiv')[0];
+canvasdiv.onclick = function ()
+{
+    canvasdiv.className = 'canvasdiv none';
     obj.gamestart = 0;
     obj.gameload = 1;
-}
+};
 
-canvas1.onmousemove = function (e) {
-    if (obj.gamerun == 1 && obj.dead == 0) {
+canvas1.onmousemove = function ( e )
+{
+    if( obj.gamerun == 1 && obj.dead == 0 )
+    {
         obj.myplane(e);
-        this.style.cursor = "none";
-    } else {
-        this.style.cursor = "";
+        this.style.cursor = 'none';
     }
-}
-document.onkeydown = function (event) {
-    if (event.keyCode == 8 && obj.gamerun == 1) {
+    else
+    {
+        this.style.cursor = '';
+    }
+};
+document.onkeydown = function ( event )
+{
+    if( event.keyCode == 8 && obj.gamerun == 1 )
+    {
         obj.gua();
-    };
-}
+    }
+    ;
+};
