@@ -7,13 +7,14 @@ using namespace std;
 
 void qSort(vector<int> & v)
 {
-	if(v.size() < 2)
+	int size = v.size();
+	if(size < 2)
 		return;
-	int referIndex = 1;     		// 基准值下标
+	int referIndex = size / 2;		// 基准值下标
 	int referValue = v[referIndex]; // 基准值
 	vector<int> vSmall(0);
 	vector<int> vLarge(0);
-	for(int i = 0; i < v.size(); i++)
+	for(int i = 0; i < size; i++)
 	{
 		if(i == referIndex)
 			continue;
@@ -39,8 +40,8 @@ void printArray(vector<int> v)
 
 int main()
 {
-	int a[] = {1, 33, 4, 2, 5};
-	vector<int> v(a, a + 5);
+	int a[] = {1, 33, 4, 2, 5, 6};
+	vector<int> v(a, a + 6);
 	qSort(v);
 	printArray(v);
 }
