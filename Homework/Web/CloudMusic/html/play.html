@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playing</title>
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/play.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 唱针 -->
+        <div class="needle"></div>
+        <!-- 唱片 -->
+        <div class="disc-container">
+            <audio preload="auto"></audio>
+            <div class="disc whirl paused">
+                <div class="play-btn"></div>            
+                <div class="album">
+                    <img src="" alt="">
+                </div>
+            </div>
+            <h2 class="song-title">
+                <span class="song-name"></span>
+                <span class="title-filter">-</span>
+                <span class="singer"></span>
+            </h2>
+            <div class="lyric-scroll">
+                <div class="lyric"></div>
+            </div>
+            <div class="range-container">
+                <input type="range" min="0" max="100" value="0" class="custom-range">
+            </div>
+        </div>
+        <div class="background-blur">
+            <img src="" alt="">
+        </div>
+    </div>
+</body>
+<script src="/node_modules/axios/dist/axios.js"></script>
+<script src="/node_modules/lyric-parser/dist/lyric.js"></script>
+<script src="/js/play.js"></script>
+</html>
