@@ -9,8 +9,8 @@ void qSort(vector<int> & v)
 {
 	if(v.size() < 2)
 		return;
-	int referIndex = 0;
-	int referValue = v[referIndex];
+	int referIndex = 1;     		// 基准值下标
+	int referValue = v[referIndex]; // 基准值
 	vector<int> vSmall(0);
 	vector<int> vLarge(0);
 	for(int i = 0; i < v.size(); i++)
