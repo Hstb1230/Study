@@ -1,3 +1,6 @@
+/*
+    Try to calculate the array size with "divide and conquer" instead of cycle.
+*/
 #include <iostream>
 #include <vector>
 using namespace std;
