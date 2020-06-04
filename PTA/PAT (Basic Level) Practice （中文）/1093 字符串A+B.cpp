@@ -1,21 +1,17 @@
 #include <iostream>
-#include <map>
 using namespace std;
 
 int main()
 {
-	map<char, bool> m;
-	string s;
-	for(int k = 0; k < 2; k++)
+	char hash[255] = {0};
+	string s1, s2, s;
+	getline(cin, s1);
+	getline(cin, s2);
+	s = s1 + s2;
+	int len = s.length();
+	for(int i = 0; i < len; i++)
 	{
-		getline(cin, s);
-		int len = s.length();
-		for(int i = 0; i < len; i++)
-		{
-			if(m.count(s[i]) > 0)
-				continue;
-			putchar(s[i]);
-			m[s[i]] = true;
-		}
+		if(hash[s[i]] == 0) putchar(s[i]);
+		hash[s[i]] = 1;
 	}
 }
