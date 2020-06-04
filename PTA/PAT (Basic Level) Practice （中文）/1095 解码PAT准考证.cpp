@@ -1,120 +1,74 @@
 #include <iostream>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <algorithm>
 using namespace std;
 
 struct e
 {
-	string id;
-	int score;
+	string t;
+	int value;
 };
 
-bool cmp(e a, e b)
+bool cmp(e & a, e & b)
 {
-	if(a.score == b.score)
-		return a.id < b.id;
-	return a.score > b.score;
-}
-
-bool cmp2(pair<int, int> a, pair<int, int> b)
-{
-	if(a.second == b.second)
-		return a.first < b.first;
-	return a.second > b.second;
-}
-
-int strToInt(const string & str, int start, int len)
-{
-	int num = 0;
-	for(int i = start; len--; i++)
-	{
-		num *= 10;
-		num += str[i] - '0';
-	}
-	return num;
+	return a.value != b.value ? a.value > b.value : a.t < b.t;
 }
 
 int main()
 {
-	int n, m;
+	int n, m, type;
 	cin >> n >> m;
+
 	vector<e> v(n);
 	for(int i = 0; i < n; i++)
-		cin >> v[i].id >> v[i].score;
+		cin >> v[i].t >> v[i].value;
 	sort(v.begin(), v.end(), cmp);
-	int type;
-	bool isNA;
+
 	for(int i = 1; i <= m; i++)
 	{
-		isNA = true;
-		cin >> type;
-		printf("Case %d: %d ", i, type);
-		switch(type)
+		string param;
+		cin >> type >> param;
+		printf("Case %d: %d %s\n", i, type, param.c_str());
+
+		vector<e> ans;
+		int sum = 0, cnt = 0;
+		if(type == 1)
 		{
-			case 1:
+			for(int j = 0; j < n; j++)
 			{
-				char c;
-				cin >> c;
-				printf("%c\n", c);
-				for(int j = 0; j < n; j++)
-				{
-					if(v[j].id[0] == c)
-					{
-						isNA = false;
-						printf("%s %d\n", v[j].id.c_str(), v[j].score);
-					}
-				}
-				if(isNA)
-				{
-					printf("NA\n");
-				}
-				break;
-			}
-			case 2:
-			{
-				string c;
-				cin >> c;
-				printf("%s\n", c.c_str());
-				int sum = 0, count = 0;
-				for(int j = 0; j < n; j++)
-				{
-					if(v[j].id.substr(1, 3) == c)
-					{
-						isNA = false;
-						count++;
-						sum += v[j].score;
-					}
-				}
-				if(isNA)
-					printf("NA\n");
-				else
-					printf("%d %d\n", count, sum);
-				break;
-			}
-			case 3:
-			{
-				string date;
-				cin >> date;
-				printf("%s\n", date.c_str());
-				map<int, int> m;
-				for(int j = 0; j < n; j++)
-				{
-					if(v[j].id.substr(4, 6) == date)
-						m[strToInt(v[j].id, 1, 3)] += 1;
-				}
-				if(m.size() == 0)
-					printf("NA\n");
-				else
-				{
-					vector< pair<int, int> > mp(m.begin(), m.end());
-					sort(mp.begin(), mp.end(), cmp2);
-					int len = mp.size();
-					for(int i = 0; i < len; i++)
-						printf("%d %d\n", mp[i].first, mp[i].second);
-				}
-				break;
+				if(v[j].t[0] == param[0])
+					ans.push_back({ v[j].t, v[j].value });
 			}
 		}
+		else if(type == 2)
+		{
+			for(int j = 0; j < n; j++)
+			{
+				if(v[j].t.substr(1, 3) == param)
+				{
+					cnt++;
+					sum += v[j].value;
+				}
+			}
+			if(cnt > 0)
+				printf("%d %d\n", cnt, sum);
+		}
+		else if(type == 3)
+		{
+			unordered_map<string, int> m;
+			for(int j = 0; j < n; j++)
+			{
+				if(v[j].t.substr(4, 6) == param)
+					m[v[j].t.substr(1, 3)] += 1;
+			}
+			for(auto it : m)
+				ans.push_back({ it.first, it.second });
+		}
+		sort(ans.begin(), ans.end(), cmp);
+		for(auto it : ans)
+			printf("%s %d\n", it.t.c_str(), it.value);
+		if((ans.size() == 0 && type != 2) || (type == 2 && cnt == 0))
+			printf("NA\n");
 	}
 }
