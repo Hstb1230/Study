@@ -42,6 +42,7 @@ input[type="radio"]
     font-weight: bold;
 }
 
+
 #tab-recommend:checked ~ .content > .inner 
 {
     margin-left: 0%;
@@ -55,6 +56,15 @@ input[type="radio"]
 #tab-search:checked ~ .content > .inner 
 {
     margin-left: -200%;
+}
+
+
+#tab-recommend:checked ~ .content > .inner > .screen:nth-child(1),
+#tab-hot:checked ~ .content > .inner > .screen:nth-child(2),
+#tab-search:checked ~ .content > .inner > .screen:nth-child(3)
+{
+    /* display: block !important; */
+    height: auto;
 }
 
 .tab
@@ -82,13 +92,16 @@ input[type="radio"]
 .content > .inner
 {
     width: 300%;
-    transition: margin-left 0.5s ease-in-out;
+    transition: margin-left 0.5s ease-in-out, height 10s ease-in-out;
+    /* transition: display 5s ease-in-out; */
 }
 
 .inner > .screen
 {
     width: 33.3%;
     float: left;
+    /* display: none; */
+    height: 600px;
 }
 
 /* 推荐歌单 */
@@ -104,11 +117,19 @@ input[type="radio"]
     width: 33%;
     margin-bottom: 15px;
 }
-.rec-song > ul > li > p
+
+.rec-song a
+{
+    color: #333;
+    /* text-decoration: none; */
+}
+
+.rec-song p
 {
     text-align: center;
-    font-size: 13px;
+    font-size: 14px;
     overflow: hidden;
+    margin: 3px 0;
 }
 
 .rec-img

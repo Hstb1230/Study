@@ -1,0 +1,126 @@
+@import 'icon.css';
+
+header
+{
+    position: relative;
+}
+
+.info
+{
+    width: 100%;
+    height: 210px;
+    display: flex;
+    position: absolute;
+    z-index: 2;
+}
+
+.info > .cover
+{
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cover-img
+{
+    position: relative;
+    width: 80%;
+}
+
+.cover-img:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 21px;
+    z-index: 2;
+    background-image: -webkit-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,.2));
+    background-image: linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.2));
+}
+
+.cover-img > img
+{
+    width: 100%;
+}
+
+.info > .title-container
+{
+    flex: 3;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    width: 50%;
+}
+
+.title
+{
+    width: 100%;
+}
+
+.title > h3
+{
+    color: white;
+    font-weight: normal;
+}
+
+.author
+{
+    margin: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 
+.avatar,
+.avatar ~ p
+{
+    display: inline-block;
+    vertical-align: middle;
+}
+ */
+
+.avatar
+{
+    width: 30px;
+    height: 30px;
+    position: relative;
+}
+
+.avatar ~ p
+{
+    flex: 1;
+    margin-left: 10px;
+    color: white;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.avatar > img
+{
+    border-radius: 50%;
+    overflow: hidden;
+    width: 100%;
+}
+
+/* 毛玻璃背景 */
+.bg-blur
+{
+    width: 100%;
+    height: 210px;
+    position: absolute;
+    z-index: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bg-blur > img
+{
+    width: 120%;
+    filter: blur(25px)  brightness(0.7);
+}
