@@ -20,9 +20,10 @@ let load = new Image();
 let loadSeq = 0;
 // 加载进度
 let loadRect = 1;
-let loadtextblur = true,
-    loadtextnum = -1,
-    pointnum = 1;
+
+let loadTextBlur = true;
+let loadTextNum = -1;
+let pointNum = 1;
 
 //我方战斗机
 let myplane = new Image();
@@ -70,6 +71,9 @@ let bossattacktime = 0;
 let bossattacknum = 1;
 
 let game = {
+    // 游戏状态
+    state: 'running',
+
     gamestart : 1,
     gameload : 0,
     gamerun : 0,
@@ -147,9 +151,9 @@ let game = {
         loadSeq = 1;
         loadtime = 0;
         loadRect = 1;
-        loadtextblur = true;
-        loadtextnum = -1;
-        pointnum = 1;
+        loadTextBlur = true;
+        loadTextNum = -1;
+        pointNum = 1;
         myplaneX = view.width / 2;
         myplaneY = 730;
         bullettime = 0;
@@ -192,15 +196,15 @@ let game = {
         context.drawImage(load, loadRect + 20, 480, 102, 72);
 
     },
-    loadtext : function ()
+    loadText : function ()
     {
-        if( loadtextblur == false )
+        if( loadTextBlur == false )
         {
-            loadtextnum--;
+            loadTextNum--;
         }
-        else if( loadtextblur == true )
+        else if( loadTextBlur == true )
         {
-            loadtextnum += 2;
+            loadTextNum += 2;
         }
         context.beginPath();
         context.font = '40px  sans-serif';
@@ -208,52 +212,52 @@ let game = {
         context.fillText('加载中 ', 50, 450);
         context.beginPath();
         context.font = '80px  sans-serif';
-        if( pointnum == 1 )
+        if( pointNum == 1 )
         {
-            context.fillText('. ', 200, 450 - loadtextnum);
+            context.fillText('. ', 200, 450 - loadTextNum);
             context.fillText('. ', 240, 450);
             context.fillText('. ', 280, 450);
-            if( loadtextnum < 0 )
+            if( loadTextNum < 0 )
             {
-                pointnum = 2;
-                loadtextnum = 0;
-                loadtextblur = true;
+                pointNum = 2;
+                loadTextNum = 0;
+                loadTextBlur = true;
             }
-            else if( loadtextnum > 39 )
+            else if( loadTextNum > 39 )
             {
-                loadtextblur = false;
+                loadTextBlur = false;
             }
         }
-        else if( pointnum == 2 )
+        else if( pointNum == 2 )
         {
             context.fillText('. ', 200, 450);
-            context.fillText('. ', 240, 450 - loadtextnum);
+            context.fillText('. ', 240, 450 - loadTextNum);
             context.fillText('. ', 280, 450);
-            if( loadtextnum < 0 )
+            if( loadTextNum < 0 )
             {
-                pointnum = 3;
-                loadtextnum = 0;
-                loadtextblur = true;
+                pointNum = 3;
+                loadTextNum = 0;
+                loadTextBlur = true;
             }
-            else if( loadtextnum > 39 )
+            else if( loadTextNum > 39 )
             {
-                loadtextblur = false;
+                loadTextBlur = false;
             }
         }
-        else if( pointnum == 3 )
+        else if( pointNum == 3 )
         {
             context.fillText('. ', 200, 450);
             context.fillText('. ', 240, 450);
-            context.fillText('. ', 280, 450 - loadtextnum);
-            if( loadtextnum < 0 )
+            context.fillText('. ', 280, 450 - loadTextNum);
+            if( loadTextNum < 0 )
             {
-                pointnum = 1;
-                loadtextnum = 0;
-                loadtextblur = true;
+                pointNum = 1;
+                loadTextNum = 0;
+                loadTextBlur = true;
             }
-            else if( loadtextnum > 39 )
+            else if( loadTextNum > 39 )
             {
-                loadtextblur = false;
+                loadTextBlur = false;
             }
         }
         context.closePath();
@@ -569,6 +573,10 @@ let game = {
 
 setInterval(function ()
 {
+    if(game.state === 'pause')
+    {
+        return;
+    }
     game.bgon();
     game.bgchange();
     if( game.gamestart == 1 )
@@ -583,7 +591,7 @@ setInterval(function ()
             game.gamerun = 1;
         }
         game.loading();
-        game.loadtext();
+        game.loadText();
     }
     if( game.gamerun == 1 )
     {
@@ -634,7 +642,7 @@ startBtn.onclick = function ()
 
 view.onmousemove = function ( e )
 {
-    if( game.gamerun == 1 && game.dead == 0 )
+    if(game.state === 'running' && game.gamerun == 1 && game.dead == 0 )
     {
         game.myplane(e);
         this.style.cursor = 'none';
@@ -645,11 +653,16 @@ view.onmousemove = function ( e )
     }
 };
 
-document.onkeydown = function ( event )
+document.onkeydown = function ( e )
 {
-    if( event.keyCode == 8 && game.gamerun == 1 )
+    if(e.key === 'Escape' && game.state === 'running')
     {
+        // 暂停游戏
+        game.state = 'pause';
+    }
+    if( e.key === 'Backspace' && game.gamerun == 1 )
+    {
+        // 清除敌机（调试）
         game.gua();
     }
-
 };
