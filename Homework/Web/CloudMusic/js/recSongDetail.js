@@ -28,6 +28,14 @@ function getPlaylistComment()
     return axios.get(`${domain}/comment/playlist?id=${id}`)
 }
 
+function $(e) {
+    return document.querySelector(e);
+}
+
+function $make(e) {
+    return document.createElement(e);
+}
+
 axios.all( [ getPlaylistDetail(), getPlaylistComment() ] )
 .then( axios.spread(
     (deatil, comment) => {
@@ -56,5 +64,33 @@ axios.all( [ getPlaylistDetail(), getPlaylistComment() ] )
         // 歌单作者的昵称和头像
         authorName.innerText = deatil.data.playlist.creator.nickname;
         authorAvatar.src = deatil.data.playlist.creator.avatarUrl;
+
+        // 设置标签
+        let tag = $('.intro_title');
+        deatil.data.playlist.tags.forEach(t => {
+            span = $make('span');
+            span.innerText = t;
+            tag.append(span);
+        });
+
+        // 设置介绍
+        let intro_content = $('.intro_content');
+        (deatil.data.playlist.description.split('\n')).forEach(s => {
+            span = $make('span');
+            if(s.length == 0)
+                s = '&nbsp;';
+            span.innerHTML = s;
+            intro_content.append(span);
+        });
+        if(intro_content.children.length > 5)
+        {
+            span = $make('span');
+            span.innerText = '...';
+            intro_content.insertBefore(span, $('.intro_content > span:nth-child(5)'));
+        }
+        else
+        {
+            $('.intro_content > icon').style.display = 'none';
+        }
     }
 ) )

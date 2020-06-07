@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>歌单信息</title>
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/recSongDetail.css">
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
 </head>
 <body>
     <header>
@@ -34,6 +35,19 @@
             <img src="" alt="">
         </div>
     </header>
+    
+    <input type="checkbox" id="intro_expand">
+    <label class="inner" for="intro_expand">
+        <div class="intro">
+            <div class="intro_title">
+                标签：
+            </div>
+            <div class="intro_content">
+                <icon class="unfold"></icon>
+                <span>介绍：</span>
+            </div>
+        </div>
+    </label>
 </body>
 <script src="/node_modules/axios/dist/axios.js"></script>
 <script src="/js/recSongDetail.js"></script>

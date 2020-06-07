@@ -48,3 +48,16 @@
 {
     background-position: -40px 0;
 }
+
+.unfold {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    z-index: 3;
+    width: 15px;
+    height: 15px;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: 12px auto;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAANCAQAAAAZZWZbAAAAkElEQVR4AY2RtQEDMQxFX+D4RsgA6cN4XGr/cQJyEzD9yvCeZIAVWxbEJKNhDQ3CiUUE3iE0UNAjnFniS674nVQnqlw8iiHuJN/+hQRbzBluJP8tryQWfLAXy2j/61Aa3H7clOb7pJSMFtyipABUip/9T55yR2hIqZnifihRpVX8aMGtyg1BODAnMglHdnb8CYQbEwGgBxiKAAAAAElFTkSuQmCC);
+}
