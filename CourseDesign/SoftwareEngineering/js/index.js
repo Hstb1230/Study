@@ -16,8 +16,8 @@ logo.src = 'img/logo.png';
 
 //加载时候的狗子和文字
 let load = new Image();
-let loadnum = 1;
-let loadtime = 0;
+// 加载图片的序号
+let loadSeq = 0;
 // 加载进度
 let loadRect = 1;
 let loadtextblur = true,
@@ -144,7 +144,7 @@ let game = {
         startBtn.classList.remove('none');
         game.life = 3;
         game.score = 0;
-        loadnum = 1;
+        loadSeq = 1;
         loadtime = 0;
         loadRect = 1;
         loadtextblur = true;
@@ -174,17 +174,11 @@ let game = {
     },
     loading : function ()
     {
-        loadtime++;
         loadRect++;
-        if( loadtime == 5 )
+        if( loadRect % 5 === 0)
         {
-            loadtime = 0;
-            loadnum++;
-            if( loadnum == 10 )
-            {
-                loadnum = 1;
-            }
-            load.src = `img/load${loadnum}.png`;
+            loadSeq = (loadSeq + 1) % 9;
+            load.src = `img/loading/${loadSeq}.png`;
         }
         context.beginPath();
         context.fillStyle = 'white';
@@ -629,6 +623,7 @@ setInterval(function ()
 
 }, 10);
 
+// 开始按钮
 let startBtn = $('.startBtn');
 startBtn.onclick = function ()
 {
