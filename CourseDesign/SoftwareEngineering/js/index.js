@@ -89,26 +89,24 @@ let game = {
     dead : 0,
     score : 0,
     life : 3,
-    bgy1 : -854,
-    bgy2 : 0,
     warnon : 0,
     bosstime : 0,
     bossattack : 0,
-    bgon : function ()
+
+    bgY : -854,
+    // 移动背景
+    bgChange : function ()
     {
-        view.drawImage(bg, 0, this.bgy1, 520, 854);
-        view.drawImage(bg, 0, this.bgy2, 520, 854);
-    },
-    bgchange : function ()
-    {
-        this.bgy1++;
-        this.bgy2++;
-        if( this.bgy1 == 0 )
+        // 渲染两次背景，进行拼接
+        view.drawImage(bg, 0, this.bgY, 520, 854);
+        view.drawImage(bg, 0, this.bgY + 854, 520, 854);
+        this.bgY++;
+        if( this.bgY === 0 )
         {
-            this.bgy1 = -854;
-            this.bgy2 = 0;
+            this.bgY = -854;
         }
     },
+
     scoring : function ()
     {
         let gradient = view.createLinearGradient(0, 0, 120, 60);
@@ -561,8 +559,7 @@ setInterval(function ()
     {
         return;
     }
-    game.bgon();
-    game.bgchange();
+    game.bgChange();
     if( game.gamestart == 1 )
     {
         game.starting();
