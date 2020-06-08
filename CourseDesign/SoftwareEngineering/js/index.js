@@ -137,8 +137,8 @@ let warning1 = new Image();
 warning1.src = 'img/warning1.png';
 let warning2 = new Image();
 warning2.src = 'img/warning2.png';
-let warningtime = 0,
-    warningchange = 0;
+let warningTime = 0;
+let warningChange = 0;
 //boss出场背景
 let bossbg = new Image();
 bossbg.src = 'img/bg2.jpg';
@@ -159,7 +159,8 @@ let game = {
     dead : 0,
     score : 0,
     life : 3,
-    warnon : 0,
+    // 显示警告
+    warnOn : false,
 
     bossTime : false,
     bossAttack : false,
@@ -168,6 +169,9 @@ let game = {
     bgY : -854,
     bgChange : function ()
     {
+        // 判断当前场景是否生效
+        if(game.state === 'loading' || game.bossAttack)
+            return;
         // 渲染两次背景，进行拼接
         view.drawImage(bg, 0, this.bgY, 520, 854);
         view.drawImage(bg, 0, this.bgY + 854, 520, 854);
@@ -236,8 +240,10 @@ let game = {
         myboomnum = 1;
         myboomtime = 0;
         enemychangearr = [];
-        warningtime = 0;
-        warningchange = 0;
+
+        warningTime = 0;
+        warningChange = 0;
+
         bossattacktime = 0;
         bossattacknum = 1;
         game.bossbgy1 = -2420;
@@ -425,7 +431,6 @@ let game = {
                 result.push(enemychangearr[i]);
             }
         }
-        ;
         enemychangearr = result;
     },
     enemyisbroke : function ()
@@ -495,21 +500,21 @@ let game = {
     },
     warning : function ()
     {
-        warningchange++;
-        warningtime++;
-        if( warningtime >= 20 )
+        warningChange++;
+        warningTime++;
+        if( warningTime >= 20 )
         {
             view.drawImage(warning1, 150, 200);
             view.drawImage(warning2, 190, 400);
-            if( warningtime >= 80 )
+            if( warningTime >= 80 )
             {
-                warningtime = 0;
+                warningTime = 0;
             }
         }
-        if( warningchange == 500 )
+        if( warningChange == 500 )
         {
-            console.log('boss time');
-            game.warnon = 0;
+            // console.log('boss time');
+            game.warnOn = false;
             game.bossTime = true;
         }
 
@@ -521,6 +526,7 @@ let game = {
     bossTimeBlur : true,
     bossBgShow : function ()
     {
+        // console.log('bossBgShow');
         view.drawImage(bossbg, 0, this.bossbgy1);
         view.drawImage(bossbg, 0, this.bossbgy2);
         view.drawImage(bossbg, 0, this.bossbgy3);
@@ -586,7 +592,7 @@ setInterval(function ()
     {
         if( game.score >= 300 && game.bossTimeBlur )
         {
-            game.warnon = 1;
+            game.warnOn = true;
             game.gua();
             game.bossTimeBlur = false;
         }
@@ -598,14 +604,14 @@ setInterval(function ()
         if( game.dead == 0 )
         {
             view.drawImage(myplane, myplaneX - myplane.width / 2, myplaneY - myplane.height / 2);
-            if( !game.bossTime && game.warnon == 0 )
+            if( !game.bossTime && !game.warnOn )
             {
                 game.enemy();
                 game.enemychange();
             }
             game.bulleton();
             game.bulletchange();
-            if( game.warnon == 1 )
+            if( game.warnOn )
             {
                 game.warning();
             }
