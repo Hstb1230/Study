@@ -3,8 +3,8 @@ function $(e)
     return document.querySelector(e);
 }
 
-let view = $('#view');
-let context = view.getContext('2d');
+let canvas = $('#canvas');
+let view = canvas.getContext('2d');
 
 // 背景图片
 let bg = new Image();
@@ -20,15 +20,17 @@ let load = new Image();
 let loadSeq = 0;
 // 加载进度
 let loadRect = 1;
-
-let loadTextBlur = true;
-let loadTextNum = -1;
-let pointNum = 1;
+// 符号 · 的移动方向
+let loadTextToUp = true;
+// 符号 · 的Y轴偏移量
+let loadPointY = -1;
+// 正被加载的符号 · 序号
+let pointSeq = 0;
 
 //我方战斗机
 let myplane = new Image();
 myplane.src = 'img/myplane1.png';
-let myplaneX = view.width / 2,
+let myplaneX = canvas.width / 2,
     myplaneY = 730;
 //战斗机子弹
 let bullet = new Image();
@@ -88,8 +90,8 @@ let game = {
     bossattack : 0,
     bgon : function ()
     {
-        context.drawImage(bg, 0, this.bgy1, 520, 854);
-        context.drawImage(bg, 0, this.bgy2, 520, 854);
+        view.drawImage(bg, 0, this.bgy1, 520, 854);
+        view.drawImage(bg, 0, this.bgy2, 520, 854);
     },
     bgchange : function ()
     {
@@ -103,18 +105,18 @@ let game = {
     },
     scoring : function ()
     {
-        let gradient = context.createLinearGradient(0, 0, 120, 60);
+        let gradient = view.createLinearGradient(0, 0, 120, 60);
         gradient.addColorStop(0, '#ff9569');
         gradient.addColorStop(1, '#e92758');
-        context.font = '30px  sans-serif';
-        context.fillStyle = gradient;
-        context.fillText('SCORE:' + this.score, 10, 50);
+        view.font = '30px  sans-serif';
+        view.fillStyle = gradient;
+        view.fillText('SCORE:' + this.score, 10, 50);
     },
     lifeing : function ()
     {
-        context.font = '30px  sans-serif';
-        context.fillStyle = '#D28140';
-        context.fillText('LIFE:' + this.life, 400, 50);
+        view.font = '30px  sans-serif';
+        view.fillStyle = '#D28140';
+        view.fillText('LIFE:' + this.life, 400, 50);
         if( game.dead == 1 && myboomnum == 9 && game.life > 0 )
         {
             game.dead = 0;
@@ -148,13 +150,14 @@ let game = {
         startBtn.classList.remove('none');
         game.life = 3;
         game.score = 0;
-        loadSeq = 1;
-        loadtime = 0;
+
+        loadSeq = 0;
         loadRect = 1;
-        loadTextBlur = true;
-        loadTextNum = -1;
-        pointNum = 1;
-        myplaneX = view.width / 2;
+        loadTextToUp = true;
+        loadPointY = -1;
+        pointSeq = 0;
+
+        myplaneX = canvas.width / 2;
         myplaneY = 730;
         bullettime = 0;
         bulletnum = 0;
@@ -174,8 +177,9 @@ let game = {
         game.bg2boss = -262;
         game.bosstimeblur = true;
         game.bossattack = 0;
-        context.drawImage(logo, 110, 200);
+        view.drawImage(logo, 110, 200);
     },
+    // 加载动画
     loading : function ()
     {
         loadRect++;
@@ -184,90 +188,64 @@ let game = {
             loadSeq = (loadSeq + 1) % 9;
             load.src = `img/loading/${loadSeq}.png`;
         }
-        context.beginPath();
-        context.fillStyle = 'white';
-        context.fillRect(0, 0, 520, 800);
-        let gradient = context.createLinearGradient(20, 500, 397, 30);
+        view.beginPath();
+        view.fillStyle = 'white';
+        view.fillRect(0, 0, 520, 800);
+        let gradient = view.createLinearGradient(20, 500, 397, 30);
         gradient.addColorStop(0, '#29bdd9');
         gradient.addColorStop(1, '#276ace');
-        context.fillStyle = gradient;
-        context.fillRect(20, 500, loadRect, 30);
-        context.closePath();
-        context.drawImage(load, loadRect + 20, 480, 102, 72);
-
+        view.fillStyle = gradient;
+        view.fillRect(20, 500, loadRect, 30);
+        view.closePath();
+        view.drawImage(load, loadRect + 20, 480, 102, 72);
     },
+    // 加载页的文本变化
     loadText : function ()
     {
-        if( loadTextBlur == false )
+        if( loadTextToUp === false )
         {
-            loadTextNum--;
+            loadPointY--;
         }
-        else if( loadTextBlur == true )
+        else if( loadTextToUp === true )
         {
-            loadTextNum += 2;
+            loadPointY += 2;
         }
-        context.beginPath();
-        context.font = '40px  sans-serif';
-        context.fillStyle = 'black';
-        context.fillText('加载中 ', 50, 450);
-        context.beginPath();
-        context.font = '80px  sans-serif';
-        if( pointNum == 1 )
+
+        view.beginPath();
+        view.font = '40px  sans-serif';
+        view.fillStyle = 'black';
+        view.fillText('加载中 ', 50, 450);
+
+        view.beginPath();
+        view.font = '80px  sans-serif';
+
+        let moveToY = [450, 450, 450];
+        moveToY[pointSeq] -= loadPointY;
+
+        view.fillText('. ', 200, moveToY[0]);
+        view.fillText('. ', 240, moveToY[1]);
+        view.fillText('. ', 280, moveToY[2]);
+
+        if( loadPointY < 0 )
         {
-            context.fillText('. ', 200, 450 - loadTextNum);
-            context.fillText('. ', 240, 450);
-            context.fillText('. ', 280, 450);
-            if( loadTextNum < 0 )
-            {
-                pointNum = 2;
-                loadTextNum = 0;
-                loadTextBlur = true;
-            }
-            else if( loadTextNum > 39 )
-            {
-                loadTextBlur = false;
-            }
+            loadPointY = 0;
+            loadTextToUp = true;
+            pointSeq = (pointSeq + 1) % 3;
         }
-        else if( pointNum == 2 )
+        else if( loadPointY > 39 )
         {
-            context.fillText('. ', 200, 450);
-            context.fillText('. ', 240, 450 - loadTextNum);
-            context.fillText('. ', 280, 450);
-            if( loadTextNum < 0 )
-            {
-                pointNum = 3;
-                loadTextNum = 0;
-                loadTextBlur = true;
-            }
-            else if( loadTextNum > 39 )
-            {
-                loadTextBlur = false;
-            }
+            loadTextToUp = false;
         }
-        else if( pointNum == 3 )
-        {
-            context.fillText('. ', 200, 450);
-            context.fillText('. ', 240, 450);
-            context.fillText('. ', 280, 450 - loadTextNum);
-            if( loadTextNum < 0 )
-            {
-                pointNum = 1;
-                loadTextNum = 0;
-                loadTextBlur = true;
-            }
-            else if( loadTextNum > 39 )
-            {
-                loadTextBlur = false;
-            }
-        }
-        context.closePath();
+
+        view.closePath();
     },
+
     myplane : function ( e )
     {
 
         myplaneX = e.offsetX;
         myplaneY = e.offsetY;
-        context.drawImage(myplane, myplaneX - myplane.width / 2, myplaneY - myplane.height / 2);
+        view.drawImage(myplane, myplaneX - myplane.width / 2, myplaneY - myplane.height / 2);
     },
     bulleton : function ()
     {
@@ -297,7 +275,7 @@ let game = {
         {
             if( bulletarr[i][1] - bulletarr[i][2] >= 0 )
             {
-                context.drawImage(bullet, bulletarr[i][0], bulletarr[i][1] - bulletarr[i][2]);
+                view.drawImage(bullet, bulletarr[i][0], bulletarr[i][1] - bulletarr[i][2]);
                 bulletarr[i][2] += 4;
                 result.push(bulletarr[i]);
             }
@@ -353,9 +331,9 @@ let game = {
         }
         for(let i = 0; i < enemyArr.length; i++)
         {
-            if( enemyArr[i][1] + enemyArr[i][2] <= view.height )
+            if( enemyArr[i][1] + enemyArr[i][2] <= canvas.height )
             {
-                context.drawImage(enemyall[enemyArr[i][3]], enemyArr[i][0], enemyArr[i][1] + enemyArr[i][2]);
+                view.drawImage(enemyall[enemyArr[i][3]], enemyArr[i][0], enemyArr[i][1] + enemyArr[i][2]);
                 if( enemyall[enemyArr[i][3]] == enemy4 )
                 {
                     enemyArr[i][2] += 1.5 * bossattacknum;
@@ -379,13 +357,13 @@ let game = {
             myboomnum++;
             myboomtime = 0;
         }
-        context.drawImage(myplane1boom, myplaneX - myplane.width / 2, myplaneY - myplane.height / 2);
+        view.drawImage(myplane1boom, myplaneX - myplane.width / 2, myplaneY - myplane.height / 2);
         if( myboomnum == 9 )
         {
             game.life -= 1;
             bulletarr = [];
             enemyArr = [];
-            myplaneX = view.width / 2;
+            myplaneX = canvas.width / 2;
             myplaneY = 750;
         }
     },
@@ -430,7 +408,7 @@ let game = {
                 enemychangearr[i][4]++;
                 enemychangearr[i][3] = 0;
             }
-            context.drawImage(enemychangearr[i][5], enemychangearr[i][0], enemychangearr[i][1]);
+            view.drawImage(enemychangearr[i][5], enemychangearr[i][0], enemychangearr[i][1]);
             if( enemychangearr[i][4] < 6 )
             {
                 result.push(enemychangearr[i]);
@@ -510,8 +488,8 @@ let game = {
         warningtime++;
         if( warningtime >= 20 )
         {
-            context.drawImage(warning1, 150, 200);
-            context.drawImage(warning2, 190, 400);
+            view.drawImage(warning1, 150, 200);
+            view.drawImage(warning2, 190, 400);
             if( warningtime >= 80 )
             {
                 warningtime = 0;
@@ -531,12 +509,12 @@ let game = {
     bosstimeblur : true,
     bossbgon : function ()
     {
-        context.drawImage(bossbg, 0, this.bossbgy1);
-        context.drawImage(bossbg, 0, this.bossbgy2);
-        context.drawImage(bossbg, 0, this.bossbgy3);
+        view.drawImage(bossbg, 0, this.bossbgy1);
+        view.drawImage(bossbg, 0, this.bossbgy2);
+        view.drawImage(bossbg, 0, this.bossbgy3);
         if( game.bosstime == 1 )
         {
-            context.drawImage(boss, 0, this.bg2boss);
+            view.drawImage(boss, 0, this.bg2boss);
         }
 
     },
@@ -573,6 +551,7 @@ let game = {
 
 setInterval(function ()
 {
+    // 暂停游戏
     if(game.state === 'pause')
     {
         return;
@@ -608,7 +587,7 @@ setInterval(function ()
         }
         if( game.dead == 0 )
         {
-            context.drawImage(myplane, myplaneX - myplane.width / 2, myplaneY - myplane.height / 2);
+            view.drawImage(myplane, myplaneX - myplane.width / 2, myplaneY - myplane.height / 2);
             if( game.bosstime == 0 && game.warnon == 0 )
             {
                 game.enemy();
@@ -640,7 +619,7 @@ startBtn.onclick = function ()
     game.gameload = 1;
 };
 
-view.onmousemove = function ( e )
+canvas.onmousemove = function ( e )
 {
     if(game.state === 'running' && game.gamerun == 1 && game.dead == 0 )
     {
@@ -649,20 +628,31 @@ view.onmousemove = function ( e )
     }
     else
     {
-        this.style.cursor = '';
+        canvas.removeAttribute('style');
+        // this.style.cursor = '';
     }
 };
 
 document.onkeydown = function ( e )
 {
-    if(e.key === 'Escape' && game.state === 'running')
+    if(e.key === 'Escape')
     {
-        // 暂停游戏
-        game.state = 'pause';
+        if(game.state === 'running')
+        {
+            // 暂停游戏
+            game.state = 'pause';
+        }
+        else if(game.state === 'pause')
+        {
+            game.state = 'running';
+        }
     }
-    if( e.key === 'Backspace' && game.gamerun == 1 )
+    else if( e.key === 'Backspace' )
     {
-        // 清除敌机（调试）
-        game.gua();
+        if(game.state === 'running')
+        {
+            // 清除敌机（调试）
+            game.gua();
+        }
     }
 };
