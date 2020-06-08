@@ -1,7 +1,4 @@
-function $(e)
-{
-    return document.querySelector(e);
-}
+$ = e => document.querySelector(e);
 
 let canvas = $('#canvas');
 let view = canvas.getContext('2d');
@@ -32,6 +29,7 @@ load.init = () =>
     if(load.img.length > 0)
         return;
     load.img = new Array(9);
+    // new Image[9];
     for(let i = 0; i < 9; i++)
     {
         load.img[i] = new Image();
@@ -100,8 +98,9 @@ let logo = new Image();
 logo.src = 'img/logo.png';
 
 // 我方战斗机
-let myplane = new Image();
-myplane.src = 'img/myplane1.png';
+let myPlane = new Image();
+myPlane.src = 'img/plane/my/plane.png';
+
 let myplaneX = canvas.width / 2,
     myplaneY = 730;
 //战斗机子弹
@@ -258,13 +257,13 @@ let game = {
 
         myplaneX = e.offsetX;
         myplaneY = e.offsetY;
-        view.drawImage(myplane, myplaneX - myplane.width / 2, myplaneY - myplane.height / 2);
+        view.drawImage(myPlane, myplaneX - myPlane.width / 2, myplaneY - myPlane.height / 2);
     },
     bulleton : function ()
     {
         bullettime++;
         let bulletX = myplaneX - bullet.width / 2;
-        let bulletY = myplaneY - myplane.height / 2 - bullet.height;
+        let bulletY = myplaneY - myPlane.height / 2 - bullet.height;
         let num;
         if( game.bossAttack )
         {
@@ -370,7 +369,7 @@ let game = {
             myboomnum++;
             myboomtime = 0;
         }
-        view.drawImage(myplane1boom, myplaneX - myplane.width / 2, myplaneY - myplane.height / 2);
+        view.drawImage(myplane1boom, myplaneX - myPlane.width / 2, myplaneY - myPlane.height / 2);
         if( myboomnum == 9 )
         {
             game.life -= 1;
@@ -385,24 +384,24 @@ let game = {
         for(let i = 0; i < enemyArr.length; i++)
         {
             if(
-                enemyArr[i][0] < myplaneX - myplane.width / 2
-                && enemyArr[i][1] + enemyArr[i][2] < myplaneY - myplane.height / 2 + myplane.height
+                enemyArr[i][0] < myplaneX - myPlane.width / 2
+                && enemyArr[i][1] + enemyArr[i][2] < myplaneY - myPlane.height / 2 + myPlane.height
             )
             {
                 if(
-                    enemyArr[i][0] + enemyall[enemyArr[i][3]].width > myplaneX - myplane.width / 2
-                    && enemyArr[i][1] + enemyArr[i][2] + enemyall[enemyArr[i][3]].height > myplaneY - myplane.height / 2
+                    enemyArr[i][0] + enemyall[enemyArr[i][3]].width > myplaneX - myPlane.width / 2
+                    && enemyArr[i][1] + enemyArr[i][2] + enemyall[enemyArr[i][3]].height > myplaneY - myPlane.height / 2
                 )
                 {
                     game.myplaneboom();
                 }
             }
             else if(
-                enemyArr[i][0] > myplaneX - myplane.width / 2
-                && enemyArr[i][1] + enemyArr[i][2] < myplaneY - myplane.height / 2 + myplane.height
+                enemyArr[i][0] > myplaneX - myPlane.width / 2
+                && enemyArr[i][1] + enemyArr[i][2] < myplaneY - myPlane.height / 2 + myPlane.height
             )
             {
-                if( enemyArr[i][0] < myplaneX - myplane.width / 2 + myplane.width && enemyArr[i][1] + enemyArr[i][2] + enemyall[enemyArr[i][3]].height > myplaneY - myplane.height / 2 )
+                if( enemyArr[i][0] < myplaneX - myPlane.width / 2 + myPlane.width && enemyArr[i][1] + enemyArr[i][2] + enemyall[enemyArr[i][3]].height > myplaneY - myPlane.height / 2 )
                 {
                     game.myplaneboom();
                 }
@@ -599,7 +598,7 @@ setInterval(function ()
         }
         if( game.dead == 0 )
         {
-            view.drawImage(myplane, myplaneX - myplane.width / 2, myplaneY - myplane.height / 2);
+            view.drawImage(myPlane, myplaneX - myPlane.width / 2, myplaneY - myPlane.height / 2);
             if( !game.bossTime && !game.warnOn )
             {
                 game.enemy();
