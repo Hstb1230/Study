@@ -103,7 +103,7 @@ bg.src = 'img/bg.jpg';
 let logo = new Image();
 logo.src = 'img/logo.png';
 
-//我方战斗机
+// 我方战斗机
 let myplane = new Image();
 myplane.src = 'img/myplane1.png';
 let myplaneX = canvas.width / 2,
@@ -150,7 +150,7 @@ let bossattacknum = 1;
 
 let game = {
     // 游戏状态
-    state: 'running',
+    state: 'playing',
 
     gamestart : 1,
     gameload : 0,
@@ -160,8 +160,9 @@ let game = {
     score : 0,
     life : 3,
     warnon : 0,
-    bosstime : 0,
-    bossattack : 0,
+
+    bossTime : false,
+    bossAttack : false,
 
     // 使背景滚动
     bgY : -854,
@@ -243,8 +244,10 @@ let game = {
         game.bossbgy2 = -1640;
         game.bossbgy3 = -860;
         game.bg2boss = -262;
-        game.bosstimeblur = true;
-        game.bossattack = 0;
+
+        game.bossTimeBlur = true;
+        game.bossAttack = false;
+
         view.drawImage(logo, 110, 200);
     },
 
@@ -261,7 +264,7 @@ let game = {
         let bulletX = myplaneX - bullet.width / 2;
         let bulletY = myplaneY - myplane.height / 2 - bullet.height;
         let num;
-        if( game.bossattack == 1 )
+        if( game.bossAttack )
         {
             num = 10;
         }
@@ -295,7 +298,7 @@ let game = {
     {
         enemytime++;
         let enemynum = parseInt(Math.random() * 4);
-        if( game.bossattack == 1 )
+        if( game.bossAttack )
         {
             num = 10;
         }
@@ -328,7 +331,7 @@ let game = {
     enemychange : function ()
     {
         let result = [];
-        if( game.bossattack == 1 )
+        if( game.bossAttack )
         {
             bossattacktime++;
             if( bossattacktime == 80 )
@@ -505,8 +508,9 @@ let game = {
         }
         if( warningchange == 500 )
         {
+            console.log('boss time');
             game.warnon = 0;
-            game.bosstime = 1;
+            game.bossTime = true;
         }
 
     },
@@ -514,19 +518,19 @@ let game = {
     bossbgy2 : -1640,
     bossbgy3 : -860,
     bg2boss : -262,
-    bosstimeblur : true,
-    bossbgon : function ()
+    bossTimeBlur : true,
+    bossBgShow : function ()
     {
         view.drawImage(bossbg, 0, this.bossbgy1);
         view.drawImage(bossbg, 0, this.bossbgy2);
         view.drawImage(bossbg, 0, this.bossbgy3);
-        if( game.bosstime == 1 )
+        if( game.bossTime )
         {
             view.drawImage(boss, 0, this.bg2boss);
         }
 
     },
-    bossbgchange : function ()
+    bossBgChange : function ()
     {
         this.bossbgy1 += 2;
         this.bossbgy2 += 2;
@@ -534,8 +538,8 @@ let game = {
         this.bg2boss += 2;
         if( this.bg2boss == 800 )
         {
-            this.bosstime = 0;
-            this.bossattack = 1;
+            this.bossTime = false;
+            this.bossAttack = true;
         }
         if( this.bossbgy3 == 800 )
         {
@@ -580,21 +584,21 @@ setInterval(function ()
     }
     if( game.gamerun == 1 )
     {
-        if( game.score >= 300 && game.bosstimeblur == true )
+        if( game.score >= 300 && game.bossTimeBlur )
         {
             game.warnon = 1;
             game.gua();
-            game.bosstimeblur = false;
+            game.bossTimeBlur = false;
         }
-        if( game.bosstime == 1 || game.bossattack == 1 )
+        if( game.bossTime || game.bossAttack )
         {
-            game.bossbgon();
-            game.bossbgchange();
+            game.bossBgShow();
+            game.bossBgChange();
         }
         if( game.dead == 0 )
         {
             view.drawImage(myplane, myplaneX - myplane.width / 2, myplaneY - myplane.height / 2);
-            if( game.bosstime == 0 && game.warnon == 0 )
+            if( !game.bossTime && game.warnon == 0 )
             {
                 game.enemy();
                 game.enemychange();
@@ -627,7 +631,7 @@ startBtn.onclick = function ()
 
 canvas.onmousemove = function ( e )
 {
-    if(game.state === 'running' && game.gamerun == 1 && game.dead == 0 )
+    if(game.state === 'playing' && game.gamerun == 1 && game.dead == 0 )
     {
         game.myplane(e);
         this.style.cursor = 'none';
@@ -643,19 +647,19 @@ document.onkeydown = function ( e )
 {
     if(e.key === 'Escape')
     {
-        if(game.state === 'running')
+        if(game.state === 'playing')
         {
             // 暂停游戏
             game.state = 'pause';
         }
         else if(game.state === 'pause')
         {
-            game.state = 'running';
+            game.state = 'playing';
         }
     }
     else if( e.key === 'Backspace' )
     {
-        if(game.state === 'running')
+        if(game.state === 'playing')
         {
             // 清除敌机（调试）
             game.gua();
