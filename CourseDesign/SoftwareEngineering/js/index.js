@@ -15,7 +15,13 @@ let logo = new Image();
 logo.src = 'img/logo.png';
 
 //加载时候的狗子和文字
-let load = new Image();
+// let load = new Image();
+let load = new Array(9);
+for(let i = 0; i < 9; i++)
+{
+    load[i] = new Image();
+    load[i].src = `./img/loading/${i}.png`;
+}
 // 加载图片的序号
 let loadSeq = 0;
 // 加载进度
@@ -186,7 +192,6 @@ let game = {
         if( loadRect % 5 === 0)
         {
             loadSeq = (loadSeq + 1) % 9;
-            load.src = `img/loading/${loadSeq}.png`;
         }
         view.beginPath();
         view.fillStyle = 'white';
@@ -197,7 +202,7 @@ let game = {
         view.fillStyle = gradient;
         view.fillRect(20, 500, loadRect, 30);
         view.closePath();
-        view.drawImage(load, loadRect + 20, 480, 102, 72);
+        view.drawImage(load[loadSeq], loadRect + 20, 480, 102, 72);
     },
     // 加载页的文本变化
     loadText : function ()
