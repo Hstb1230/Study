@@ -101,8 +101,9 @@ logo.src = 'img/logo.png';
 let myPlane = new Image();
 myPlane.src = 'img/plane/my/plane.png';
 
-let myplaneX = canvas.width / 2,
-    myplaneY = 730;
+let myPlaneX = canvas.width / 2,
+    myPlaneY = 730;
+
 //战斗机子弹
 let bullet = new Image();
 bullet.src = 'img/bullet.png';
@@ -146,6 +147,13 @@ let bossattacknum = 1;
 let game = {
     // 游戏状态
     state: 'playing',
+
+    pause: () => {
+        if(game.state !== 'playing')
+            return;
+        game.state = 'pause';
+        canvas.isFocus = false;
+    },
 
     gamestart : 1,
     gameload : 0,
@@ -225,8 +233,8 @@ let game = {
         game.life = 3;
         game.score = 0;
 
-        myplaneX = canvas.width / 2;
-        myplaneY = 730;
+        myPlaneX = canvas.width / 2;
+        myPlaneY = 730;
         bullettime = 0;
         bulletnum = 0;
         bulletarr = [];
@@ -255,15 +263,15 @@ let game = {
     myplane : function ( e )
     {
 
-        myplaneX = e.offsetX;
-        myplaneY = e.offsetY;
-        view.drawImage(myPlane, myplaneX - myPlane.width / 2, myplaneY - myPlane.height / 2);
+        myPlaneX = e.offsetX;
+        myPlaneY = e.offsetY;
+        view.drawImage(myPlane, myPlaneX - myPlane.width / 2, myPlaneY - myPlane.height / 2);
     },
     bulleton : function ()
     {
         bullettime++;
-        let bulletX = myplaneX - bullet.width / 2;
-        let bulletY = myplaneY - myPlane.height / 2 - bullet.height;
+        let bulletX = myPlaneX - bullet.width / 2;
+        let bulletY = myPlaneY - myPlane.height / 2 - bullet.height;
         let num;
         if( game.bossAttack )
         {
@@ -369,14 +377,14 @@ let game = {
             myboomnum++;
             myboomtime = 0;
         }
-        view.drawImage(myplane1boom, myplaneX - myPlane.width / 2, myplaneY - myPlane.height / 2);
+        view.drawImage(myplane1boom, myPlaneX - myPlane.width / 2, myPlaneY - myPlane.height / 2);
         if( myboomnum == 9 )
         {
             game.life -= 1;
             bulletarr = [];
             enemyArr = [];
-            myplaneX = canvas.width / 2;
-            myplaneY = 750;
+            myPlaneX = canvas.width / 2;
+            myPlaneY = 750;
         }
     },
     myplaneisbroke : function ()
@@ -384,24 +392,24 @@ let game = {
         for(let i = 0; i < enemyArr.length; i++)
         {
             if(
-                enemyArr[i][0] < myplaneX - myPlane.width / 2
-                && enemyArr[i][1] + enemyArr[i][2] < myplaneY - myPlane.height / 2 + myPlane.height
+                enemyArr[i][0] < myPlaneX - myPlane.width / 2
+                && enemyArr[i][1] + enemyArr[i][2] < myPlaneY - myPlane.height / 2 + myPlane.height
             )
             {
                 if(
-                    enemyArr[i][0] + enemyall[enemyArr[i][3]].width > myplaneX - myPlane.width / 2
-                    && enemyArr[i][1] + enemyArr[i][2] + enemyall[enemyArr[i][3]].height > myplaneY - myPlane.height / 2
+                    enemyArr[i][0] + enemyall[enemyArr[i][3]].width > myPlaneX - myPlane.width / 2
+                    && enemyArr[i][1] + enemyArr[i][2] + enemyall[enemyArr[i][3]].height > myPlaneY - myPlane.height / 2
                 )
                 {
                     game.myplaneboom();
                 }
             }
             else if(
-                enemyArr[i][0] > myplaneX - myPlane.width / 2
-                && enemyArr[i][1] + enemyArr[i][2] < myplaneY - myPlane.height / 2 + myPlane.height
+                enemyArr[i][0] > myPlaneX - myPlane.width / 2
+                && enemyArr[i][1] + enemyArr[i][2] < myPlaneY - myPlane.height / 2 + myPlane.height
             )
             {
-                if( enemyArr[i][0] < myplaneX - myPlane.width / 2 + myPlane.width && enemyArr[i][1] + enemyArr[i][2] + enemyall[enemyArr[i][3]].height > myplaneY - myPlane.height / 2 )
+                if( enemyArr[i][0] < myPlaneX - myPlane.width / 2 + myPlane.width && enemyArr[i][1] + enemyArr[i][2] + enemyall[enemyArr[i][3]].height > myPlaneY - myPlane.height / 2 )
                 {
                     game.myplaneboom();
                 }
@@ -598,7 +606,7 @@ setInterval(function ()
         }
         if( game.dead == 0 )
         {
-            view.drawImage(myPlane, myplaneX - myPlane.width / 2, myplaneY - myPlane.height / 2);
+            view.drawImage(myPlane, myPlaneX - myPlane.width / 2, myPlaneY - myPlane.height / 2);
             if( !game.bossTime && !game.warnOn )
             {
                 game.enemy();
@@ -646,8 +654,12 @@ canvas.onmousemove = function ( e )
     }
 };
 
-document.onkeydown = function ( e )
+canvas.onmouseenter = (e) => canvas.isFocus = true;
+
+document.onkeydown = (e) =>
 {
+    if(!canvas.isFocus)
+        return;
     if(e.key === 'Escape')
     {
         if(game.state === 'playing')
@@ -669,3 +681,12 @@ document.onkeydown = function ( e )
         }
     }
 };
+
+document.onmouseout = document.onmousemove = (e) =>
+{
+    const left = canvas.parentElement.offsetLeft - 30;
+    const right = canvas.parentElement.offsetLeft + canvas.parentElement.offsetWidth + 30;
+    if((left <= e.clientX && e.clientX <= right))
+        return;
+    game.pause();
+}
