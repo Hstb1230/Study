@@ -6,6 +6,95 @@ function $(e)
 let canvas = $('#canvas');
 let view = canvas.getContext('2d');
 
+// 加载动画
+let load = {
+    img : [],
+    seq : 0,
+    rect: 1,
+    textSeq : 0,
+    textToUp: true,
+    textY: -1,
+    // 初始化资源
+    init : () => {},
+    // 加载动画
+    playing : () => {},
+    // 加载页的文本变化
+    flushText : () => {},
+};
+
+load.init = () =>
+{
+    load.img = new Array(9);
+    for(let i = 0; i < 9; i++)
+    {
+        load.img[i] = new Image();
+        load.img[i].src = `./img/loading/${i}.png`;
+    }
+}
+
+load.playing = () =>
+{
+    load.rect++;
+    if( load.rect % 5 === 0)
+    {
+        load.seq = (load.seq + 1) % 9;
+    }
+    view.beginPath();
+    view.fillStyle = 'white';
+    view.fillRect(0, 0, 520, 800);
+    let gradient = view.createLinearGradient(20, 500, 397, 30);
+    gradient.addColorStop(0, '#29bdd9');
+    gradient.addColorStop(1, '#276ace');
+    view.fillStyle = gradient;
+    view.fillRect(20, 500, load.rect, 30);
+    view.closePath();
+    // console.log(this.seq, this.rect);
+    view.drawImage(load.img[load.seq], load.rect + 20, 480, 102, 72);
+    load.flushText();
+}
+
+load.flushText = () =>
+{
+    if( load.textToUp === false )
+    {
+        load.textY--;
+    }
+    else if( load.textToUp === true )
+    {
+        load.textY += 2;
+    }
+
+    view.beginPath();
+    view.font = '40px sans-serif';
+    view.fillStyle = 'black';
+    view.fillText('加载中 ', 50, 450);
+
+    view.beginPath();
+    view.font = '80px sans-serif';
+
+    let moveToY = [450, 450, 450];
+    moveToY[load.textSeq] -= load.textY;
+
+    view.fillText('. ', 200, moveToY[0]);
+    view.fillText('. ', 240, moveToY[1]);
+    view.fillText('. ', 280, moveToY[2]);
+
+    if( load.textY < 0 )
+    {
+        load.textY = 0;
+        load.textToUp = true;
+        load.textSeq = (load.textSeq + 1) % 3;
+    }
+    else if( load.textY > 39 )
+    {
+        load.textToUp = false;
+    }
+
+    view.closePath();
+}
+
+load.init();
+
 // 背景图片
 let bg = new Image();
 bg.src = 'img/bg.jpg';
@@ -13,25 +102,6 @@ bg.src = 'img/bg.jpg';
 // 全民飞机大战Logo
 let logo = new Image();
 logo.src = 'img/logo.png';
-
-//加载时候的狗子和文字
-// let load = new Image();
-let load = new Array(9);
-for(let i = 0; i < 9; i++)
-{
-    load[i] = new Image();
-    load[i].src = `./img/loading/${i}.png`;
-}
-// 加载图片的序号
-let loadSeq = 0;
-// 加载进度
-let loadRect = 1;
-// 符号 · 的移动方向
-let loadTextToUp = true;
-// 符号 · 的Y轴偏移量
-let loadPointY = -1;
-// 正被加载的符号 · 序号
-let pointSeq = 0;
 
 //我方战斗机
 let myplane = new Image();
@@ -93,8 +163,8 @@ let game = {
     bosstime : 0,
     bossattack : 0,
 
+    // 使背景滚动
     bgY : -854,
-    // 移动背景
     bgChange : function ()
     {
         // 渲染两次背景，进行拼接
@@ -155,12 +225,6 @@ let game = {
         game.life = 3;
         game.score = 0;
 
-        loadSeq = 0;
-        loadRect = 1;
-        loadTextToUp = true;
-        loadPointY = -1;
-        pointSeq = 0;
-
         myplaneX = canvas.width / 2;
         myplaneY = 730;
         bullettime = 0;
@@ -182,65 +246,6 @@ let game = {
         game.bosstimeblur = true;
         game.bossattack = 0;
         view.drawImage(logo, 110, 200);
-    },
-    // 加载动画
-    loading : function ()
-    {
-        loadRect++;
-        if( loadRect % 5 === 0)
-        {
-            loadSeq = (loadSeq + 1) % 9;
-        }
-        view.beginPath();
-        view.fillStyle = 'white';
-        view.fillRect(0, 0, 520, 800);
-        let gradient = view.createLinearGradient(20, 500, 397, 30);
-        gradient.addColorStop(0, '#29bdd9');
-        gradient.addColorStop(1, '#276ace');
-        view.fillStyle = gradient;
-        view.fillRect(20, 500, loadRect, 30);
-        view.closePath();
-        view.drawImage(load[loadSeq], loadRect + 20, 480, 102, 72);
-    },
-    // 加载页的文本变化
-    loadText : function ()
-    {
-        if( loadTextToUp === false )
-        {
-            loadPointY--;
-        }
-        else if( loadTextToUp === true )
-        {
-            loadPointY += 2;
-        }
-
-        view.beginPath();
-        view.font = '40px  sans-serif';
-        view.fillStyle = 'black';
-        view.fillText('加载中 ', 50, 450);
-
-        view.beginPath();
-        view.font = '80px  sans-serif';
-
-        let moveToY = [450, 450, 450];
-        moveToY[pointSeq] -= loadPointY;
-
-        view.fillText('. ', 200, moveToY[0]);
-        view.fillText('. ', 240, moveToY[1]);
-        view.fillText('. ', 280, moveToY[2]);
-
-        if( loadPointY < 0 )
-        {
-            loadPointY = 0;
-            loadTextToUp = true;
-            pointSeq = (pointSeq + 1) % 3;
-        }
-        else if( loadPointY > 39 )
-        {
-            loadTextToUp = false;
-        }
-
-        view.closePath();
     },
 
     myplane : function ( e )
@@ -566,13 +571,12 @@ setInterval(function ()
     }
     if( game.gameload == 1 )
     {
-        if( loadRect >= 380 )
+        if( load.rect >= 380 )
         {
             game.gameload = 0;
             game.gamerun = 1;
         }
-        game.loading();
-        game.loadText();
+        load.playing();
     }
     if( game.gamerun == 1 )
     {
