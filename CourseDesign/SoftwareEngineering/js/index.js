@@ -9,7 +9,7 @@ let view = canvas.getContext('2d');
 // 加载动画
 let load = {
     img : [],
-    seq : 0,
+    // 狗子X轴位置偏移
     rect: 1,
     textSeq : 0,
     textToUp: true,
@@ -24,6 +24,13 @@ let load = {
 
 load.init = () =>
 {
+    // 重置状态
+    load.rect = 1;
+    load.textSeq = 0;
+    load.textToUp = true;
+    load.textY = -1;
+    if(load.img.length > 0)
+        return;
     load.img = new Array(9);
     for(let i = 0; i < 9; i++)
     {
@@ -35,10 +42,7 @@ load.init = () =>
 load.playing = () =>
 {
     load.rect++;
-    if( load.rect % 5 === 0)
-    {
-        load.seq = (load.seq + 1) % 9;
-    }
+    let seq = Math.floor(load.rect / 5 % 9);
     view.beginPath();
     view.fillStyle = 'white';
     view.fillRect(0, 0, 520, 800);
@@ -49,20 +53,13 @@ load.playing = () =>
     view.fillRect(20, 500, load.rect, 30);
     view.closePath();
     // console.log(this.seq, this.rect);
-    view.drawImage(load.img[load.seq], load.rect + 20, 480, 102, 72);
+    view.drawImage(load.img[seq], load.rect + 20, 480, 102, 72);
     load.flushText();
 }
 
 load.flushText = () =>
 {
-    if( load.textToUp === false )
-    {
-        load.textY--;
-    }
-    else if( load.textToUp === true )
-    {
-        load.textY += 2;
-    }
+    load.textY += load.textToUp ? 2 : -1;
 
     view.beginPath();
     view.font = '40px sans-serif';
@@ -81,7 +78,6 @@ load.flushText = () =>
 
     if( load.textY < 0 )
     {
-        load.textY = 0;
         load.textToUp = true;
         load.textSeq = (load.textSeq + 1) % 3;
     }
@@ -630,6 +626,8 @@ setInterval(function ()
 let startBtn = $('.startBtn');
 startBtn.onclick = function ()
 {
+    load.init();
+
     startBtn.classList.add('none');
     game.gamestart = 0;
     game.gameload = 1;
