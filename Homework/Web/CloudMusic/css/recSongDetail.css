@@ -76,22 +76,22 @@ header
 }
 
 /* 
-.avatar,
-.avatar ~ p
+.author > .avatar,
+.author > .avatar ~ p
 {
     display: inline-block;
     vertical-align: middle;
 }
  */
 
-.avatar
+ .author > .avatar
 {
     width: 30px;
     height: 30px;
     position: relative;
 }
 
-.avatar ~ p
+.author > .avatar ~ p
 {
     flex: 1;
     font-size: 14px;
@@ -102,7 +102,7 @@ header
     text-overflow: ellipsis;
 }
 
-.avatar > img
+.author > .avatar > img
 {
     border-radius: 50%;
     overflow: hidden;
@@ -193,4 +193,180 @@ header
 .intro_content > icon
 {
     transition: transform 0.3s ease-in-out;
+}
+
+h3.title
+{
+    font-weight: normal;
+    font-size: 14px;
+    padding-left: 10px;
+    margin-top: 5px;
+    height: 20px;
+    line-height: 20px;
+    color: #666;
+    background-color: rgb(233, 233, 233);
+}
+
+/* 歌曲列表 */
+.song-list ul 
+{
+    margin: 5px 0;
+}
+
+.song-list a
+{
+    text-decoration: none;
+    color: gray;
+}
+
+.song-list li
+{
+    height: 54px;
+    font-size: 14px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.song-list .song-info
+{
+    flex: 1;
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    padding: 5px 0;
+    margin: 0 5px 0 0;
+}
+
+.song-list .rank
+{
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    color: gray;
+}
+
+.song-list p
+{
+    color: #666;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.song-list span
+{
+    font-size: 12px;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 评论 */
+.comment
+{
+    display: flex;
+    margin: 5px 0;
+}
+
+.comment > .avatar 
+{
+    width: 32px;
+    height: 32px;
+    margin: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.comment > .avatar img
+{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.comment > .multi
+{
+    flex: 1;
+    align-items: center;
+    padding: 0 5px 5px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+}
+
+.comment > .multi > .head
+{
+    height: 32px;
+    margin: 9px 0;
+    display: flex;
+    align-items: center;
+}
+
+.comment > .multi > .head > .meta
+{
+    flex: 1;
+}
+
+/* 评论者昵称以及vip标识 */
+.comment > .multi > .head > .meta > .user
+{
+    display: flex;
+    align-items: center;
+}
+
+.comment > .multi > .head > .meta > .user .i-vip
+{
+    margin-left: 3px;
+}
+
+/* 评论者昵称 */
+.comment > .multi > .head > .meta > .user > p
+{
+    font-size: 14px;
+}
+
+/* 评论时间 */
+.comment > .multi > .head > .meta > span
+{
+    font-size: 11px;
+    color: #666;
+}
+
+.comment > .multi > .head > .like
+{
+    width: 50px;
+    text-align: right;
+    font-size: 13px;
+    color: #666;
+}
+
+/* 评论内容 */
+.comment > .multi > .content
+{
+    font-size: 15px;
+}
+
+/* 评论引用 */
+.comment > .multi .reply
+{
+    color: rgba(0, 0, 0, .65);
+    border: 1px solid #888;
+    padding: 8px;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+/* 查看更多评论 */
+.more
+{
+    margin: 18px auto;
+    text-align: center;
+}
+
+/* 去除列表首个元素边框 */
+li.comment:nth-last-child(1) .multi,
+.song-list a:nth-last-child(1) .song-info
+{
+    border-bottom: none;
 }

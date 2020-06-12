@@ -15,6 +15,7 @@
     background-position: 0;
 }
 
+/* 歌单 */
 .playlist
 {
     position: absolute;
@@ -32,6 +33,7 @@
     border-bottom-right-radius: 17px;
 }
 
+/* 音乐人，音乐达人 */
 .musician,
 .star
 {
@@ -55,6 +57,7 @@
     background-position: -20px 0;
 }
 
+/* 箭头 */
 .unfold {
     position: absolute;
     bottom: 3px;
@@ -66,4 +69,34 @@
     background-repeat: no-repeat;
     background-size: 12px auto;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAANCAQAAAAZZWZbAAAAkElEQVR4AY2RtQEDMQxFX+D4RsgA6cN4XGr/cQJyEzD9yvCeZIAVWxbEJKNhDQ3CiUUE3iE0UNAjnFniS674nVQnqlw8iiHuJN/+hQRbzBluJP8tryQWfLAXy2j/61Aa3H7clOb7pJSMFtyipABUip/9T55yR2hIqZnifihRpVX8aMGtyg1BODAnMglHdnb8CYQbEwGgBxiKAAAAAElFTkSuQmCC);
+}
+
+
+
+.play-icon
+{
+    width: 22px;
+    height: 22px;
+    margin: 0 10px;
+    position: absolute;
+    right: 0px;
+    background: url('../img/index_icon_2x.png');
+    background-size: 166px 97px;
+    background-position-x: -24px;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.i-like
+{
+    width: 12px;
+    height: 12px;
+}
+
+.i-vip
+{
+    width: 21px;
+    height: 11px;
+    background: url(//p1.music.126.net/OeOahPin96CFyHmEnH2grA==/109951163446555771.png) 0 0/contain no-repeat;
 }
