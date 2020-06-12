@@ -32,6 +32,7 @@
     border-bottom-right-radius: 17px;
 }
 
+.musician,
 .star
 {
     position: absolute;
@@ -39,14 +40,19 @@
     bottom: 0;
     width: 12px;
     height: 12px;
-    background-image: url(//s3.music.126.net/mobile-new/img/usericn_2x.png?6423c06…=);
     background-repeat: no-repeat;
     background-size: 75px auto;
+    background-image: url(//s3.music.126.net/mobile-new/img/usericn_2x.png?6423c06…=);
 }
 
 .star
 {
     background-position: -40px 0;
+}
+
+.musician
+{
+    background-position: -20px 0;
 }
 
 .unfold {
