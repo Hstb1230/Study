@@ -1,0 +1,47 @@
+* 
+{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    box-sizing: border-box;
+    resize: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body
+{
+    background: url(../img/bg.jpg) no-repeat top center;
+}
+
+.main
+{
+    min-width: 1080px;
+    max-width: 1920px;
+    display: flex;
+    margin: 0 auto;
+}
+
+.main .column
+{
+    flex: 3;
+    margin: .39rem;
+}
+
+.main .column:nth-child(2)
+{
+    flex: 5;
+}
+
+.main .column .panel 
+{
+    height: 8.16rem;
+    width: 100%;
+    margin-bottom: .39rem;
+    background: url(../img/line.png) rgba(255, 255, 255, 0.1);
+}
+
+.column .map
+{
+    height: 17.11rem;
+    background: url(../img/line.png) rgba(255, 255, 255, 0.1);
+}
