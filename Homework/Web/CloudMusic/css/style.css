@@ -40,6 +40,7 @@ body
     height: 25px;
 }
 
+/* 下载按钮 */
 .download-button
 {
     width: 100px;
@@ -47,10 +48,14 @@ body
     border-radius: 25px;
     border: none;
     background-color: white;
-    color: #d43c33;
     text-align: center;
     line-height: 36px;
     font-size: 16px;
+}
+
+.download-button a
+{
+    color: #d43c33;
 }
 
 input[type="radio"]
