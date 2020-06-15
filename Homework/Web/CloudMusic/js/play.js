@@ -1,4 +1,4 @@
-const domain = 'http://172.16.16.193:3000';
+const domain = 'http://localhost:3000';
 
 document.querySelector('html').style.height = '100%';
 
