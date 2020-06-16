@@ -1,4 +1,4 @@
-const domain = 'http://localhost:3000';
+const domain = 'http://127.0.0.1:3000';
 
 function $(e) {
     return document.querySelector(e);
@@ -57,15 +57,16 @@ function timestampToDate(timeStamp) {
     now.setMilliseconds(0);
 
     let t = new Date(timeStamp);
-    if(now.getTime() / 1000 - Math.floor(timeStamp / 1000) < 24 * 60 * 60)
+    if(now.getTime() / 1000 < Math.floor(timeStamp / 1000))
+        fmt = '今天';
+    else if(now.getTime() / 1000 - Math.floor(timeStamp / 1000) < 24 * 60 * 60)
         fmt = '昨天';
     else if(now.getTime() / 1000 - Math.floor(timeStamp / 1000) < 24 * 60 * 60 * 2)
-        fmt += '前天';
+        fmt = '前天';
     else if(now.getFullYear() === t.getFullYear())
-        return `${t.getFullMonth()}月${t.getFullDate()}日`;
+        fmt = `${t.getFullMonth()}月${t.getFullDate()}日`;
     else if(now.getTime() / 1000 > Math.floor(timeStamp / 1000))
-        return `${t.getFullYear()}年${t.getFullMonth()}月${t.getFullDate()}日`;
-    fmt += `今天`;
+        fmt = `${t.getFullYear()}年${t.getFullMonth()}月${t.getFullDate()}日`;
     
     return fmt;
 }
@@ -80,7 +81,9 @@ function formatTime(timeStamp) {
     now.setMilliseconds(0);
 
     let t = new Date(timeStamp);
-    if(now.getTime() / 1000 - Math.floor(timeStamp / 1000) < 24 * 60 * 60)
+    if(now.getTime() / 1000 < Math.floor(timeStamp / 1000))
+        fmt = '';
+    else if(now.getTime() / 1000 - Math.floor(timeStamp / 1000) < 24 * 60 * 60)
         fmt = '昨天';
     else if(now.getTime() / 1000 - Math.floor(timeStamp / 1000) < 24 * 60 * 60 * 2)
         fmt += '前天';

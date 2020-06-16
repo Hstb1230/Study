@@ -24,10 +24,10 @@
 {
     flex: 1;
     border-bottom: 1px solid rgba(0, 0, 0, .1);
-    padding: 5px 42px 5px 0;
+    padding: 5px 45px 5px 0;
     /* 有排名时 */
-    margin: 0 5px;
-    width: 90%;
+    margin: 0 5px 0 8px;
+    width: 100%;
 }
 
 /* 排名序号 */
@@ -58,8 +58,7 @@
     white-space: nowrap; 
     overflow: hidden;
     text-overflow: ellipsis;
-    /* margin-bottom: 3px; */
-    display: inline;
+    margin-bottom: 3px;
 }
 
 /* 歌曲副标题 */

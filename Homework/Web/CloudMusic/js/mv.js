@@ -38,7 +38,8 @@ function getComment()
 {
     return axios.get(`${domain}/comment/mv`, {
         params: {
-            id: id
+            id: id,
+            timestamp: (new Date()).getTime()
         }
     })
     .then( data => {
@@ -129,13 +130,14 @@ function e(detail, resource, comment) {
     $('.mv-info > .data > .play').innerText = `播放数：${detail.data.playCount}`;
 
     if(comment.hotComments.length > 0)
-        $('.hot-comment > ul').innerHTML = parseComment(comment.hotComments);
+        $('.hot-comment > ul').innerHTML = parseComment(comment.hotComments, 1, id);
     else 
         $('.hot-comment').style.display = 'none';
     
     $('.recent-comment > h3').innerText += `(${comment.total})`;
-    $('.recent-comment > ul').innerHTML = parseComment(comment.comments);
+    $('.recent-comment > ul').innerHTML = parseComment(comment.comments, 1, id);
 
+    generateCommentView($('.recent-comment'), 1, id);
 }
 
 axios.all( [ getDetail(), getResource(), getComment() ] )

@@ -42,7 +42,8 @@ function getSongResource()
     return axios.get(`${domain}/song/url`, {
         params: {
             id: id
-        }
+        },
+        withCredentials: true
     });
 }
 
@@ -90,7 +91,8 @@ axios.all( [ getSongInfo(), getSongResource(), getSongLyric() ] )
 
         // console.log(resource);
         audioView = $('.disc-container > audio');
-        audioView.src = resource.data.data[0].url;
+        // if(resource.data.data[0].url !== null)
+            audioView.src = resource.data.data[0].url;
         audioView.load();
 
         playBtn = $('.play-btn');

@@ -67,21 +67,39 @@ axios.all( [ getPlaylistDetail(), getPlaylistComment() ] )
         }
         // 设置标签
         let tag = $('.intro_title');
-        detail.data.playlist.tags.forEach(t => {
-            span = $make('span');
-            span.innerText = t;
-            tag.append(span);
-        });
+        if(detail.data.playlist.tags.length > 0)
+        {
+            detail.data.playlist.tags.forEach(t => {
+                span = $make('span');
+                span.innerText = t;
+                tag.append(span);
+            });
+        }
+        else
+        {
+            tag.style.display = 'none';
+        }
 
         // 设置介绍
         let intro_content = $('.intro_content');
-        (detail.data.playlist.description.split('\n')).forEach(s => {
-            span = $make('span');
-            if(s.length == 0)
-                s = '&nbsp;';
-            span.innerHTML = s;
-            intro_content.append(span);
-        });
+        if(detail.data.playlist.description)
+        {
+            (detail.data.playlist.description.split('\n')).forEach(s => {
+                span = $make('span');
+                if(s.length == 0)
+                    s = '&nbsp;';
+                span.innerHTML = s;
+                intro_content.append(span);
+            });
+        }
+        else
+        {
+            intro_content.style.display = 'none';
+        }
+
+        if(detail.data.playlist.tags.length === 0 && !detail.data.playlist.description)
+            $('.intro').style.display = 'none';
+
         if(intro_content.children.length > 5)
         {
             span = $make('span');
@@ -129,15 +147,19 @@ axios.all( [ getPlaylistDetail(), getPlaylistComment() ] )
         $('.song-list > ul').innerHTML = songList;
 
         // 热门评论
-        $('.hot-comment > ul').innerHTML = parseComment(comment.data.hotComments);
+        if(comment.data.hotComments.length > 0)
+            $('.hot-comment > ul').innerHTML = parseComment(comment.data.hotComments, 2, id);
+        else
+            $('.hot-comment').style.display = 'none';
 
         // 最新评论
-        $('.recent-comment > ul').innerHTML = parseComment(comment.data.comments);
+        $('.recent-comment > ul').innerHTML = parseComment(comment.data.comments, 2, id);
         if(comment.data.more)
             $('.recent-comment > ul').innerHTML += `
                 <div class="more">
                     <p>查看全部${comment.data.total}条评论</p>
                 </div>
             `;
+        generateCommentView($('.recent-comment'), 2, id);
     }
 ) )

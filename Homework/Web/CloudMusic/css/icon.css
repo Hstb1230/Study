@@ -103,6 +103,13 @@
     height: 12px;
 }
 
+.i-delete
+{
+    width: 15px;
+    height: 15px;
+    margin-left: 3px;
+}
+
 .i-vip
 {
     width: 21px;
@@ -160,4 +167,27 @@
     
     border-color: #d33a31;
     border-width: 2px;
+}
+
+.i-send, .i-user
+{
+    width: 25px;
+    height: 25px;
+    margin-left: 5px;
+}
+
+.i-send
+{
+    padding-left: 5px;
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.i-user
+{
+    padding-bottom: 1px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,.2);
 }

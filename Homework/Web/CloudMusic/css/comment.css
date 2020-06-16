@@ -1,13 +1,13 @@
 
 
 /* 评论 */
-.comment
+.comment-info
 {
     display: flex;
     margin: 5px 0;
 }
 
-.comment > .avatar 
+.comment-info > .avatar 
 {
     width: 32px;
     height: 32px;
@@ -18,14 +18,14 @@
     position: relative;
 }
 
-.comment > .avatar img
+.comment-info > .avatar img
 {
     width: 32px;
     height: 32px;
     border-radius: 50%;
 }
 
-.comment > .multi
+.comment-info > .multi
 {
     flex: 1;
     align-items: center;
@@ -33,7 +33,7 @@
     border-bottom: 1px solid rgba(0, 0, 0, .1);
 }
 
-.comment > .multi > .head
+.comment-info > .multi > .head
 {
     height: 32px;
     margin: 9px 0;
@@ -41,52 +41,58 @@
     align-items: center;
 }
 
-.comment > .multi > .head > .meta
+.comment-info > .multi > .head > .meta
 {
     flex: 1;
 }
 
 /* 评论者昵称以及vip标识 */
-.comment > .multi > .head > .meta > .user
+.comment-info > .multi > .head > .meta > .user
 {
     display: flex;
     align-items: center;
 }
 
-.comment > .multi > .head > .meta > .user .i-vip
+.comment-info > .multi > .head > .meta > .user .i-vip
 {
     margin-left: 3px;
 }
 
 /* 评论者昵称 */
-.comment > .multi > .head > .meta > .user > p
+.comment-info > .multi > .head > .meta > .user > p
 {
     font-size: 14px;
 }
 
 /* 评论时间 */
-.comment > .multi > .head > .meta > span
+.comment-info > .multi > .head > .meta > span
 {
     font-size: 11px;
     color: #666;
 }
 
-.comment > .multi > .head > .like
+.comment-info > .multi > .head > .like
 {
     width: 50px;
+}
+
+.comment-info > .multi > .head > .like,
+.comment-info > .multi > .head > .delete
+{
+    height: 17px;
     text-align: right;
     font-size: 13px;
     color: #666;
 }
 
 /* 评论内容 */
-.comment > .multi > .content
+.comment-info > .multi > .content
 {
     font-size: 15px;
 }
 
 /* 评论引用 */
-.comment > .multi .reply
+.comment-info > .multi .reply
 {
     color: rgba(0, 0, 0, .65);
     border: 1px solid #888;
@@ -96,7 +102,43 @@
 }
 
 /* 去除列表首个元素边框 */
-li.comment:nth-last-child(1) .multi
+li.comment-info:nth-last-child(1) .multi
 {
     border-bottom: none;
+}
+
+/* 发送评论 */
+.send-comment
+{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 45px;
+    padding: 5px;
+}
+
+.send-comment .sc-send
+{
+    flex: 1;
+    /* width: 100%; */
+    height: 100%;
+    position: relative;
+}
+
+.send-comment .sc-send #sc-content
+{
+    width: 100%;
+    height: 100%;
+    padding-left: 5px;
+}
+
+.send-comment .disable
+{
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+#sc-content:invalid ~ .i-send
+{
+    display: none;
 }

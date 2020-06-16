@@ -87,7 +87,9 @@ function highLightAll(str, key)
     if(key.length === 0) return str;
     // 避免匹配到括号
     key = key[0].replace(/\(/g, '\\(').replace(/\)/g, '\\)');
-    return str.replace(new RegExp(`(${key})`, 'ig'), '<div class="text-highlight">$1</div>');
+    let rep = str.replace(new RegExp(`(${key})`, 'ig'), '<div class="text-highlight">$1</div>');
+    // console.log(str, rep);
+    return rep;
 }
 
 function getSearchSongList(searchKey) {
@@ -261,10 +263,10 @@ function searchTo(searchKey)
                         <a href="./play.html?id=${song.id}">
                             <li>
                                 <div class="song-info">
-                                    <p class="song-name">
+                                    <div class="song-name">
                                         ${highLightAll(song.name, highLightWord)}
                                         ${subtitle}
-                                    </p>
+                                    </div>
                                     <span>
                                         ${sqVersion}
                                         ${singer}
@@ -336,6 +338,7 @@ function searchTo(searchKey)
                     newSongGroup.appendChild(a);
                     */
                 });
+                console.log(list);
                 if(list !== '')
                     newSongGroup.innerHTML = list;
                 if(songList.songs[0].privilege === undefined)
@@ -347,7 +350,7 @@ function searchTo(searchKey)
                         <br>
                         可修改"NeteaseCloudMusicApi\\module\\search.js"：
                         <br>
-                        增加请求参数「 strategy: query.strategy || 5 」并重新运行API
+                        增加请求参数「 strategy: query.strategy || 0 」并重新运行API
                     `;
                     view.insertBefore(note, view.childNodes[0]);
                 }

@@ -1,0 +1,52 @@
+.login
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    flex-flow: column wrap;
+    width: 100%;
+}
+
+.login .logo
+{
+    height: 128px;
+    width: 128px;
+    margin-bottom: 50px;
+    background-image: url(/img/circle_logo.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.login .input
+{
+    display: flex;
+    align-items: center;
+    padding: 8px 80px;
+    width: 100%;
+    height: 50px;
+}
+
+.login .input p
+{
+    width: 80px;
+}
+
+.login .input input
+{
+    flex: 1;
+    padding: 5px;
+    height: 100%;
+}
+
+.login .login-btn
+{
+    margin-top: 18px;
+    color: white;
+    padding: 10px 80px;
+    background: #d43c33;
+    border-radius: 10px;
+    border: none;
+}
