@@ -61,7 +61,8 @@ let game = {
     // 游戏状态
     state: 'playing',
 
-    pause: () => {},
+    start : () => {},
+    pause : () => {},
 
     // 使背景滚动
     bgY : -854,
