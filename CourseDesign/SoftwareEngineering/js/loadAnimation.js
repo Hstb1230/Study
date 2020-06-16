@@ -12,6 +12,8 @@ let load = {
     playing : () => {},
     // 加载页的文本变化
     flushText : () => {},
+    // 是否加载完成
+    isFinish : () => {},
 };
 
 load.init = () =>
@@ -81,5 +83,7 @@ load.flushText = () =>
 
     view.closePath();
 }
+
+load.isFinish = () => load.rect >= 380;
 
 load.init();
