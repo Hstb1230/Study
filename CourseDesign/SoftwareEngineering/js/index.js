@@ -1,93 +1,6 @@
-$ = e => document.querySelector(e);
+// 引用文件
 
-let canvas = $('#canvas');
-let view = canvas.getContext('2d');
-
-// 加载动画
-let load = {
-    img : [],
-    // 狗子X轴位置偏移
-    rect: 1,
-    textSeq : 0,
-    textToUp: true,
-    textY: -1,
-    // 初始化资源
-    init : () => {},
-    // 加载动画
-    playing : () => {},
-    // 加载页的文本变化
-    flushText : () => {},
-};
-
-load.init = () =>
-{
-    // 重置状态
-    load.rect = 1;
-    load.textSeq = 0;
-    load.textToUp = true;
-    load.textY = -1;
-    if(load.img.length > 0)
-        return;
-    load.img = new Array(9);
-    // new Image[9];
-    for(let i = 0; i < 9; i++)
-    {
-        load.img[i] = new Image();
-        load.img[i].src = `./img/loading/${i}.png`;
-    }
-}
-
-load.playing = () =>
-{
-    load.rect++;
-    let seq = Math.floor(load.rect / 5 % 9);
-    view.beginPath();
-    view.fillStyle = 'white';
-    view.fillRect(0, 0, 520, 800);
-    let gradient = view.createLinearGradient(20, 500, 397, 30);
-    gradient.addColorStop(0, '#29bdd9');
-    gradient.addColorStop(1, '#276ace');
-    view.fillStyle = gradient;
-    view.fillRect(20, 500, load.rect, 30);
-    view.closePath();
-    // console.log(this.seq, this.rect);
-    view.drawImage(load.img[seq], load.rect + 20, 480, 102, 72);
-    load.flushText();
-}
-
-load.flushText = () =>
-{
-    load.textY += load.textToUp ? 2 : -1;
-
-    view.beginPath();
-    view.font = '40px sans-serif';
-    view.fillStyle = 'black';
-    view.fillText('加载中 ', 50, 450);
-
-    view.beginPath();
-    view.font = '80px sans-serif';
-
-    let moveToY = [450, 450, 450];
-    moveToY[load.textSeq] -= load.textY;
-
-    view.fillText('. ', 200, moveToY[0]);
-    view.fillText('. ', 240, moveToY[1]);
-    view.fillText('. ', 280, moveToY[2]);
-
-    if( load.textY < 0 )
-    {
-        load.textToUp = true;
-        load.textSeq = (load.textSeq + 1) % 3;
-    }
-    else if( load.textY > 39 )
-    {
-        load.textToUp = false;
-    }
-
-    view.closePath();
-}
-
-load.init();
+$include('./js/loadAnimation.js');
 
 // 背景图片
 let bg = new Image();
@@ -148,12 +61,11 @@ let game = {
     // 游戏状态
     state: 'playing',
 
-    pause: () => {
-        if(game.state !== 'playing')
-            return;
-        game.state = 'pause';
-        canvas.isFocus = false;
-    },
+    pause: () => {},
+
+    // 使背景滚动
+    bgY : -854,
+    bgChange : () => {},
 
     gamestart : 1,
     gameload : 0,
@@ -168,22 +80,6 @@ let game = {
     bossTime : false,
     bossAttack : false,
 
-    // 使背景滚动
-    bgY : -854,
-    bgChange : function ()
-    {
-        // 判断当前场景是否生效
-        if(game.state === 'loading' || game.bossAttack)
-            return;
-        // 渲染两次背景，进行拼接
-        view.drawImage(bg, 0, this.bgY, 520, 854);
-        view.drawImage(bg, 0, this.bgY + 854, 520, 854);
-        this.bgY++;
-        if( this.bgY === 0 )
-        {
-            this.bgY = -854;
-        }
-    },
 
     scoring : function ()
     {
@@ -192,13 +88,13 @@ let game = {
         gradient.addColorStop(1, '#e92758');
         view.font = '30px  sans-serif';
         view.fillStyle = gradient;
-        view.fillText('SCORE:' + this.score, 10, 50);
+        view.fillText('SCORE:' + game.score, 10, 50);
     },
     lifeing : function ()
     {
         view.font = '30px  sans-serif';
         view.fillStyle = '#D28140';
-        view.fillText('LIFE:' + this.life, 400, 50);
+        view.fillText('LIFE:' + game.life, 400, 50);
         if( game.dead == 1 && myboomnum == 9 && game.life > 0 )
         {
             game.dead = 0;
@@ -217,7 +113,7 @@ let game = {
             game.gameover = 1;
         }
     },
-    gameovering : function ()
+    gameOvering : function ()
     {
         if( game.gameover == 1 )
         {
@@ -227,6 +123,8 @@ let game = {
             game.gamerun = 0;
         }
     },
+
+    // 开始新一轮游戏，重置游戏状态
     starting : function ()
     {
         startBtn.classList.remove('none');
@@ -530,31 +428,31 @@ let game = {
     bossBgShow : function ()
     {
         // console.log('bossBgShow');
-        view.drawImage(bossbg, 0, this.bossbgy1);
-        view.drawImage(bossbg, 0, this.bossbgy2);
-        view.drawImage(bossbg, 0, this.bossbgy3);
+        view.drawImage(bossbg, 0, game.bossbgy1);
+        view.drawImage(bossbg, 0, game.bossbgy2);
+        view.drawImage(bossbg, 0, game.bossbgy3);
         if( game.bossTime )
         {
-            view.drawImage(boss, 0, this.bg2boss);
+            view.drawImage(boss, 0, game.bg2boss);
         }
 
     },
     bossBgChange : function ()
     {
-        this.bossbgy1 += 2;
-        this.bossbgy2 += 2;
-        this.bossbgy3 += 2;
-        this.bg2boss += 2;
-        if( this.bg2boss == 800 )
+        game.bossbgy1 += 2;
+        game.bossbgy2 += 2;
+        game.bossbgy3 += 2;
+        game.bg2boss += 2;
+        if( game.bg2boss == 800 )
         {
-            this.bossTime = false;
-            this.bossAttack = true;
+            game.bossTime = false;
+            game.bossAttack = true;
         }
-        if( this.bossbgy3 == 800 )
+        if( game.bossbgy3 == 800 )
         {
-            this.bossbgy1 = -1540;
-            this.bossbgy2 = -760;
-            this.bossbgy3 = 20;
+            game.bossbgy1 = -1540;
+            game.bossbgy2 = -760;
+            game.bossbgy3 = 20;
         }
     },
 
@@ -569,6 +467,27 @@ let game = {
         enemyArr = [];
     },
 };
+
+// 暂停游戏
+game.pause = () => {
+    if(game.state !== 'playing')
+        return;
+    game.state = 'pause';
+    canvas.isFocus = false;
+}
+
+// 改变背景
+game.bgChange = () => {
+    // 判断当前场景是否生效
+    if(game.state === 'loading' || game.bossAttack)
+        return;
+    // 渲染两次背景，进行拼接
+    view.drawImage(bg, 0, game.bgY, 520, 854);
+    view.drawImage(bg, 0, game.bgY + 854, 520, 854);
+    game.bgY++;
+    if( game.bgY === 0 )
+        game.bgY = -854;
+}
 
 setInterval(function ()
 {
@@ -623,7 +542,7 @@ setInterval(function ()
         game.enemyisbroke();
         game.enemyboom();
         game.lifeing();
-        game.gameovering();
+        game.gameOvering();
         game.scoring();
     }
 
@@ -645,12 +564,11 @@ canvas.onmousemove = function ( e )
     if(game.state === 'playing' && game.gamerun == 1 && game.dead == 0 )
     {
         game.myplane(e);
-        this.style.cursor = 'none';
+        canvas.style.cursor = 'none';
     }
     else
     {
         canvas.removeAttribute('style');
-        // this.style.cursor = '';
     }
 };
 
@@ -682,6 +600,7 @@ document.onkeydown = (e) =>
     }
 };
 
+// 当鼠标移出游戏界面时暂停游戏
 document.onmouseout = document.onmousemove = (e) =>
 {
     const left = canvas.parentElement.offsetLeft - 30;
