@@ -8,9 +8,15 @@ fetch(`${domain}/personalized/newsong`, {
 })
 .then((data) => {
     recArr = data.result.slice(0, 10)
-    newSongGroup = document.querySelector('.new-song > ul')
+    // newSongGroup = document.querySelector('.new-song > ul');
+    newSongGroup = $('.song-list.new > ul');
+    let songList = '';
     recArr.forEach(elem => {
         song = elem.song;
+        // console.log(song);
+
+        /*
+        // DOM
         a = document.createElement('a');
         a.href = `play.html?id=${song.id}`;
         li = document.createElement('li');
@@ -58,9 +64,47 @@ fetch(`${domain}/personalized/newsong`, {
 
         if(song.privilege.maxbr == 999000)
         {
-            songSingerDiv.innerHTML = '<span class="sq-icon"></span> ' + songSingerDiv.innerHTML ;
+            songSingerDiv.innerHTML = '<span class="sq-icon"></span>' + songSingerDiv.innerHTML ;
         }
 
         newSongGroup.appendChild(a);
+        return;
+        */
+        
+        let singer = '';
+        song.artists.forEach( ar => {
+            singer += ` / ${ar.name}`;
+        });
+        singer = singer.slice(3);
+
+        let subtitle = '';
+        if(song.alias.length > 0)
+            subtitle = `<span class="subtitle">(${song.alias[0]})</span>`;
+
+        let sqVersion = '';
+        if(song.privilege.maxbr == 999000)
+            sqVersion = '<span class="sq-icon"></span>';
+
+        songList += `
+        <a href="./play.html?id=${song.id}">
+            <li>
+                <div class="song-info">
+                    <p class="song-name">
+                        ${song.name}
+                        ${subtitle}
+                    </p>
+                    <span>
+                        ${sqVersion}
+                        ${singer}
+                         - 
+                        ${song.album.name}
+                    </span>
+                </div>
+                <span class="play-icon"></span>
+            </li>
+        </a>
+        `;
     })
+    if(songList !== '')
+        newSongGroup.innerHTML = songList;
 })

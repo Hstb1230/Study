@@ -1,0 +1,94 @@
+/* 歌曲列表 */
+.song-list ul 
+{
+    margin: 5px 0;
+}
+
+.song-list a
+{
+    text-decoration: none;
+    color: gray;
+}
+
+.song-list li
+{
+    height: 54px;
+    font-size: 14px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+}
+
+.song-list .song-info
+{
+    flex: 1;
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    padding: 5px 42px 5px 0;
+    /* 有排名时 */
+    margin: 0 5px;
+    width: 90%;
+}
+
+/* 排名序号 */
+.song-list .rank
+{
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    color: gray;
+    position: absolute;
+    left: 0;
+    font-size: 17px;
+}
+
+/* 没有排名 */
+.song-list .rank ~ .song-info
+{
+    margin: 0 5px 0 42px;
+}
+
+/* 歌名 */
+.song-list p,
+.song-list .song-name
+{
+    color: #333333;
+    font-size: 17px;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* margin-bottom: 3px; */
+    display: inline;
+}
+
+/* 歌曲副标题 */
+.song-list .song-name .subtitle
+{
+    font-size: 14px;
+    color: #999999;
+    display: inline;
+}
+
+/* 作者 + 专辑 */
+.song-list span
+{
+    font-size: 12px;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+}
+
+/* 去除歌曲列表第一项顶部边框 */
+.song-list a:nth-last-child(1) .song-info
+{
+    border-bottom: none;
+}
+
+/* 高亮排行前三序号 */
+.song-list.hot a:nth-child(n + 1):nth-child(-n + 3) .rank
+{
+    color: red;
+}

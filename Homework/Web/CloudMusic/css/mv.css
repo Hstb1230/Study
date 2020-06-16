@@ -1,0 +1,101 @@
+@import 'icon.css';
+@import 'comment.css'; 
+
+/* 固定视频 */
+.video
+{
+    width: 100%;
+    height: 230px;
+    position: fixed;
+    z-index: 3;
+}
+
+.video video
+{
+    width: 100%;
+}
+
+content
+{
+    position: absolute;
+    top: 230px;
+    width: 100%;
+}
+
+/* mv封面 */
+.video > .cover
+{
+    position: absolute;
+    width: 100%;
+    height: 230px;
+    z-index: 3;
+    background-color: white;
+}
+
+.video > .cover > img
+{
+    width: 100%;
+    height: 100%;
+}
+
+/* 播放按钮 */
+.video > .cover::after
+{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    z-index: 3;
+    content: "";
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZD0iTTIwIDBjMTEgMCAyMCA5IDIwIDIwcy05IDIwLTIwIDIwUzAgMzEgMCAyMCA5IDAgMjAgMHoiIG9wYWNpdHk9Ii4yNCIgZmlsbC1ydWxlPSJldmVub2RkIi8+PHBhdGggZD0iTTIwIDJjOS45IDAgMTggOC4xIDE4IDE4cy04LjEgMTgtMTggMThTMiAyOS45IDIgMjAgMTAuMSAyIDIwIDJtMC0yQzkgMCAwIDkgMCAyMHM5IDIwIDIwIDIwIDIwLTkgMjAtMjBTMzEgMCAyMCAweiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjYiLz48cGF0aCBkPSJNMTYgMTMuOXMwLTEuNiAxLjYtLjVsMTAuOSA2LjFzMS4xLjUgMCAxLjFsLTEwLjkgNi4xcy0xLjYgMS4xLTEuNi0uNVYxMy45IiBmaWxsPSIjZmZmIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4=) 0 0/contain no-repeat;
+}
+
+/* MV信息 */
+.mv-info
+{
+    width: 100%;
+    padding: 10px;
+    font-size: 13px;
+}
+
+.mv-info > .name-container
+{
+    margin: 5px 0;
+    font-size: 17px;
+}
+
+.mv-info > .artist
+{
+    margin: 5px 0;
+    color: #507daf;
+}
+
+.mv-info > .data
+{
+    color: #999999;
+}
+
+.mv-info > .data > .release
+{
+    padding-right: 12px;
+    border-right: 1px solid #999999 ;
+}
+
+.mv-info > .data > .play
+{
+    padding-left: 8px;
+}
+
+h3.title
+{
+    font-weight: normal;
+    font-size: 14px;
+    padding-left: 10px;
+    margin-top: 5px;
+    height: 20px;
+    line-height: 20px;
+    color: #666;
+    background-color: rgb(233, 233, 233);
+}

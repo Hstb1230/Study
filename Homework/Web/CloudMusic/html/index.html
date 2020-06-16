@@ -49,7 +49,8 @@
                     <p>最新音乐</p>
                 </div>
             
-                <div class="new-song">
+                <div class="song-list new">
+                <!-- <div class="new-song"> -->
                     <ul>
                         <!-- 
                         <a href="">
@@ -76,7 +77,21 @@
             </div>
             <!-- 热歌榜 -->
             <div class="screen">
-                22222222222222222222222222222222
+                <div class="hot-song-header">
+                    <div class="hsh-highlight"></div>
+                    <div class="hsh-content">
+                        <div class="cover"></div>
+                        <div class="update">
+                            更新日期：
+                            <span>06月11日</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 歌曲列表 -->
+                <div class="song-list hot">
+                    <ul>
+                    </ul>
+                </div>
             </div>
             <!-- 搜索页 -->
             <div class="screen">
@@ -119,8 +134,9 @@
 
 </body>
 <script src="/node_modules/axios/dist/axios.js"></script>
-<!-- <script src="/js/changeHeight.js"></script> -->
+<script src="/js/global.js"></script>
 <script src="/js/recSong.js"></script>
 <script src="/js/newSong.js"></script>
+<script src="/js/hotSong.js"></script>
 <script src="/js/search.js"></script>
 </html>

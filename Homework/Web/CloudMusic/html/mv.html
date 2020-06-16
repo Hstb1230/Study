@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MV</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/mv.css">
+</head>
+<body>
+    <div class="video">
+        <div class="cover" style="opacity: 1;">
+            <img>
+        </div>
+        <video controls></video>
+    </div>
+    <content>
+        <div class="mv-info">
+            <h4 class="name-container">
+                <i class="i-mv">mv</i>
+                <span class="name"></span>
+            </h4>
+            <div class="artist">
+                歌手：
+            </div>
+            <div class="data">
+                <span class="release"></span>
+                <span class="play"></span>
+            </div>
+        </div>
+        <div class="hot-comment">
+            <h3 class="title">精彩评论</h3>
+            <ul>
+            </ul>
+        </div>
+        <div class="recent-comment">
+            <h3 class="title">最新评论</h3>
+            <ul>
+            </ul>
+        </div>
+    </content>
+</body>
+<script src="/node_modules/axios/dist/axios.min.js"></script>
+<script src="/js/global.js"></script>
+<script src="/js/comment.js"></script>
+<script src="/js/mv.js"></script>
+</html>

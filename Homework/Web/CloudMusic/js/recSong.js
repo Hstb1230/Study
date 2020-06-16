@@ -1,4 +1,3 @@
-const domain = 'http://localhost:3000';
 
 fetch(`${domain}/personalized`, {
     method: 'GET',
@@ -7,7 +6,7 @@ fetch(`${domain}/personalized`, {
 .then( data => data.json() )
 .then( data => {
     recArr = data.result.slice(0, 6)
-    recGroup = document.querySelector('.rec-song > ul')
+    recGroup = $('.rec-song > ul')
     recArr.forEach(elem => {
         li = document.createElement('li');
         recGroup.appendChild(li);

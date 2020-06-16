@@ -1,23 +1,29 @@
-const domain = 'http://localhost:3000';
+$('html').style.height = '100%';
 
-document.querySelector('html').style.height = '100%';
-
-// 捕获ID
-let query = location.search.slice(1).split('&');
-let id = null;
-query.forEach(element => {
-    param = element.split('=');
-    if(param[0] === 'id')
-    {
-        id = param[1];
-        return;
-    }
-});
+const id = getParam('id');
 
 // 空请求，跳转首页
 if(id === null || id.length == 0)
 {
     window.location.href= '.';
+}
+
+let audio = $('.disc-container > audio');
+const makeAudioPause = () => {
+    audio.volume = Math.max(0, Math.floor((audio.volume - 0.05) * 100) / 100);
+    if(audio.volume <= 0)
+    {
+        audio.pause();
+        discView.classList.replace('playing', 'paused');
+    }
+    else
+        setTimeout(makeAudioPause, Math.floor(audio.volume * 100));
+}
+
+const makeAudioPlay = () => {
+    audio.volume = Math.min(1, Math.floor((audio.volume + 0.04) * 100) / 100);
+    if(audio.volume < 1)
+        setTimeout(makeAudioPlay, Math.floor(audio.volume * 100));
 }
 
 // 获取歌曲信息
@@ -59,20 +65,20 @@ axios.all( [ getSongInfo(), getSongResource(), getSongLyric() ] )
         // console.log(info);
 
         albumImg = info.data.songs[0].al.picUrl;
-        albumImgView = document.querySelector('.disc > .album > img');
+        albumImgView = $('.disc > .album > img');
         albumImgView.src = albumImg;
 
-        backgroundImgView = document.querySelector('.background-blur img');
+        backgroundImgView = $('.background-blur img');
         backgroundImgView.src = albumImg;
 
-        songNameView = document.querySelector('.song-title > .song-name');
+        songNameView = $('.song-title > .song-name');
         songNameView.innerText = info.data.songs[0].name;
         if(info.data.songs[0].tns != undefined)
         {
             songNameView.innerText += `（${info.data.songs[0].tns[0]}）`;
         }
 
-        singerView = document.querySelector('.song-title > .singer');
+        singerView = $('.song-title > .singer');
         info.data.songs[0].ar.forEach(
             singer => {
                 singerView.innerText += ` / ${singer.name}`;
@@ -80,20 +86,20 @@ axios.all( [ getSongInfo(), getSongResource(), getSongLyric() ] )
         );
         singerView.innerText = singerView.innerText.slice(2);
 
-        document.title = document.querySelector('.song-title').innerText;
+        document.title = $('.song-title').innerText;
 
         // console.log(resource);
-        audioView = document.querySelector('.disc-container > audio');
+        audioView = $('.disc-container > audio');
         audioView.src = resource.data.data[0].url;
         audioView.load();
 
-        playBtn = document.querySelector('.play-btn');
+        playBtn = $('.play-btn');
 
-        rangeBarView = document.querySelector('.range-container > input[type=range]');
+        rangeBarView = $('.range-container > input[type=range]');
 
         // console.log(lyric);
-        lyricView = document.querySelector('.lyric');
-        lyricScrollView = document.querySelector('.lyric-scroll');
+        lyricView = $('.lyric');
+        lyricScrollView = $('.lyric-scroll');
 
         // 歌词组合
         let lyricMap = new Map();
@@ -167,20 +173,28 @@ axios.all( [ getSongInfo(), getSongResource(), getSongLyric() ] )
             if(audioView.paused)
             {
                 playBtn.style.opacity = '0';
-                audioView.play();
                 discView.classList.replace('paused', 'playing');
                 lyricPlay.togglePlay();
+                audioView.play();
+                setTimeout(makeAudioPlay, audioView.volume);
             }
             else 
             {
-                playBtn.removeAttribute('style');
-                audioView.pause();
-                discView.classList.replace('playing', 'paused');
-                lyricPlay.togglePlay();
+                let d = () => {
+                    if(audioView.paused)
+                    {
+                        clearInterval(interval);
+                        lyricPlay.togglePlay();
+                        playBtn.style.opacity = '1';
+                        playBtn.removeAttribute('style');
+                    }
+                };
+                let interval = setInterval(d, 10);
+                setTimeout(makeAudioPause, audioView.volume);
             }
         }
 
-        discView = document.querySelector('.disc');
+        discView = $('.disc');
 
         audioView.addEventListener('loadedmetadata', () => {
             rangeBarView.max = audioView.duration;
@@ -204,7 +218,16 @@ axios.all( [ getSongInfo(), getSongResource(), getSongLyric() ] )
         });
 
         audioView.addEventListener('ended', () => { 
+            playBtn.style.opacity = '1';
             discView.classList.replace('playing', 'paused'); 
         });
+
+        document.onkeydown = e => {
+            if(e.code === 'Space')
+            {
+                tryPlay();
+                e.preventDefault();
+            }
+        }
     }
 ));
