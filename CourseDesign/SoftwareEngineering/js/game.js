@@ -51,14 +51,14 @@ let game = {
             myplane1boom.src = `img/myplane1boom${myboomnum}.png`;
         }
         else if( game.dead == 1 && game.life == 0 )
-        {
             game.gameover = 1;
-        }
     },
     gameOvering : function ()
     {
         if( game.gameover == 1 )
         {
+            game.reset();
+
             game.gamestart = 1;
             game.gameover = 0;
             game.dead = 0;
@@ -69,6 +69,9 @@ let game = {
     // 开始新一轮游戏，重置游戏状态
     reset : function ()
     {
+        game.state = 'home';
+        // 显示鼠标，开始游戏按钮
+        canvas.removeAttribute('style');
         startBtn.classList.remove('none');
 
         game.life = 3;
@@ -410,12 +413,30 @@ let game = {
     },
 };
 
+// 开始游戏
+game.start = () => {
+    console.log('game.start');
+    // 隐藏鼠标
+    canvas.style.cursor = 'none';
+    if(game.state === 'home' || game.state === 'playing')
+    {
+        load.init();
+        startBtn.classList.add('none');
+        game.state = 'loading';
+    }
+    else if(game.state === 'pause')
+    {
+        game.state = 'playing';
+    }
+}
+
 // 暂停游戏
 game.pause = () => {
     if(game.state !== 'playing')
         return;
     game.state = 'pause';
-    canvas.isFocus = false;
+    // 显示鼠标
+    canvas.removeAttribute('style');
 }
 
 // 改变背景
@@ -435,22 +456,18 @@ setInterval(function ()
 {
     // 暂停游戏
     if(game.state === 'pause')
-    {
         return;
-    }
+
     game.bgChange();
     if( game.gamestart == 1 )
-    {
-        game.reset();
-
         view.drawImage(logo, 110, 200);
-    }
     if( game.gameload == 1 )
     {
-        if( load.rect >= 380 )
+        if( load.isFinish() )
         {
             game.gameload = 0;
             game.gamerun = 1;
+            game.state = 'playing';
         }
         load.playing();
     }
@@ -496,9 +513,8 @@ setInterval(function ()
 let startBtn = $('.startBtn');
 startBtn.onclick = function ()
 {
-    load.init();
+    game.start();
 
-    startBtn.classList.add('none');
     game.gamestart = 0;
     game.gameload = 1;
 };
@@ -508,11 +524,6 @@ canvas.onmousemove = function ( e )
     if(game.state === 'playing' && game.gamerun == 1 && game.dead == 0 )
     {
         game.myplane(e);
-        canvas.style.cursor = 'none';
-    }
-    else
-    {
-        canvas.removeAttribute('style');
     }
 };
 
@@ -525,14 +536,9 @@ document.onkeydown = (e) =>
     if(e.key === 'Escape')
     {
         if(game.state === 'playing')
-        {
-            // 暂停游戏
-            game.state = 'pause';
-        }
+            game.pause();
         else if(game.state === 'pause')
-        {
-            game.state = 'playing';
-        }
+            game.start();
     }
     else if( e.key === 'Backspace' )
     {
@@ -549,7 +555,9 @@ document.onmouseout = document.onmousemove = (e) =>
 {
     const left = canvas.parentElement.offsetLeft - 30;
     const right = canvas.parentElement.offsetLeft + canvas.parentElement.offsetWidth + 30;
-    if((left <= e.clientX && e.clientX <= right))
-        return;
-    game.pause();
+    canvas.isFocus = (left <= e.clientX && e.clientX <= right);
+    if(!canvas.isFocus)
+        game.pause();
 }
+
+game.reset();
