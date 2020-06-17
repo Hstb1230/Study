@@ -526,10 +526,8 @@ document.onkeydown = (e) =>
     else if( e.key === 'Backspace' )
     {
         if(game.state === 'playing')
-        {
             // 清除敌机（调试）
             game.gua();
-        }
     }
 };
 
