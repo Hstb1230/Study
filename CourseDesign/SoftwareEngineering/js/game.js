@@ -9,9 +9,6 @@ let game = {
     bgY : -854,
     bgChange : () => {},
 
-    gamestart : 1,
-    gameload : 0,
-    gamerun : 0,
     gameover : 0,
     dead : 0,
     score : 0,
@@ -59,10 +56,8 @@ let game = {
         {
             game.reset();
 
-            game.gamestart = 1;
             game.gameover = 0;
             game.dead = 0;
-            game.gamerun = 0;
         }
     },
 
@@ -457,21 +452,17 @@ setInterval(function ()
     // 暂停游戏
     if(game.state === 'pause')
         return;
-
     game.bgChange();
-    if( game.gamestart == 1 )
+    // 只有在首页时显示
+    if( game.state === 'home' )
         view.drawImage(logo, 110, 200);
-    if( game.gameload == 1 )
+    else if( game.state === 'loading' )
     {
         if( load.isFinish() )
-        {
-            game.gameload = 0;
-            game.gamerun = 1;
             game.state = 'playing';
-        }
         load.playing();
     }
-    if( game.gamerun == 1 )
+    else if( game.state === 'playing' )
     {
         if( game.score >= 300 && game.bossTimeBlur )
         {
@@ -514,17 +505,13 @@ let startBtn = $('.startBtn');
 startBtn.onclick = function ()
 {
     game.start();
-
-    game.gamestart = 0;
-    game.gameload = 1;
 };
 
 canvas.onmousemove = function ( e )
 {
-    if(game.state === 'playing' && game.gamerun == 1 && game.dead == 0 )
-    {
+    // 更新飞机位置（轨迹）
+    if(game.state === 'playing' && game.dead == 0 )
         game.myplane(e);
-    }
 };
 
 canvas.onmouseenter = (e) => canvas.isFocus = true;
