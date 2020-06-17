@@ -1,6 +1,6 @@
 let game = {
     // 游戏状态
-    state: 'playing',
+    state: 'home',
 
     start : () => {},
     pause : () => {},
@@ -410,19 +410,16 @@ let game = {
 
 // 开始游戏
 game.start = () => {
-    console.log('game.start');
     // 隐藏鼠标
     canvas.style.cursor = 'none';
-    if(game.state === 'home' || game.state === 'playing')
+    if(game.state === 'home')
     {
         load.init();
         startBtn.classList.add('none');
         game.state = 'loading';
     }
     else if(game.state === 'pause')
-    {
         game.state = 'playing';
-    }
 }
 
 // 暂停游戏
@@ -453,18 +450,20 @@ setInterval(function ()
     if(game.state === 'pause')
         return;
     game.bgChange();
-    // 只有在首页时显示
     if( game.state === 'home' )
+        // 只在首页显示LOGO
         view.drawImage(logo, 110, 200);
     else if( game.state === 'loading' )
     {
         if( load.isFinish() )
             game.state = 'playing';
-        load.playing();
+        else
+            load.playing();
     }
     else if( game.state === 'playing' )
     {
-        if( game.score >= 300 && game.bossTimeBlur )
+        // 设置Boss模式触发点
+        if( game.score >= 10 && game.bossTimeBlur )
         {
             game.warnOn = true;
             game.gua();
@@ -502,10 +501,7 @@ setInterval(function ()
 
 // 开始按钮
 let startBtn = $('.startBtn');
-startBtn.onclick = function ()
-{
-    game.start();
-};
+startBtn.onclick = () => game.start();
 
 canvas.onmousemove = function ( e )
 {
