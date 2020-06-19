@@ -12,12 +12,6 @@ const int codeOperator = 4;
 // ·Ö¸ô·û
 const int codeDivide = 5;
 
-struct info
-{
-	int code;
-	string str;
-};
-
 bool isKey(string & s)
 {
 	static string keyList[] = {
