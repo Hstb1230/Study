@@ -9,11 +9,52 @@
 </head>
 <body>
 
-<div class="container">
-    <div class="startBtn"></div>
-    <canvas width="520" height="800" id="canvas">
-        浏览器无法加载页面
-    </canvas>
+<!-- 游戏界面（未开始时可做背景） -->
+<canvas width="520" height="800" id="game">
+    浏览器无法加载页面
+</canvas>
+
+<!-- 悬浮窗 -->
+<div class="float">
+    <div class="container">
+        <input type="checkbox" />
+        223333333333333
+    </div>
+</div>
+
+<!-- 主界面 -->
+<div class="main">
+    <div class="tab">
+        <div class="default">
+            <!--  未登录  -->
+            <div class="account">
+                <a class="a-register">
+                    注册
+                </a>
+                <div class="a-login">
+                    <a>登录</a>
+                </div>
+            </div>
+            <div class="note">
+                <!-- 底部提示 -->
+                <div class="pact">
+                    <!-- 用户协议 -->
+                    <input type="checkbox" />
+                    <p>&nbsp;我已阅读 <a href="/#">《 用户协议 》</a></p>
+                </div>
+                <div class="advice">
+                    <!-- 健康提示 -->
+                    抵制不良游戏，拒绝盗版游戏。注意自我保护，谨防受骗上当。
+                    <br>
+                    适度游戏益脑，沉迷游戏伤身。合理安排时间，享受健康生活。
+                </div>
+            </div>
+        </div>
+        <div class="home">
+            <!-- 已登录 -->
+            <div class="startBtn none"></div>
+        </div>
+    </div>
 </div>
 
 <script src="./js/global.js"></script>

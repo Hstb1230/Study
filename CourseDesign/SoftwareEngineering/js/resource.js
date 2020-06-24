@@ -53,3 +53,6 @@ boss.src = 'img/planeboss.png';
 //boss改变飞机速度
 let bossattacktime = 0;
 let bossattacknum = 1;
+
+// 开始按钮
+let startBtn = $('.startBtn');

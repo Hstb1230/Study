@@ -8,5 +8,5 @@ $include = (e) => {
     head.appendChild(newScript);
 }
 
-let canvas = $('#canvas');
+let canvas = $('#game');
 let view = canvas.getContext('2d');

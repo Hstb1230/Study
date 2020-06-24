@@ -52,7 +52,7 @@ let game = {
     },
     gameOvering : function ()
     {
-        if( game.gameover == 1 )
+        if( game.gameover === 1 )
         {
             game.reset();
 
@@ -67,7 +67,8 @@ let game = {
         game.state = 'home';
         // 显示鼠标，开始游戏按钮
         canvas.removeAttribute('style');
-        startBtn.classList.remove('none');
+        if(account.isLogin)
+            startBtn.classList.remove('none');
 
         game.life = 3;
         game.score = 0;
@@ -463,7 +464,7 @@ setInterval(function ()
     else if( game.state === 'playing' )
     {
         // 设置Boss模式触发点
-        if( game.score >= 10 && game.bossTimeBlur )
+        if( game.score >= 100 && game.bossTimeBlur )
         {
             game.warnOn = true;
             game.gua();
@@ -499,8 +500,6 @@ setInterval(function ()
 
 }, 10);
 
-// 开始按钮
-let startBtn = $('.startBtn');
 startBtn.onclick = () => game.start();
 
 canvas.onmousemove = function ( e )
