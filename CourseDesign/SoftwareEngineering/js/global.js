@@ -4,8 +4,14 @@ $include = (e) => {
     let newScript = document.createElement('script');
     newScript.setAttribute('type','text/javascript');
     newScript.setAttribute('src',e);
-    let head = document.querySelector('head');
-    head.appendChild(newScript);
+    document.body.appendChild(newScript);
+}
+
+$make = (e) => document.createElement(e);
+
+// https://zeit.co/blog/async-and-await
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 let canvas = $('#game');
