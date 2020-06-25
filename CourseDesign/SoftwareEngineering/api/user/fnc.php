@@ -546,3 +546,17 @@ function getRank()
     }
     return $rankList;
 }
+
+function getPactContent()
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT content FROM setting WHERE name = ?');
+    $str = 'pact';
+    $stmt->bind_param('s', $str);
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($content);
+    $stmt->fetch();
+    $stmt->close();
+    return $content;
+}
