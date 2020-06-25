@@ -504,6 +504,7 @@ startBtn.onclick = () => game.start();
 
 canvas.onmousemove = function ( e )
 {
+    console.log(game.state, game.dead);
     // 更新飞机位置（轨迹）
     if(game.state === 'playing' && game.dead == 0 )
         game.myplane(e);
