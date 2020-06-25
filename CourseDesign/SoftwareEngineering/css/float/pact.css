@@ -1,0 +1,40 @@
+.float .content .pact-request
+{
+    font-size: 19px;
+}
+
+.float .content .pact-request a
+{
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration-line: underline;
+}
+
+.float .content .pact-content
+{
+    margin-right: 3px;
+}
+
+.float .content .pact-content h3
+{
+    text-align: center;
+    width: 100%;
+    padding-bottom: 25px;
+    border-bottom: 1px solid gray;
+}
+
+.float .content .pact-content p
+{
+    font-size: 19px;
+}
+
+.float .content .pact-content .btn-agree
+{
+    padding: 23px;
+    text-align: center;
+    background: black;
+    border-radius: 25px;
+    color: whitesmoke;
+    font-size: 23px;
+    cursor: pointer;
+}
