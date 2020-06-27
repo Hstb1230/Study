@@ -1,0 +1,23 @@
+
+.i-see, .i-hide
+{
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.i-see
+{
+    background-image: url('/img/icon/see.png');
+}
+
+.i-hide
+{
+    background-image: url('/img/icon/hide.png');
+}

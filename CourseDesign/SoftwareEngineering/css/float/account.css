@@ -1,0 +1,81 @@
+.float .register,
+.float .register form,
+.float .register form .submit
+{
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.float .register h3
+{
+    width: 100%;
+    text-align: center;
+    padding-bottom: 25px;
+    border-bottom: 1px solid gray;
+}
+
+.float .register form
+{
+    margin-top: 25px;
+    align-items: flex-end;
+}
+
+.float .register ul
+{
+    margin-bottom: 19px;
+}
+
+.float .register li
+{
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    font-size: 17px;
+}
+
+.float .register li p
+{
+    margin-right: 8px;
+}
+
+.float .register li label
+{
+    width: 55%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.float .register form input,
+.float .register form select
+{
+    width: 80%;
+    padding: 5px;
+}
+
+.float .register form select
+{
+    width: 89%;
+}
+
+.float .register form .submit
+{
+    width: 50px;
+    height: 50px;
+    background: black;
+    border-radius: 50%;
+    color: white;
+    font-size: 23px;
+}
+
+.float .register form .submit input
+{
+    display: none;
+}
+
+.float .register label[for=sp],
+.float .register label[for=p]
+{
+    position: relative;
+}

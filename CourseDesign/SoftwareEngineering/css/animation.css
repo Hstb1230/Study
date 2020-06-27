@@ -1,0 +1,39 @@
+
+
+/*
+ * 抖动效果
+ * https://blog.csdn.net/wsmrzx/article/details/102864730
+ */
+.shake
+{
+    animation: shake 800ms ease-in-out;
+}
+@keyframes shake
+{
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(+2px, 0, 0); }
+    30%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(+4px, 0, 0); }
+    50% { transform: translate3d(-4px, 0, 0); }
+}
+
+/* 隐藏提示文本 */
+form input::placeholder
+{
+    opacity: 1;
+    font-weight: bold;
+    transition: opacity 1.8s ease-in-out;
+}
+/* 期望：渐变消失 */
+input.ph-hide::placeholder
+{
+    opacity: 0;
+}
+/* 使用placeholder-shown会导致整个输入框消失 */
+/* Mozilla，IE等不支持透明度变化（标准支持） */
+input.ph-hide::-moz-placeholder,
+input.ph-hide::-ms-input-placeholder
+{
+    opacity: 1;
+}
+

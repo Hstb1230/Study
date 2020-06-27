@@ -26,6 +26,7 @@
 .float .content .pact-content p
 {
     font-size: 19px;
+    margin: 19px 0;
 }
 
 .float .content .pact-content .btn-agree

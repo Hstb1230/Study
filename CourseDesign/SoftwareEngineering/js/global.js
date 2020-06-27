@@ -14,5 +14,14 @@ function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
+function objectToKeyValue(obj)
+{
+    let kv = '';
+    Object.keys(obj).forEach( k => {
+        kv += `&${k}=${escape(obj[k])}`;
+    });
+    return kv.substring(1);
+}
+
 let canvas = $('#game');
 let view = canvas.getContext('2d');

@@ -1,4 +1,5 @@
 @import 'pact.css';
+@import 'account.css';
 
 /*
  * 悬浮窗
@@ -32,7 +33,7 @@
     max-height: 70%;
     background: linear-gradient(aliceblue, floralwhite);
     border-radius: 25px;
-    padding: 25px 15px 25px 25px;
+    padding: 25px;
 }
 
 .float .content
