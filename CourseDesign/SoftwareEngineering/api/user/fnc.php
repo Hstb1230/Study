@@ -110,6 +110,16 @@ function register($username, $password, $verify_problem_id, $verify_answer, &$fa
         $factor = '问题ID非法';
         return false;
     }
+    if(strlen($username) < 3)
+    {
+        $factor = '用户名太短';
+        return false;
+    }
+    if(strlen($password) < 3)
+    {
+        $factor = '密码太短';
+        return false;
+    }
     $create_time = time();
     $password = md5($password);
     global $conn;
@@ -121,11 +131,17 @@ function register($username, $password, $verify_problem_id, $verify_answer, &$fa
         $_SESSION['role'] = 0;
         $_SESSION['user_id'] = getUserID($username);
         setWarehouse(10, 5, 3);
+        logout();
     }
     else
         $factor = $stmt->error;
     $stmt->close();
     return $isSuccess;
+}
+
+function logout()
+{
+    unset($_SESSION['role'], $_SESSION['user_id']);
 }
 
 /**
