@@ -68,7 +68,7 @@ let game = {
         // 显示鼠标，开始游戏按钮
         canvas.removeAttribute('style');
         if(account.isLogin)
-            startBtn.classList.remove('none');
+            startBtn.classList.remove('hide');
 
         game.life = 3;
         game.score = 0;
@@ -416,7 +416,7 @@ game.start = () => {
     if(game.state === 'home')
     {
         load.init();
-        startBtn.classList.add('none');
+        startBtn.classList.add('hide');
         game.state = 'loading';
     }
     else if(game.state === 'pause')
@@ -531,12 +531,19 @@ document.onkeydown = (e) =>
     }
 };
 
+let allowLeft = (document.body.parentElement.offsetWidth / 2 - 260) - 50;
+let allowRight = (document.body.parentElement.offsetWidth / 2 + 260) - 50;
+
+// 因为不触发resize事件，只能定时获取
+setInterval(() => {
+    allowLeft = (document.body.parentElement.offsetWidth / 2 - 260) - 50;
+    allowRight = (document.body.parentElement.offsetWidth / 2 + 260) + 50;
+}, 2000);
+
 // 当鼠标移出游戏界面时暂停游戏
 document.onmouseout = document.onmousemove = (e) =>
 {
-    const left = canvas.parentElement.offsetLeft - 30;
-    const right = canvas.parentElement.offsetLeft + canvas.parentElement.offsetWidth + 30;
-    canvas.isFocus = (left <= e.clientX && e.clientX <= right);
+    canvas.isFocus = (allowLeft <= e.clientX && e.clientX <= allowRight);
     if(!canvas.isFocus)
         game.pause();
 }

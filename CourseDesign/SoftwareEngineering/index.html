@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>全民飞机大战</title>
     <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <link rel="stylesheet" href="./css/home.css">
     <link rel="stylesheet" type="text/css" href="./css/icon.css">
 </head>
 <body>
@@ -33,7 +34,7 @@
         </canvas>
 
         <!-- 功能 -->
-        <div class="default">
+        <div class="default hide">
             <!--  未登录  -->
             <div class="account gray">
                 <a class="register" onclick="return floatOfRegister()">
@@ -61,9 +62,31 @@
                 </div>
             </div>
         </div>
-        <div class="home">
+        <div class="home hide">
+            <div class="header">
+                <!-- 设置 -->
+                <div class="i-setting" onclick="floatOfSetting()"> </div>
+                <!-- 道具 -->
+                <div class="prop">
+                    <div class="power">
+                        <div class="i-power"> </div>
+                        <p>0</p>
+                    </div>
+                    <div class="gold">
+                        <div class="i-gold"> </div>
+                        <p>0</p>
+                    </div>
+                    <div class="buy" onclick="floatOfRecharge()">
+                        ＋
+                    </div>
+                </div>
+            </div>
             <!-- 已登录 -->
-            <div class="startBtn none"></div>
+            <div class="startBtn"></div>
+            <div class="menu">
+                <div class="rank" onclick="floatOfRank()">排行榜</div>
+                <div class="store" onclick="floatOfStore()">游戏商店</div>
+            </div>
         </div>
     </div>
 

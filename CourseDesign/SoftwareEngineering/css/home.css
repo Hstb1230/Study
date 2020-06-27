@@ -1,0 +1,105 @@
+.home .header
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    /*width: -webkit-fill-available;*/
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+    padding: 8px 0;
+    animation: light .6s linear forwards;
+}
+
+.home .header:hover
+{
+    animation: deep .6s linear forwards;
+}
+
+.home .header .prop,
+.home .header .prop .power,
+.home .header .prop .gold
+{
+    display: flex;
+    align-items: center;
+}
+
+
+.home .header .prop
+{
+    margin-right: 8px;
+    color: white;
+}
+.home .header .prop .power p
+{
+    padding-right: 8px;
+    border-right: 2px solid gray;
+}
+
+.home .header .prop .power .i-power,
+.home .header .prop .power .i-gold
+{
+    margin-right: 0;
+}
+
+.home .header .prop .buy
+{
+    width: 16px;
+    height: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 1px solid white;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.home .header .i-setting,
+.home .menu .rank,
+.home .menu .store,
+.home .header .prop .buy
+{
+    cursor: pointer;
+    transition: all .4s;
+}
+
+.home .header .i-setting:hover,
+.home .menu .rank:hover,
+.home .menu .store:hover,
+.home .header .prop .buy:hover
+{
+    transform: scale(1.1);
+}
+
+.home .menu
+{
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+}
+
+.home .menu .rank,
+.home .menu .store
+{
+    padding: 8px 15px;
+    border-radius: 25px;
+    margin: 12px auto;
+}
+
+.home .menu .rank
+{
+    background: #4CA1AF;
+}
+
+.home .menu .store
+{
+    background: olivedrab;
+}

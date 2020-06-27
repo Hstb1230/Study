@@ -1,15 +1,20 @@
 
-.i-see, .i-hide
+[class^=i-]
 {
     width: 22px;
     height: 22px;
-    position: absolute;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    margin: 0 8px;
+}
+
+.i-see, .i-hide
+{
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .i-see
@@ -20,4 +25,24 @@
 .i-hide
 {
     background-image: url('/img/icon/hide.png');
+}
+
+.i-setting
+{
+    background-image: url('/img/icon/setting.png');
+}
+
+.i-gold
+{
+    background-image: url('/img/icon/gold.png');
+}
+
+.i-power
+{
+    background-image: url('/img/icon/power.png');
+}
+
+.i-exit
+{
+    background-image: url('/img/icon/exit.png');
 }

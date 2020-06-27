@@ -2,44 +2,90 @@ let account = {
     isLogin : false,
 };
 
+// 登录页面视图
+let viewOfAccLog = '';
+// 注册页面视图
+let viewOfAccReg = '';
+// 重置密码页面视图
+let viewOfResetPassword = '';
+// 协议内容
+let contentOfPact = '';
+// 验证问题
+let verifyProblem = [];
+
 // 获取登录状态
 let waitAccount = fetch('/api/user/isLogin.php')
     .then(data => data.json())
     .then(data =>
         {
-            return (data.code === 200 && data.msg);
+            account.isLogin = (data.code === 200 && data.msg);
+            return account.isLogin;
         },
     );
 
-waitAccount.then( state => {
+waitAccount.then(state =>
+{
     if( state )
     {
-        $('.main .default').style.display = 'none';
-        $('.main .home').style.display = 'black';
+        $('.main .home').classList.remove('hide');
+        loadHomeResource();
     }
     else
     {
+        $('.main .default').classList.remove('hide');
         let getLoginView = () => axios.get('/view/login.html');
         let getPactContent = () => axios.get('/api/user/getPactContent.php');
         let getRegisterView = () => axios.get('/view/register.html');
-        axios.all( [ getPactContent(), getLoginView(), getRegisterView() ] )
+        let getResetPasswordView = () => axios.get('/view/resetPassword.html');
+        let getVerifyProblemList = () => axios.get('/api/user/getVerifyProblemList.php');
+        axios.all(
+            [
+                getPactContent(),
+                getLoginView(),
+                getRegisterView(),
+                getResetPasswordView(),
+                getVerifyProblemList(),
+            ],
+        )
              .then(
-                 axios.spread( (pactContent, loginView, registerView) => {
-                     // console.log(loginView, registerView);
-                     contentOfPact = pactContent.data.data.replace(/\n/g, '<br>');
-                     viewOfAccLog = loginView.data;
-                     viewOfAccReg = registerView.data;
-                 } )
-             )
-    }
-})
+                 axios.spread(
+                     (
+                         pactContent,
+                         loginView,
+                         registerView,
+                         resetPasswordView,
+                         verifyProblemList,
+                     ) =>
+                     {
+                         // console.log(loginView, registerView);
+                         contentOfPact = pactContent.data.data.replace(/\n/g, '<br>');
+                         viewOfAccLog = loginView.data;
+                         viewOfAccReg = registerView.data;
+                         viewOfResetPassword = resetPasswordView.data;
+                         verifyProblem = verifyProblemList.data.data;
+                     }),
+             );
 
-// 登录页面视图
-let viewOfAccLog = '';
-// 注册页面视图
-let viewOfAccReg = '';
-// 协议内容
-let contentOfPact = '';
+        pactSelect.addEventListener('click',
+            function ()
+            {
+                localStorage.setItem('agree-pact', this.checked);
+                if( this.checked )
+                    acc.classList.remove('gray');
+                else
+                    acc.classList.add('gray');
+                console.log('pact select', this.checked);
+            },
+        );
+
+        // 从本地读取同意状态，避免每次打开网页都要勾选
+        if( localStorage.getItem('agree-pact') === 'true' )
+        {
+            pactSelect.checked = true;
+            acc.classList.remove('gray');
+        }
+    }
+});
 
 function showPassword( e )
 {
@@ -106,11 +152,11 @@ function register()
                         let div = $make('div');
                         div.innerHTML = `
                             <h3>注册失败</h3>
-                            <p>${ data['err_msg'] }，<a onclick="return floatOfRegister()">重新注册</a></p>
+                            <p>${data['err_msg']}，<a onclick="return floatOfRegister()">重新注册</a></p>
                         `;
                         setFloat(div, 'error');
                     }
-                }
+                },
             );
     });
     return false;
@@ -176,7 +222,12 @@ function login()
                             登录成功，3s后自动关闭
                         `;
                         setFloat(div);
-                        setTimeout(closeFloat, 4500);
+                        setTimeout(() => {
+                            $('.main .default').classList.add('hide');
+                            $('.main .home').classList.remove('hide');
+                            closeFloat();
+                            loadHomeResource();
+                        }, 3000);
                     }
                     else
                     {
@@ -184,7 +235,7 @@ function login()
                         div.innerHTML = `
                             <h3>登录失败</h3>
                             <p>
-                                ${ data['err_msg'] }，
+                                ${data['err_msg']}，
                                 请<a onclick="return floatOfLogin()">重新登录</a>
                                 或尝试
                                 <a onclick="return floatOfResetPassword()">重置密码</a>
@@ -192,27 +243,67 @@ function login()
                         `;
                         setFloat(div, 'error');
                     }
-                }
+                },
             );
     });
 
     return false;
 }
 
+function resetPassword()
+{
+    let form = $('.float .reset-password form');
+    // 禁止二次点击
+    form.style.opacity = 0.5;
+    form.style.userSelect = 'none';
+    let req = {
+        u : escape(form.u.value),
+        vid : escape(form.vid.value),
+        vans : escape(form.vans.value),
+        np : escape(form.np.value),
+    };
+    // console.log(objectToKeyValue(req));
+    sleep(800).then(() =>
+    {
+        fetch('/api/user/resetPassword.php', {
+            method : 'post',
+            headers : {
+                'Content-Type' : 'application/x-www-form-urlencoded',
+            },
+            body : objectToKeyValue(req),
+        })
+            .then(res => res.json())
+            .then(data =>
+                {
+                    form.style.opacity = 1;
+                    form.style.userSelect = '';
+                    // console.log(data);
+                    if( data.code === 200 )
+                    {
+                        let div = $make('div');
+                        div.innerHTML = `
+                            重置成功，<a onclick="return floatOfLogin()">现在登录</a>
+                        `;
+                        setFloat(div);
+                    }
+                    else
+                    {
+                        let div = $make('div');
+                        div.innerHTML = `
+                            <h3>重置失败</h3>
+                            <p>${data['err_msg']}，<a onclick="return floatOfResetPassword()">重新操作</a></p>
+                        `;
+                        setFloat(div, 'error');
+                    }
+                },
+            );
+    });
+    return false;
+}
+
 let pact = $('.main .default .pact');
 let pactLink = pact.querySelector('a');
 let pactSelect = pact.querySelector('input');
-pactSelect.addEventListener('click',
-    function ()
-    {
-        localStorage.setItem('agree-pact', this.checked);
-        if( this.checked )
-            acc.classList.remove('gray');
-        else
-            acc.classList.add('gray');
-        console.log('pact select', this.checked);
-    },
-);
 
 let acc = $('.main .default .account');
 let accReg = acc.querySelector('.register');
@@ -232,23 +323,18 @@ function floatOfRegister()
     }
     let div = $make('div');
     div.innerHTML = viewOfAccReg;
-    axios.get('/api/user/getVerifyProblemList.php')
-         .then(res => res.data)
-         .then(res => res.data)
-         .then(data =>
-         {
-             // console.log(data)
-             let select = div.querySelector('form select');
-             while( select.options.length > 0 )
-                 select.options.remove(0);
-             data.forEach(i =>
-             {
-                 select.options.add(new Option(
-                     i.content,
-                     i.id,
-                 ));
-             });
-         });
+
+    let select = div.querySelector('form select');
+    while( select.options.length > 0 )
+        select.options.remove(0);
+    verifyProblem.forEach(i =>
+    {
+        select.options.add(new Option(
+            i.content,
+            i.id,
+        ));
+    });
+
     setFloat(div, 'account register');
     div.querySelector('label[for=u] input')
        .addEventListener('blur',
@@ -288,21 +374,28 @@ function floatOfLogin()
     setFloat(div, 'account login');
 }
 
-accLog.addEventListener('click',
-    function ()
-    {
-        if( !pactSelect.checked )
-        {
-            console.log('accLog');
-            floatOfPactRequest();
-            return;
-        }
-        console.log('log');
-    },
-);
-
 function floatOfResetPassword()
 {
+    if( viewOfResetPassword === '' )
+    {
+        setFloat('获取数据失败，请<a onclick="location.reload()">刷新网页</a>');
+        return;
+    }
+    let div = $make('div');
+    div.innerHTML = viewOfResetPassword;
+    setFloat(div, 'account reset-password');
+
+    let select = div.querySelector('form select');
+    while( select.options.length > 0 )
+        select.options.remove(0);
+    verifyProblem.forEach(i =>
+    {
+        select.options.add(new Option(
+            i.content,
+            i.id,
+        ));
+    });
+
     return false;
 }
 
@@ -330,7 +423,7 @@ function floatOfPactContent()
     `;
     setFloat(div, 'pact-content');
     let content = div.querySelector('p');
-    if(contentOfPact.length > 0)
+    if( contentOfPact.length > 0 )
         content.innerHTML = contentOfPact;
     else
         content.innerHTML = '获取失败';
@@ -352,11 +445,4 @@ function floatOfPactContent()
         },
     );
     return false;
-}
-
-// 从本地读取同意状态，避免每次打开网页都要勾选
-if( localStorage.getItem('agree-pact') === 'true' )
-{
-    pactSelect.checked = true;
-    acc.classList.remove('gray');
 }

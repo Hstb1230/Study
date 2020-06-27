@@ -51,7 +51,7 @@ body
     height: 100%;
 }
 
-.main .home
+.hide
 {
     display: none;
 }
@@ -140,11 +140,6 @@ body
 .account .login
 {
     background: black;
-}
-
-.none
-{
-    display: none;
 }
 
 .startBtn

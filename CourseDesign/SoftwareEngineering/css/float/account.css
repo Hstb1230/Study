@@ -76,8 +76,9 @@
     display: none;
 }
 
-.float .account label[for=sp],
-.float .account label[for=p]
+.float .account label[for=p],
+.float .account label[for=np],
+.float .account label[for=sp]
 {
     position: relative;
 }
