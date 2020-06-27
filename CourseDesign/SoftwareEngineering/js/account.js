@@ -3,18 +3,43 @@ let account = {
 };
 
 // 获取登录状态
-fetch('/api/')
+let waitAccount = fetch('/api/user/isLogin.php')
     .then(data => data.json())
     .then(data =>
-    {
-        account.isLogin = (data.code === 200 && toString(data.data) !== '{}');
-    });
+        {
+            return (data.code === 200 && data.msg);
+        },
+    );
 
-if( account.isLogin )
-{
-    $('.tab .default').style.display = 'none';
-    $('.tab .home').style.display = 'black';
-}
+waitAccount.then( state => {
+    if( state )
+    {
+        $('.main .default').style.display = 'none';
+        $('.main .home').style.display = 'black';
+    }
+    else
+    {
+        let getLoginView = () => axios.get('/view/login.html');
+        let getPactContent = () => axios.get('/api/user/getPactContent.php');
+        let getRegisterView = () => axios.get('/view/register.html');
+        axios.all( [ getPactContent(), getLoginView(), getRegisterView() ] )
+             .then(
+                 axios.spread( (pactContent, loginView, registerView) => {
+                     // console.log(loginView, registerView);
+                     contentOfPact = pactContent.data.data.replace(/\n/g, '<br>');
+                     viewOfAccLog = loginView.data;
+                     viewOfAccReg = registerView.data;
+                 } )
+             )
+    }
+})
+
+// 登录页面视图
+let viewOfAccLog = '';
+// 注册页面视图
+let viewOfAccReg = '';
+// 协议内容
+let contentOfPact = '';
 
 function showPassword( e )
 {
@@ -36,6 +61,9 @@ function showPassword( e )
 function register()
 {
     let form = $('.float .register form');
+    // 禁止二次点击
+    form.style.opacity = 0.5;
+    form.style.userSelect = 'none';
     if( form.p.value !== form.sp.value )
     {
         form.sp.value = '';
@@ -49,17 +77,42 @@ function register()
         vid : escape(form.vid.value),
         vans : escape(form.vans.value),
     };
-    console.log(objectToKeyValue(req));
-    fetch('/api/user/register.php', {
-        method : 'post',
-        body : objectToKeyValue(req),
-    })
-        .then(res => res.json())
-        .then(data =>
-        {
-            console.log(data);
-        });
-    // console.log(form);
+    // console.log(objectToKeyValue(req));
+    sleep(800).then(() =>
+    {
+        fetch('/api/user/register.php', {
+            method : 'post',
+            headers : {
+                'Content-Type' : 'application/x-www-form-urlencoded',
+            },
+            body : objectToKeyValue(req),
+        })
+            .then(res => res.json())
+            .then(data =>
+                {
+                    form.style.opacity = 1;
+                    form.style.userSelect = '';
+                    // console.log(data);
+                    if( data.code === 200 )
+                    {
+                        let div = $make('div');
+                        div.innerHTML = `
+                            注册成功，<a onclick="return floatOfLogin()">现在登录</a>
+                        `;
+                        setFloat(div);
+                    }
+                    else
+                    {
+                        let div = $make('div');
+                        div.innerHTML = `
+                            <h3>注册失败</h3>
+                            <p>${ data['err_msg'] }，<a onclick="return floatOfRegister()">重新注册</a></p>
+                        `;
+                        setFloat(div, 'error');
+                    }
+                }
+            );
+    });
     return false;
 }
 
@@ -74,7 +127,7 @@ function userExist( e )
         });
 }
 
-function reportInput(e, msg)
+function reportInput( e, msg )
 {
     e.value = '';
     e.validationMessage = e.placeholder = msg;
@@ -91,9 +144,59 @@ function reportInput(e, msg)
     }, 1800);
 }
 
-function login( username, password )
+function login()
 {
+    let form = $('.float .login form');
+    // 禁止二次点击
+    form.style.opacity = 0.5;
+    form.style.userSelect = 'none';
+    let req = {
+        u : escape(form.u.value),
+        p : escape(form.p.value),
+    };
+    sleep(800).then(() =>
+    {
+        fetch('/api/user/login.php', {
+            method : 'post',
+            headers : {
+                'Content-Type' : 'application/x-www-form-urlencoded',
+            },
+            body : objectToKeyValue(req),
+        })
+            .then(res => res.json())
+            .then(data =>
+                {
+                    form.style.opacity = 1;
+                    form.style.userSelect = '';
+                    // console.log(data);
+                    if( data.code === 200 )
+                    {
+                        let div = $make('div');
+                        div.innerHTML = `
+                            登录成功，3s后自动关闭
+                        `;
+                        setFloat(div);
+                        setTimeout(closeFloat, 4500);
+                    }
+                    else
+                    {
+                        let div = $make('div');
+                        div.innerHTML = `
+                            <h3>登录失败</h3>
+                            <p>
+                                ${ data['err_msg'] }，
+                                请<a onclick="return floatOfLogin()">重新登录</a>
+                                或尝试
+                                <a onclick="return floatOfResetPassword()">重置密码</a>
+                            </p>
+                        `;
+                        setFloat(div, 'error');
+                    }
+                }
+            );
+    });
 
+    return false;
 }
 
 let pact = $('.main .default .pact');
@@ -114,99 +217,77 @@ pactSelect.addEventListener('click',
 let acc = $('.main .default .account');
 let accReg = acc.querySelector('.register');
 let accLog = acc.querySelector('.login');
-accReg.addEventListener('click',
-    function ()
+
+function floatOfRegister()
+{
+    if( !pactSelect.checked )
     {
-        if( !pactSelect.checked )
-        {
-            console.log('accReg');
-            floatOfPactRequest();
-            return;
-        }
-        let div = $make('div');
-        div.innerHTML = `
-            <div class="register">
-                <h3>注册</h3>
-                <form action="/api/user/register.php" onsubmit="return register()">
-                    <ul>
-                        <li>
-                            <p>用户名</p>
-                            <label for="u">
-                                <input type="text" minlength="3" name="u" required />
-                            </label>
-                        </li>
-                        <li>
-                            <p>密码</p>
-                            <label for="p">
-                                <input type="password" minlength="3" name="p" required />
-                                <i class="i-hide" onclick="showPassword('p')"> </i>
-                            </label>
-                        </li>
-                        <li>
-                            <p>再次输入密码</p>
-                            <label for="sp">
-                                <input type="password" minlength="3" name="sp" required />
-                                <i class="i-hide" onclick="showPassword('sp')"> </i>
-                            </label>
-                        </li>
-                        <li>
-                            <p>密保问题</p>
-                            <label>
-                                <select name="vid">
-                                    <option value="0">获取中 · · ·</option>
-                                </select>
-                            </label>
-                        </li>
-                        <li>
-                            <p>答案</p>
-                            <label>
-                                <input type="text" name="vans" required />
-                            </label>
-                        </li>
-                    </ul>
-                    <label class="submit">
-                        <input type="submit">
-                        →
-                    </label>
-                </form>
-            </div>
-        `;
-        axios.get('/api/user/getVerifyProblemList.php')
-             .then(res => res.data)
-             .then(res => res.data)
-             .then(data =>
+        floatOfPactRequest();
+        return;
+    }
+    if( viewOfAccReg === '' )
+    {
+        setFloat('获取数据失败，请<a onclick="location.reload()">刷新网页</a>');
+        return;
+    }
+    let div = $make('div');
+    div.innerHTML = viewOfAccReg;
+    axios.get('/api/user/getVerifyProblemList.php')
+         .then(res => res.data)
+         .then(res => res.data)
+         .then(data =>
+         {
+             // console.log(data)
+             let select = div.querySelector('form select');
+             while( select.options.length > 0 )
+                 select.options.remove(0);
+             data.forEach(i =>
              {
-                 // console.log(data)
-                 let select = div.querySelector('form select');
-                 while( select.options.length > 0 )
-                     select.options.remove(0);
-                 data.forEach(i =>
-                 {
-                     select.options.add(new Option(
-                         i.content,
-                         i.id,
-                     ));
-                 });
+                 select.options.add(new Option(
+                     i.content,
+                     i.id,
+                 ));
              });
-        setFloat(div, 'register');
-        div.querySelector('label[for=u] input')
-           .addEventListener('blur',
-               function ()
+         });
+    setFloat(div, 'account register');
+    div.querySelector('label[for=u] input')
+       .addEventListener('blur',
+           function ()
+           {
+               if( this.value !== '' )
+                   userExist(this);
+           },
+       );
+    div.querySelector('label[for=sp] input')
+       .addEventListener('blur',
+           function ()
+           {
+               if( this.value !== '' && this.value !== div.querySelector('form').p.value )
                {
-                   if( this.value !== '' )
-                       userExist(this);
-               },
-           );
-        div.querySelector('label[for=sp] input')
-           .addEventListener('blur',
-               function ()
-               {
-                   if( this.value !== div.querySelector('form').p.value )
-                       reportInput(this, '密码不一致');
-               },
-           );
-    },
-);
+                   reportInput(this, '密码不一致');
+                   reportInput(div.querySelector('form').p, '');
+               }
+           },
+       );
+}
+
+function floatOfLogin()
+{
+    if( !pactSelect.checked )
+    {
+        floatOfPactRequest();
+        return;
+    }
+    if( viewOfAccLog === '' )
+    {
+        setFloat('获取数据失败，请<a onclick="location.reload()">刷新网页</a>');
+        return;
+    }
+    let div = $make('div');
+    div.innerHTML = viewOfAccLog;
+    setFloat(div, 'account login');
+}
+
 accLog.addEventListener('click',
     function ()
     {
@@ -219,6 +300,11 @@ accLog.addEventListener('click',
         console.log('log');
     },
 );
+
+function floatOfResetPassword()
+{
+    return false;
+}
 
 // 显示阅读协议请求
 function floatOfPactRequest()
@@ -243,31 +329,28 @@ function floatOfPactContent()
         <div class="btn-agree" style="display:none;">我已理解并同意 √</div>
     `;
     setFloat(div, 'pact-content');
-    fetch('/api/user/getPactContent.php')
-        .then(data => data.json())
-        .then(data =>
+    let content = div.querySelector('p');
+    if(contentOfPact.length > 0)
+        content.innerHTML = contentOfPact;
+    else
+        content.innerHTML = '获取失败';
+    let agree = div.querySelector('.btn-agree');
+    if( !pactSelect.checked )
+        agree.style.display = '';
+    agree.addEventListener('click',
+        function ()
         {
-            let content = div.querySelector('p');
-            // 替换协议中的换行为HTML版换行
-            content.innerHTML = data.data.replace(/\n/g, '<br>');
-            let agree = div.querySelector('.btn-agree');
-            if( !pactSelect.checked )
-                agree.style.display = '';
-            agree.addEventListener('click',
-                function ()
-                {
-                    // 将同意状态保存至本地
-                    localStorage.setItem('agree-pact', true);
-                    pactSelect.checked = true;
-                    // 需要手动触发动画
-                    setTimeout(() =>
-                    {
-                        acc.classList.remove('gray');
-                    }, 500);
-                    closeFloat();
-                },
-            );
-        });
+            // 将同意状态保存至本地
+            localStorage.setItem('agree-pact', true);
+            pactSelect.checked = true;
+            // 需要手动触发动画
+            setTimeout(() =>
+            {
+                acc.classList.remove('gray');
+            }, 500);
+            closeFloat();
+        },
+    );
     return false;
 }
 

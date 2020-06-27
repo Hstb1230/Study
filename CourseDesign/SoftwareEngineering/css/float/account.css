@@ -1,6 +1,6 @@
-.float .register,
-.float .register form,
-.float .register form .submit
+.float .account,
+.float .account form,
+.float .account form .submit
 {
     display: flex;
     flex-flow: column wrap;
@@ -8,7 +8,7 @@
     justify-content: center;
 }
 
-.float .register h3
+.float .account h3
 {
     width: 100%;
     text-align: center;
@@ -16,50 +16,52 @@
     border-bottom: 1px solid gray;
 }
 
-.float .register form
+.float .account form
 {
     margin-top: 25px;
     align-items: flex-end;
+    transition: opacity 1s linear;
 }
 
-.float .register ul
+.float .account ul
 {
     margin-bottom: 19px;
 }
 
-.float .register li
+.float .account li
 {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     padding: 12px 0;
     font-size: 17px;
 }
 
-.float .register li p
+.float .account li p
 {
     margin-right: 8px;
 }
 
-.float .register li label
+.float .account li label
 {
     width: 55%;
     display: flex;
     justify-content: flex-end;
 }
 
-.float .register form input,
-.float .register form select
+.float .account form input,
+.float .account form select
 {
     width: 80%;
     padding: 5px;
 }
 
-.float .register form select
+.float .account form select
 {
     width: 89%;
 }
 
-.float .register form .submit
+.float .account form .submit
 {
     width: 50px;
     height: 50px;
@@ -69,13 +71,41 @@
     font-size: 23px;
 }
 
-.float .register form .submit input
+.float .account form .submit input
 {
     display: none;
 }
 
-.float .register label[for=sp],
-.float .register label[for=p]
+.float .account label[for=sp],
+.float .account label[for=p]
 {
     position: relative;
+}
+
+.float .error h3
+{
+    font-size: 19px;
+    text-align: center;
+    width: 100%;
+    padding-bottom: 25px;
+    border-bottom: 1px solid gray;
+}
+
+.float .error p
+{
+    font-size: 17px;
+    margin: 19px 0;
+}
+
+.float li.forget
+{
+    justify-content: flex-end;
+    padding: 0;
+}
+
+.float li.forget a
+{
+    color: #4CA1AF;
+    font-size: 13px;
+    transform: translateX(5px);
 }

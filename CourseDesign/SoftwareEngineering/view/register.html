@@ -1,0 +1,43 @@
+<h3>注册</h3>
+<form action="/api/user/register.php" onsubmit="return register()">
+    <ul>
+        <li>
+            <p>用户名</p>
+            <label for="u">
+                <input type="text" minlength="3" name="u" required />
+            </label>
+        </li>
+        <li>
+            <p>密码</p>
+            <label for="p">
+                <input type="password" minlength="6" name="p" required />
+                <i class="i-hide" onclick="showPassword('p')"> </i>
+            </label>
+        </li>
+        <li>
+            <p>再次输入密码</p>
+            <label for="sp">
+                <input type="password" minlength="6" name="sp" required />
+                <i class="i-hide" onclick="showPassword('sp')"> </i>
+            </label>
+        </li>
+        <li>
+            <p>密保问题</p>
+            <label>
+                <select name="vid">
+                    <option value="0">获取中 · · ·</option>
+                </select>
+            </label>
+        </li>
+        <li>
+            <p>答案</p>
+            <label>
+                <input type="text" name="vans" required />
+            </label>
+        </li>
+    </ul>
+    <label class="submit">
+        <input type="submit">
+        →
+    </label>
+</form>

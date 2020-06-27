@@ -28,8 +28,10 @@
 */
 .float .container
 {
-    width: 70%;
+    width: auto;
     height: auto;
+    min-width: 25%;
+    max-width: 70%;
     max-height: 70%;
     background: linear-gradient(aliceblue, floralwhite);
     border-radius: 25px;
@@ -42,6 +44,7 @@
     height: 100%;
     /* 内容太长的时候显示滚动条 */
     overflow: auto;
+    overflow-x: hidden;
 }
 
 /* 滚动条样式 */
@@ -74,4 +77,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* 加粗链接样式 */
+.float a[onclick]
+{
+    cursor: pointer;
+    font-weight: bold;
+    margin: 0 3px;
+    text-decoration-line: underline;
 }

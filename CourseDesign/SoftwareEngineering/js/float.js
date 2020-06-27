@@ -100,9 +100,16 @@ function setFloat(e, className)
     float.style.display = '';
     let content = float.querySelector('.content');
     if(className !== '')
-        e.classList.add(className);
+    {
+        className.split(' ').forEach( s => {
+            e.classList.add(s);
+        })
+    }
     content.innerHTML = '';
-    content.append(e);
+    if(typeof e === 'string')
+        content.innerHTML = e;
+    else
+        content.append(e);
     // showFloat();
     // 延迟设置透明度，否则会因为display为none而缺少过渡动画
     setTimeout(() => {
