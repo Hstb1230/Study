@@ -2,7 +2,7 @@
 // 重置密码
 include_once '../util.php';
 // 检验数据
-if(!arrIsset($_REQUEST, ['u', 'vid', 'vans', 'p']))
+if(!arrIsset($_REQUEST, ['u', 'vid', 'vans', 'np']))
     createResponse(400, 'wrong parameter', $_REQUEST);
 
 include_once '../db.php';
@@ -13,7 +13,7 @@ include_once 'fnc.php';
 $username = $_REQUEST['u'];
 $verify_problem_id = $_REQUEST['vid'];
 $verify_answer = $_REQUEST['vans'];
-$new_password = $_REQUEST['p'];
+$new_password = $_REQUEST['np'];
 $factor = '重置成功';
 
 if(resetPassword($username, $verify_problem_id, $verify_answer, $new_password, $factor))

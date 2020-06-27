@@ -150,28 +150,28 @@ function logout()
  * @param int $verify_problem_id 密保问题ID
  * @param string $verify_ans 密保问题答案
  * @param string $new_password 新密码
- * @param string $factor 失败原因
+ * @param string $reason 失败原因
  * @return bool
  */
-function resetPassword($username, $verify_problem_id, $verify_ans, $new_password, & $factor)
+function resetPassword($username, $verify_problem_id, $verify_ans, $new_password, & $reason)
 {
     $success = false;
     $info = getUserInfo($username);
     if(empty($info))
     {
-        $factor = '不存在用户';
+        $reason = '不存在用户';
         goto end;
     }
 
     if($info['verify_problem_id'] != (int)$verify_problem_id)
     {
-        $factor = '问题id错误';
+        $reason = '问题或答案错误';
         goto end;
     }
 
     if($info['problem_answer'] != $verify_ans)
     {
-        $factor = '问题答案错误';
+        $reason = '问题或答案错误';
         goto end;
     }
 
@@ -180,10 +180,10 @@ function resetPassword($username, $verify_problem_id, $verify_ans, $new_password
     $stmt = $conn->prepare('UPDATE account SET password = ? WHERE id = ?');
     $stmt->bind_param('si', $new_password, $info['id']);
     $stmt->execute();
-    if($stmt->num_rows > 0)
+    if($stmt->affected_rows > 0)
         $success = true;
     else
-        $factor = $stmt->error;
+        $reason = '没有对应用户';
     end:
     return $success;
 }
