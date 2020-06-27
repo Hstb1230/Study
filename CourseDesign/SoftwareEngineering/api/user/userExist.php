@@ -11,4 +11,4 @@ include_once 'fnc.php';
 
 $username = $_REQUEST['u'];
 
-createResponse(200, empty(getUserInfo($username)));
+createResponse(200, null, !empty(getUserInfo($username)));

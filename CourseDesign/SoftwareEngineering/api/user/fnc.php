@@ -547,6 +547,10 @@ function getRank()
     return $rankList;
 }
 
+/**
+ * 获取协议内容
+ * @return string
+ */
 function getPactContent()
 {
     global $conn;
@@ -559,4 +563,22 @@ function getPactContent()
     $stmt->fetch();
     $stmt->close();
     return $content;
+}
+
+function getVerifyProblemList()
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT id, content FROM verify_problem');
+    $stmt->execute();
+    $stmt->store_result();
+    $i = [];
+    $list = [];
+    $stmt->bind_result($i['id'], $i['content']);
+    while($stmt->fetch())
+        $list[] = [
+            'id' => $i['id'],
+            'content' => $i['content'],
+        ];
+    $stmt->close();
+    return $list;
 }
