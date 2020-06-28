@@ -698,3 +698,16 @@ function getVerifyProblemID()
     $i = getUserInfoByID($_SESSION['user_id']);
     return $i['verify_problem_id'];
 }
+
+function revive(& $data, & $reason)
+{
+    $w = getWarehouseInfo();
+    if($w['resurrection']-- <= 0)
+    {
+        $reason = '复活道具不足';
+        return false;
+    }
+    setWarehouse($w['gold'], $w['play_count'], $w['resurrection']);
+    $data = $w;
+    return true;
+}
