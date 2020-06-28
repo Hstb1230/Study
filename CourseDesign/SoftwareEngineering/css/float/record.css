@@ -1,0 +1,40 @@
+.float .record h3
+{
+    width: 100%;
+    text-align: center;
+    padding-bottom: 25px;
+    border-bottom: 1px solid gray;
+}
+
+.float .record li
+{
+    display: flex;
+    justify-content: space-around;
+    margin: 19px;
+}
+
+.float .record .time
+{
+    margin-right: 5px;
+}
+
+.float .record .i-power,
+.float .record .i-heart,
+.float .record .i-gold,
+.float .record .i-CNY
+{
+    width: 22px;
+    height: 22px;
+    position: relative;
+}
+
+.float .record .need,
+.float .record .count
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    font-size: 12px;
+    font-weight: bold;
+}

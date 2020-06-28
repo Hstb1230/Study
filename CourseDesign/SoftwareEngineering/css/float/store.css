@@ -1,0 +1,121 @@
+.float .store .header
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 12px 19px;
+    margin-bottom: 19px;
+    border-bottom: 1px solid darkgray;
+}
+
+.float .store .header h3
+{
+    font-size: 23px;
+}
+
+.float .store .header h5
+{
+    display: flex;
+    align-items: center;
+    line-height: 22px;
+}
+
+.float .store .header h5 .i-bill
+{
+    margin-right: 0;
+}
+
+.float .store ul
+{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.float .store li,
+.float .store .header h5
+{
+    cursor: pointer;
+}
+
+.float .store li
+{
+    padding: 12px 25px;
+    border: 1px solid darkgray;
+    border-radius: 15px;
+    margin: 13px auto;
+}
+
+.float .store .info
+{
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    font-size: 30px;
+    margin-bottom: 13px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.float .store .info [class^=i-]
+{
+    width: 32px;
+    height: 32px;
+    margin-right: 0;
+}
+
+.float .store .info .count
+{
+    font-size: 19px;
+}
+
+.float .store .info .i-gold
+{
+    position: relative;
+}
+
+.float .store .info .need
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.float .store .detail
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 17px;
+}
+
+.float .store .detail .i-stock,
+.float .store .detail .i-gold
+{
+    width: 16px;
+    height: 16px;
+    position: relative;
+}
+
+.float .store .detail .need,
+.float .store .detail .count
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.float .message h3
+{
+    width: 100%;
+    text-align: center;
+    padding-bottom: 25px;
+    border-bottom: 1px solid gray;
+    margin-bottom: 25px;
+}

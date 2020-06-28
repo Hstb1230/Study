@@ -4,7 +4,7 @@
     width: 22px;
     height: 22px;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     background-position: center;
     margin: 0 8px;
 }
@@ -45,4 +45,49 @@
 .i-exit
 {
     background-image: url('/img/icon/exit.png');
+}
+
+.i-bill
+{
+    background-image: url('/img/icon/bill.png');
+}
+
+.i-stock
+{
+    background-image: url('/img/icon/stock.png');
+}
+
+.i-heart
+{
+    background-image: url('/img/icon/heart.png');
+}
+
+.i-CNY
+{
+    background-image: url('/img/icon/CNY.png');
+}
+
+.i-alipay
+{
+    background-image: url('/img/icon/alipay.png');
+}
+
+.i-wechat
+{
+    background-image: url('/img/icon/wechat.png');
+}
+
+.i-first-win
+{
+    background-image: url('/img/icon/first-win.png');
+}
+
+.i-second-win
+{
+    background-image: url('/img/icon/second-win.png');
+}
+
+.i-third-win
+{
+    background-image: url('/img/icon/third-win.png');
 }

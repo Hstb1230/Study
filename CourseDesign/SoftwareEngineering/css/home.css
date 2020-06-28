@@ -25,7 +25,6 @@
     align-items: center;
 }
 
-
 .home .header .prop
 {
     margin-right: 8px;
@@ -76,7 +75,7 @@
 .home .menu
 {
     position: absolute;
-    bottom: 50px;
+    bottom: 30px;
     width: 100%;
     display: flex;
     flex-flow: column;
@@ -91,7 +90,7 @@
 {
     padding: 8px 15px;
     border-radius: 25px;
-    margin: 12px auto;
+    margin: 19px auto;
 }
 
 .home .menu .rank

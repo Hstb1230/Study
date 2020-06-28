@@ -1,9 +1,23 @@
 let home = $('.main .home');
+let warehouse;
 let viewOfSetting = '';
 let viewOfChangePassword = '';
 let viewOfChangeVerifyProblem = '';
 let listOfVerifyProblem = [];
 let verifyProblemID = 1;
+let listOfRecharge;
+
+function flushWarehouse()
+{
+    axios.get('/api/user/getWarehouseInfo.php')
+        .then( res => res.data )
+        .then( res => {
+            warehouse = res.data;
+            let prop = home.querySelector('.prop');
+            prop.querySelector('.gold p').innerHTML = warehouse['gold'];
+            prop.querySelector('.power p').innerHTML = warehouse['play_count'];
+        })
+}
 
 function loadHomeResource()
 {
@@ -21,9 +35,10 @@ function loadHomeResource()
                 settingView
             ) =>
             {
+                warehouse = warehouseInfo.data.data;
                 let prop = home.querySelector('.prop');
-                prop.querySelector('.gold p').innerHTML = warehouseInfo.data.data['gold'];
-                prop.querySelector('.power p').innerHTML = warehouseInfo.data.data['play_count'];
+                prop.querySelector('.gold p').innerHTML = warehouse['gold'];
+                prop.querySelector('.power p').innerHTML = warehouse['play_count'];
                 viewOfSetting = settingView.data;
             }
         )
@@ -195,18 +210,282 @@ function floatOfChangeVerifyProblem()
 
 function floatOfRank()
 {
-    setFloat('排行榜');
+    let e = $make('div');
+    e.innerHTML = `
+        <h3>排行榜</h3>
+        <ul>
+            <li>
+                <div class="more">获取中</div>
+            </li>
+        </ul>
+    `;
+    setFloat(e, 'rank');
+    fetch('/api/user/rank.php')
+        .then( res => res.json() )
+        .then( res => res.data )
+        .then( arr => {
+            let ul = '';
+            arr.forEach( (a, i) => {
+                let seq = a['seq'];
+                if(seq === 1)
+                    seq = '<div class="i-first-win"></div>';
+                else if(seq === 2)
+                    seq = '<div class="i-second-win"></div>';
+                else if(seq === 3)
+                    seq = '<div class="i-third-win"></div>';
+                if(a.seq !== i + 1)
+                    ul += `
+                        <li>
+                            <div class="more">······</div>
+                        </li>
+                    `;
+                else
+                    ul += `
+                        <li>
+                            <div class="seq">${seq}</div>
+                            <div class="name">${a.name}</div>
+                            <div class="score">${a.score}</div>
+                        </li>
+                    `;
+            })
+            e.querySelector('ul').innerHTML = ul;
+        })
     return false;
+}
+
+function buyProp(id)
+{
+    fetch(
+        '/api/user/buyCommodity.php',
+        {
+            method : 'post',
+            headers : { 'Content-Type' : 'application/x-www-form-urlencoded' },
+            body : objectToKeyValue({ cid : id }),
+        }
+    ).then( res => res.json() )
+     .then( res => {
+         let e;
+         if( res.code === 200 )
+         {
+             e = '购买成功，<a onclick="floatOfStore()">继续购买</a>';
+             flushWarehouse();
+             setFloat(e);
+         }
+         else
+         {
+             e = $make('div');
+             e.innerHTML = `
+                <h3>购买失败</h3>
+                <p>${res['err_msg']}，<a onclick="floatOfStore()">继续购买</a></p>
+             `;
+             setFloat(e, 'message');
+         }
+     })
 }
 
 function floatOfStore()
 {
-    setFloat('商店');
+    let e = $make('div');
+    e.innerHTML = `
+        <div class="header">
+            <h3>商店</h3>
+            <h5 onclick="floatOfConsumeRecord()"><div class="i-bill"></div>消费记录</h5>
+        </div>
+        <ul>
+            <li>获取中 · · ·</li>
+        </ul>
+    `;
+    setFloat(e, 'store');
+    let ul = '';
+    fetch('/api/user/getCommodityList.php')
+        .then( res => res.json() )
+        .then( res => res.data )
+        .then( list => {
+            list.forEach( i => {
+                ul += `
+                    <li onclick="buyProp(${ i['id'] })">
+                        <div class="info">
+                            <div class="${ i['prop'] === 0 ? 'i-power' : 'i-heart' }"></div>
+                            <div style="font-size: 12px; margin-right: 3px;">x</div>
+                            <div class="count">${ i['amount'] }</div>
+                        </div>
+                        <div class="detail">
+                            <div class="i-stock">
+                                <div class="count">${ i['prop'] === 0 ? warehouse['play_count'] : warehouse['gold'] }</div>
+                            </div>
+                            <div class="i-gold">
+                                <div class="need">${ i['pay'] }</div>    
+                            </div>
+                        </div>
+                    </li>
+                `;
+            } )
+            e.querySelector('ul').innerHTML = ul;
+        } )
     return false;
+}
+
+function floatOfConsumeRecord()
+{
+    let e = $make('div');
+    e.innerHTML = `
+        <h3>消费记录</h3>
+        <ul>
+        </ul>
+    `;
+    setFloat(e, 'record');
+    let ul = '';
+    fetch('/api/user/getConsumeRecord.php')
+        .then( res => res.json() )
+        .then( res => res.data )
+        .then( list => {
+            list.forEach( i => {
+                ul += `
+                    <li>
+                        <div class="time">${ timestampToDate(i.time * 1000) }</div>
+                        花费
+                        <div class="i-gold">
+                            <div class="need">${ i['pay'] }</div>
+                        </div>
+                        购买
+                        <div class="${ i['prop'] === 0 ? 'i-power' : 'i-heart' }">
+                            <div class="count">${ i['amount'] }</div>
+                        </div>
+                    </li>
+                `;
+            } )
+            e.querySelector('ul').innerHTML = ul;
+        } )
+    return false;
+}
+
+function floatOfRechargeRecord()
+{
+    let e = $make('div');
+    e.innerHTML = `
+        <h3>充值记录</h3>
+        <ul>
+        </ul>
+    `;
+    setFloat(e, 'record');
+    let ul = '';
+    fetch('/api/user/getRechargeRecord.php')
+        .then( res => res.json() )
+        .then( res => res.data )
+        .then( list => {
+            list.forEach( i => {
+                ul += `
+                    <li>
+                        <div class="time">${ timestampToDate(i.time * 1000) }</div>
+                        通过
+                        <div class="i-${ i['pay_way'] === 1 ? 'alipay' : 'wechat' }"></div>
+                        充值
+                        <div class="i-CNY">
+                            <div class="need">${ i['final_pay'] }</div>
+                        </div>
+                        获得
+                        <div class="i-gold">
+                            <div class="count">${ i['gold'] }</div>
+                        </div>
+                    </li>
+                `;
+            } )
+            e.querySelector('ul').innerHTML = ul;
+        } )
+    return false;
+}
+
+function recharge(way)
+{
+    let radio = $('input[name=pay]:checked');
+    if(radio === null)
+    {
+        reportElement($('.float .recharge ul'));
+        return false;
+    }
+    let req = {
+        rid: listOfRecharge[radio.value]['id'],
+        fp: listOfRecharge[radio.value]['pay'],
+        pw : way
+    };
+    fetch(
+        '/api/user/recharge.php',
+        {
+            method: 'post',
+            headers : { 'Content-Type' : 'application/x-www-form-urlencoded' },
+            body : objectToKeyValue(req),
+        }
+    )   .then( res => res.json() )
+        .then( res => {
+            if(res.code === 200)
+            {
+                flushWarehouse();
+                setFloat('充值成功，<a onclick="floatOfRecharge()">继续充值</a>');
+            }
+            else
+            {
+                let e = $make('div');
+                e.innerHTML = `
+                    <h3>充值失败</h3>
+                    <p>
+                        ${ res['err_msg'] }
+                        ，<a onclick="floatOfRecharge()">继续充值</a>
+                    </p>
+                `;
+                setFloat(e, 'message');
+            }
+        })
 }
 
 function floatOfRecharge()
 {
-    setFloat('充值');
+    let e = $make('div');
+    e.innerHTML = `
+        <div class="header">
+            <h3>充值</h3>
+            <h5 onclick="floatOfRechargeRecord()"><div class="i-bill"></div>充值记录</h5>
+        </div>
+        <ul>
+            <li>获取中 · · ·</li>
+        </ul>
+        <div class="pay">
+            <h3>付款方式</h3>
+        </div>
+        <ul>
+            <li onclick="recharge(1)">
+                <div class="i-alipay"></div>
+            </li>
+            <li onclick="recharge(2)">
+                <div class="i-wechat"></div>
+            </li>
+        </ul>
+    `;
+    setFloat(e, 'recharge');
+    let ul = '';
+    fetch('/api/user/getRechargeList.php')
+        .then( res => res.json() )
+        .then( res => res.data )
+        .then( list => {
+            listOfRecharge = list;
+            list.forEach( (i, seq) => {
+                ul += `
+                    <label>
+                        <input type="radio" name="pay" style="display: none;" value="${ seq }">
+                        <li>
+                            <div class="info">
+                                <div class="i-gold">
+                                    <div class="count">${ i['amount'] }</div>    
+                                </div>
+                            </div>
+                            <div class="detail">
+                                <div class="i-CNY"></div>
+                                <div class="need">${ i['pay'] }</div>
+                            </div>
+                        </li>
+                    </label>
+                `;
+            } )
+            e.querySelector('ul').innerHTML = ul;
+        } )
     return false;
 }

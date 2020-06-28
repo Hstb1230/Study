@@ -1,0 +1,117 @@
+.float .recharge .header,
+.float .recharge .pay
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 12px 19px;
+    margin-bottom: 19px;
+    border-bottom: 1px solid darkgray;
+}
+
+.float .recharge .header h3,
+.float .recharge .pay h3
+{
+    font-size: 23px;
+}
+
+.float .recharge .header h5
+{
+    display: flex;
+    align-items: center;
+    line-height: 22px;
+}
+
+.float .recharge .header h5 .i-bill
+{
+    margin-right: 0;
+}
+
+.float .recharge ul
+{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.float .recharge input[type=radio]:checked ~ li
+{
+    background: rgba(0, 0, 0, .15);
+}
+
+.float .recharge li,
+.float .recharge .header h5
+{
+    cursor: pointer;
+}
+
+.float .recharge li
+{
+    padding: 25px;
+    border: 1px solid darkgray;
+    border-radius: 15px;
+    margin: 13px;
+}
+
+.float .recharge .info
+{
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    font-size: 30px;
+    margin-bottom: 13px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.float .recharge .info [class^=i-]
+{
+    width: 32px;
+    height: 32px;
+    margin-right: 0;
+}
+
+.float .recharge .info .count
+{
+    font-size: 19px;
+}
+
+.float .recharge .info .i-gold
+{
+    position: relative;
+}
+
+.float .recharge .i-gold .count
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.float .recharge .detail
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 17px;
+}
+
+.float .recharge .detail .need
+{
+    font-size: 16px;
+}
+
+.float .recharge .pay
+{
+    margin-top: 19px;
+}
+
+.float .recharge li .i-alipay,
+.float .recharge li .i-wechat
+{
+    width: auto;
+    min-width: 32px;
+}

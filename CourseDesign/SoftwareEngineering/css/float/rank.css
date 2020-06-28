@@ -1,0 +1,53 @@
+.float .rank h3
+{
+    width: 100%;
+    text-align: center;
+    padding-bottom: 25px;
+    border-bottom: 1px solid gray;
+}
+
+.float .rank li
+{
+    display: flex;
+    margin: 12px 8px;
+    justify-content: space-between;
+}
+
+.float .rank li > div
+{
+    text-align: center;
+}
+
+.float .rank li .seq
+{
+    width: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+.float .rank li .name,
+.float .rank li .score
+{
+    margin: 0 20px;
+}
+
+.float .rank li .name
+{
+    width: 80px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.float .rank li .score
+{
+    width: 45px;
+    overflow: hidden;
+}
+
+.float .rank li .more
+{
+    width: 100%;
+    font-size: 23px;
+    text-align: center;
+}
