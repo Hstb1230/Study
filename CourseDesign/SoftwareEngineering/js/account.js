@@ -33,38 +33,7 @@ waitAccount.then(state =>
     else
     {
         $('.main .default').classList.remove('hide');
-        let getLoginView = () => axios.get('/view/login.html');
-        let getPactContent = () => axios.get('/api/user/getPactContent.php');
-        let getRegisterView = () => axios.get('/view/register.html');
-        let getResetPasswordView = () => axios.get('/view/resetPassword.html');
-        let getVerifyProblemList = () => axios.get('/api/user/getVerifyProblemList.php');
-        axios.all(
-            [
-                getPactContent(),
-                getLoginView(),
-                getRegisterView(),
-                getResetPasswordView(),
-                getVerifyProblemList(),
-            ],
-        )
-             .then(
-                 axios.spread(
-                     (
-                         pactContent,
-                         loginView,
-                         registerView,
-                         resetPasswordView,
-                         verifyProblemList,
-                     ) =>
-                     {
-                         // console.log(loginView, registerView);
-                         contentOfPact = pactContent.data.data.replace(/\n/g, '<br>');
-                         viewOfAccLog = loginView.data;
-                         viewOfAccReg = registerView.data;
-                         viewOfResetPassword = resetPasswordView.data;
-                         verifyProblem = verifyProblemList.data.data;
-                     }),
-             );
+        initDefaultResource();
 
         pactSelect.addEventListener('click',
             function ()
@@ -86,6 +55,42 @@ waitAccount.then(state =>
         }
     }
 });
+
+function initDefaultResource()
+{
+    let getLoginView = () => axios.get('/view/login.html');
+    let getPactContent = () => axios.get('/api/user/getPactContent.php');
+    let getRegisterView = () => axios.get('/view/register.html');
+    let getResetPasswordView = () => axios.get('/view/resetPassword.html');
+    let getVerifyProblemList = () => axios.get('/api/user/getVerifyProblemList.php');
+    axios.all(
+        [
+            getPactContent(),
+            getLoginView(),
+            getRegisterView(),
+            getResetPasswordView(),
+            getVerifyProblemList(),
+        ],
+    )
+         .then(
+             axios.spread(
+                 (
+                     pactContent,
+                     loginView,
+                     registerView,
+                     resetPasswordView,
+                     verifyProblemList,
+                 ) =>
+                 {
+                     // console.log(loginView, registerView);
+                     contentOfPact = pactContent.data.data.replace(/\n/g, '<br>');
+                     viewOfAccLog = loginView.data;
+                     viewOfAccReg = registerView.data;
+                     viewOfResetPassword = resetPasswordView.data;
+                     verifyProblem = verifyProblemList.data.data;
+                 }),
+         );
+}
 
 function showPassword( e )
 {

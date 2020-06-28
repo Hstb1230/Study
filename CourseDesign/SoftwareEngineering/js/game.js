@@ -68,7 +68,7 @@ let game = {
         // 显示鼠标，开始游戏按钮
         canvas.removeAttribute('style');
         if(account.isLogin)
-            startBtn.classList.remove('hide');
+            $('.main .home').classList.remove('hide');
 
         game.life = 3;
         game.score = 0;
@@ -416,8 +416,8 @@ game.start = () => {
     if(game.state === 'home')
     {
         load.init();
-        startBtn.classList.add('hide');
         game.state = 'loading';
+        $('.main .home').classList.add('hide');
     }
     else if(game.state === 'pause')
         game.state = 'playing';

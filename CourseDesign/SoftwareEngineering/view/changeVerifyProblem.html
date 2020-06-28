@@ -1,0 +1,35 @@
+<h3>修改密保问题</h3>
+<form action="/api/user/changeVerifyProblem.php" onsubmit="return changeVerifyProblem()">
+    <ul>
+        <li>
+            <p>密保问题</p>
+            <label for="vp">
+                <input type="text" name="vp" readonly />
+            </label>
+        </li>
+        <li>
+            <p>答案</p>
+            <label>
+                <input type="text" name="vans" required />
+            </label>
+        </li>
+        <li>
+            <p>密保问题</p>
+            <label>
+                <select name="nvp">
+                    <option value="0">获取中 · · ·</option>
+                </select>
+            </label>
+        </li>
+        <li>
+            <p>答案</p>
+            <label>
+                <input type="text" name="nvans" required />
+            </label>
+        </li>
+    </ul>
+    <label class="submit">
+        <input type="submit">
+        →
+    </label>
+</form>

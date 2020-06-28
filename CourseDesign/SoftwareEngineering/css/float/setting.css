@@ -1,0 +1,65 @@
+.float .setting
+{
+    margin: 5px;
+}
+
+.float .setting h3
+{
+    width: 100%;
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, .1);
+    padding: 8px 0;
+}
+
+.float .setting [class^=s-]
+{
+    margin: 12px auto;
+}
+
+.float .setting .s-music
+{
+    display: flex;
+    justify-content: space-around;
+}
+
+.float .setting .s-music label
+{
+    margin: 0 10px;
+}
+
+.float .setting .s-acc
+{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.float .setting .s-acc > div
+{
+    width: 50%;
+    text-align: center;
+    margin: 8px 0;
+}
+
+.float .setting .s-acc .change
+{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.float .setting .s-acc .change > div
+{
+    border-radius: 15px;
+    background: #eeeeee;
+    padding: 12px;
+    cursor: pointer;
+}
+
+.float .setting .s-acc .exit
+{
+    cursor: pointer;
+    text-decoration-line: underline;
+}
