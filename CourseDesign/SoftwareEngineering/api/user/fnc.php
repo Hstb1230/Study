@@ -144,6 +144,36 @@ function logout()
     unset($_SESSION['role'], $_SESSION['user_id']);
 }
 
+function changePassword($password, $newPassword, & $reason, & $value)
+{
+    $success = false;
+    $info = getUserInfoByID($_SESSION['user_id']);
+    if(empty($info))
+    {
+        $reason = '不存在用户';
+        goto end;
+    }
+
+    if($info['password'] != $password)
+    {
+        $reason = '原密码错误';
+        $value = 'p';
+        goto end;
+    }
+
+    $newPassword = md5($newPassword);
+    global $conn;
+    $stmt = $conn->prepare('UPDATE account SET password = ? WHERE id = ?');
+    $stmt->bind_param('si', $newPassword, $info['id']);
+    $stmt->execute();
+    if($stmt->affected_rows > 0)
+        $success = true;
+    else
+        $reason = '没有对应用户';
+    end:
+    return $success;
+}
+
 /**
  * 重置密码
  * @param string $username 用户名
@@ -151,9 +181,10 @@ function logout()
  * @param string $verify_ans 密保问题答案
  * @param string $new_password 新密码
  * @param string $reason 失败原因
+ * @param string $value 错误值
  * @return bool
  */
-function resetPassword($username, $verify_problem_id, $verify_ans, $new_password, & $reason)
+function resetPassword($username, $verify_problem_id, $verify_ans, $new_password, & $reason, & $value)
 {
     $success = false;
     $info = getUserInfo($username);
@@ -165,25 +196,19 @@ function resetPassword($username, $verify_problem_id, $verify_ans, $new_password
 
     if($info['verify_problem_id'] != (int)$verify_problem_id)
     {
+        $value = 'vid';
         $reason = '问题或答案错误';
         goto end;
     }
 
     if($info['problem_answer'] != $verify_ans)
     {
+        $value = 'vans';
         $reason = '问题或答案错误';
         goto end;
     }
 
-    $new_password = md5($new_password);
-    global $conn;
-    $stmt = $conn->prepare('UPDATE account SET password = ? WHERE id = ?');
-    $stmt->bind_param('si', $new_password, $info['id']);
-    $stmt->execute();
-    if($stmt->affected_rows > 0)
-        $success = true;
-    else
-        $reason = '没有对应用户';
+    $success = changePassword($info['password'], $new_password, $reason, $value);
     end:
     return $success;
 }
@@ -193,34 +218,38 @@ function resetPassword($username, $verify_problem_id, $verify_ans, $new_password
  * @param string $ans 原问题答案
  * @param int $new_verify_problem 新问题id
  * @param string $new_verify_ans 新问题答案
- * @param string $factor 失败原因
+ * @param string $reason 失败原因
+ * @param string $value
  * @return bool 操作结果
  */
-function changeVerifyProblem($ans, $new_verify_problem, $new_verify_ans, & $factor)
+function changeVerifyProblem($ans, $new_verify_problem, $new_verify_ans, & $reason, & $value)
 {
     $success = true;
     if(!isset($_SESSION['user_id']))
     {
-        $factor = '请先登录';
+        $reason = '请先登录';
         goto fail;
     }
     $info = getUserInfoByID($_SESSION['user_id']);
     if(empty($info))
     {
-        $factor = '用户不存在';
+        $reason = '用户不存在';
         goto fail;
     }
     else if($info['problem_answer'] != $ans)
     {
-        $factor = '原问题答案错误';
+        $value = 'vans';
+        $reason = '原问题答案错误';
     }
     else if(!existVerifyProblem($new_verify_problem))
     {
-        $factor = '新问题ID非法';
+        $value = 'np';
+        $reason = '新问题ID非法';
     }
     else if($info['problem_answer'] == $new_verify_ans && $info['verify_problem_id'] == $new_verify_problem)
     {
-        $factor = '新旧问题一样';
+        $value = 'nvans';
+        $reason = '新旧问题答案一样';
     }
     else
         goto success;
@@ -236,7 +265,7 @@ function changeVerifyProblem($ans, $new_verify_problem, $new_verify_ans, & $fact
     $stmt->execute();
     if($stmt->affected_rows > 0)
         goto end;
-    $factor = $stmt->error;
+    $reason = $stmt->error;
     goto fail;
 
     end:
@@ -434,6 +463,7 @@ function getCommodityInfo($id)
  * 购买商品
  * @param int $id
  * @param string $reason
+ * @return bool
  */
 function buyCommodity($id, & $reason)
 {
@@ -597,4 +627,10 @@ function getVerifyProblemList()
         ];
     $stmt->close();
     return $list;
+}
+
+function getVerifyProblemID()
+{
+    $i = getUserInfoByID($_SESSION['user_id']);
+    return $i['verify_problem_id'];
 }
