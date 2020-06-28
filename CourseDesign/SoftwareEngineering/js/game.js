@@ -45,7 +45,6 @@ let game = {
             myBoomSeq = 0;
             myboomtime = 0;
             enemychangearr = [];
-            // myplane1boom.src = `img/myplane1boom${myBoomSeq}.png`;
         }
         else if( game.dead == 1 && game.life == 0 )
             game.gameover = 1;
@@ -212,12 +211,10 @@ let game = {
         myboomtime++;
         if( myboomtime >= 10 )
         {
-            // myplane1boom.src = `img/myplane1boom${myBoomSeq}.png`;
             myBoomSeq = (myBoomSeq + 1) % myPlaneBoom.length;
             myboomtime = 0;
         }
 
-        // view.drawImage( myplane1boom, myPlaneX - myPlane.width / 2, myPlaneY - myPlane.height / 2);
         view.drawImage( myPlaneBoom[myBoomSeq], myPlaneX - myPlane.width / 2, myPlaneY - myPlane.height / 2);
         if( myBoomSeq === myPlaneBoom.length - 1 )
         {

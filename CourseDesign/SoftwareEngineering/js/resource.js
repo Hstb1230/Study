@@ -40,7 +40,11 @@ function loadGameResource()
 
 // 我方战斗机
 let myPlane = new Image();
+// 战斗机爆炸
 let myPlaneBoom;
+// 爆炸图序号
+let myBoomSeq = 0,
+    myboomtime = 0;
 loadGameResource();
 
 let myPlaneX = canvas.width / 2,
@@ -65,11 +69,6 @@ let enemy4 = new Image();
 enemy4.src = `img/enemy4.png`;
 let enemyall = [enemy1, enemy2, enemy3, enemy4];
 
-//战斗机爆炸
-let myplane1boom = new Image();
-
-let myBoomSeq = 0,
-    myboomtime = 0;
 //敌机爆炸
 let enemychangearr = [];
 //boss警告
