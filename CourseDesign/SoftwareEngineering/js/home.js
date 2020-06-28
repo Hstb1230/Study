@@ -87,6 +87,10 @@ function floatOfSetting()
         function ()
         {
             localStorage.setItem('m-bg', this.checked);
+            if(this.checked)
+                audioOfBG.play();
+            else
+                audioOfBG.pause();
         }
     )
     div.querySelector('.s-music input[name=m-game]').addEventListener('click',
