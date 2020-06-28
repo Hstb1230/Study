@@ -1,13 +1,19 @@
 let game = {
     // 游戏状态
-    state: 'home',
+    state : 'home',
 
-    start : () => {},
-    pause : () => {},
+    start : () =>
+    {
+    },
+    pause : () =>
+    {
+    },
 
     // 使背景滚动
     bgY : -854,
-    bgChange : () => {},
+    bgChange : () =>
+    {
+    },
 
     gameover : 0,
     dead : 0,
@@ -34,13 +40,13 @@ let game = {
         view.font = '30px  sans-serif';
         view.fillStyle = '#D28140';
         view.fillText('LIFE:' + game.life, 400, 50);
-        if( game.dead == 1 && myBoomSeq === myPlaneBoom.length -1 && game.life > 0 )
+        if( game.dead == 1 && myBoomSeq === myPlaneBoom.length - 1 && game.life > 0 )
         {
             game.dead = 0;
             bullettime = 0;
             bulletnum = 0;
             bulletarr = [];
-            enemytime = 0;
+            enemyTime = 0;
             enemyArr = [];
             myBoomSeq = 0;
             myboomtime = 0;
@@ -66,7 +72,7 @@ let game = {
         game.state = 'home';
         // 显示鼠标，开始游戏按钮
         canvas.removeAttribute('style');
-        if(account.isLogin)
+        if( account.isLogin )
             $('.main .home').classList.remove('hide');
 
         game.life = 3;
@@ -77,7 +83,7 @@ let game = {
         bullettime = 0;
         bulletnum = 0;
         bulletarr = [];
-        enemytime = 0;
+        enemyTime = 0;
         enemyArr = [];
         myBoomSeq = 0;
         myboomtime = 0;
@@ -143,37 +149,27 @@ let game = {
 
     enemy : function ()
     {
-        enemytime++;
-        let enemynum = parseInt(Math.random() * 4);
-        if( game.bossAttack )
-        {
-            num = 10;
-        }
-        else
-        {
-            num = 25;
-        }
-        if( enemytime >= num )
-        {
-            if( enemynum == 3 && Math.random() < 0.9 )
-            {
-                return;
-            }
-            else
-            {
-                let enemylife = 1;
-                if( enemynum == 3 )
-                {
-                    enemylife = 5;
-                }
-                let changearr = [
-                    Math.random() * 520 - enemyall[enemynum].width / 2, -enemyall[enemynum].height, 0, enemynum,
-                    enemylife,
-                ];
-                enemyArr.push(changearr);
-                enemytime = 0;
-            }
-        }
+        enemyTime++;
+        let enemyType = parseInt(Math.random() * 4);
+        // 生成飞机频率
+        let enemyFrequency = (game.bossAttack ? 10 : 25);
+        if( enemyTime < enemyFrequency )
+            return;
+        // 决定要不要生成大飞机
+        if( enemyType === 3 && Math.random() < 0.9 )
+            return;
+        let enemyLife = 1;
+        if( enemyType === 3 )
+            enemyLife = 5;
+        let enemyInfo = [
+            Math.random() * 520 - enemyImg[enemyType].width / 2,
+            -enemyImg[enemyType].height,
+            0,
+            enemyType,
+            enemyLife,
+        ];
+        enemyArr.push(enemyInfo);
+        enemyTime = 0;
     },
     enemychange : function ()
     {
@@ -191,9 +187,11 @@ let game = {
         {
             if( enemyArr[i][1] + enemyArr[i][2] <= canvas.height )
             {
-                view.drawImage(enemyall[enemyArr[i][3]], enemyArr[i][0], enemyArr[i][1] + enemyArr[i][2]);
-                if( enemyall[enemyArr[i][3]] == enemy4 )
+                view.drawImage(enemyImg[enemyArr[i][3]], enemyArr[i][0], enemyArr[i][1] + enemyArr[i][2]);
+                // if( enemyImg[enemyArr[i][3]] == enemy4 )
+                if( enemyArr[i][3] === 3 )
                 {
+                    // 是大飞机，伤害减弱
                     enemyArr[i][2] += 1.5 * bossattacknum;
                 }
                 else
@@ -215,7 +213,7 @@ let game = {
             myboomtime = 0;
         }
 
-        view.drawImage( myPlaneBoom[myBoomSeq], myPlaneX - myPlane.width / 2, myPlaneY - myPlane.height / 2);
+        view.drawImage(myPlaneBoom[myBoomSeq], myPlaneX - myPlane.width / 2, myPlaneY - myPlane.height / 2);
         if( myBoomSeq === myPlaneBoom.length - 1 )
         {
             game.life -= 1;
@@ -235,8 +233,8 @@ let game = {
             )
             {
                 if(
-                    enemyArr[i][0] + enemyall[enemyArr[i][3]].width > myPlaneX - myPlane.width / 2
-                    && enemyArr[i][1] + enemyArr[i][2] + enemyall[enemyArr[i][3]].height > myPlaneY - myPlane.height / 2
+                    enemyArr[i][0] + enemyImg[enemyArr[i][3]].width > myPlaneX - myPlane.width / 2
+                    && enemyArr[i][1] + enemyArr[i][2] + enemyImg[enemyArr[i][3]].height > myPlaneY - myPlane.height / 2
                 )
                 {
                     game.myplaneboom();
@@ -247,7 +245,7 @@ let game = {
                 && enemyArr[i][1] + enemyArr[i][2] < myPlaneY - myPlane.height / 2 + myPlane.height
             )
             {
-                if( enemyArr[i][0] < myPlaneX - myPlane.width / 2 + myPlane.width && enemyArr[i][1] + enemyArr[i][2] + enemyall[enemyArr[i][3]].height > myPlaneY - myPlane.height / 2 )
+                if( enemyArr[i][0] < myPlaneX - myPlane.width / 2 + myPlane.width && enemyArr[i][1] + enemyArr[i][2] + enemyImg[enemyArr[i][3]].height > myPlaneY - myPlane.height / 2 )
                 {
                     game.myplaneboom();
                 }
@@ -262,7 +260,8 @@ let game = {
             enemychangearr[i][3]++;
             if( enemychangearr[i][3] >= 10 )
             {
-                enemychangearr[i][5].src = `img/enemy${enemychangearr[i][2]}boom${enemychangearr[i][4]}.png`;
+                enemychangearr[i][5] = enemyBoomImg[(enemychangearr[i][2] - 1)][(enemychangearr[i][4] - 1)];
+                // enemychangearr[i][5].src = `img/enemy${enemychangearr[i][2]}boom${enemychangearr[i][4]}.png`;
                 enemychangearr[i][4]++;
                 enemychangearr[i][3] = 0;
             }
@@ -282,7 +281,7 @@ let game = {
             {
                 if(
                     bulletarr[i][0] < enemyArr[x][0]
-                    && bulletarr[i][1] - bulletarr[i][2] < enemyArr[x][1] + enemyArr[x][2] + enemyall[enemyArr[x][3]].height
+                    && bulletarr[i][1] - bulletarr[i][2] < enemyArr[x][1] + enemyArr[x][2] + enemyImg[enemyArr[x][3]].height
                     && bulletarr[i][1] - bulletarr[i][2] > enemyArr[x][1] + enemyArr[x][2]
                 )
                 {
@@ -310,11 +309,11 @@ let game = {
                 }
                 else if(
                     bulletarr[i][0] > enemyArr[x][0]
-                    && bulletarr[i][1] - bulletarr[i][2] < enemyArr[x][1] + enemyArr[x][2] + enemyall[enemyArr[x][3]].height
+                    && bulletarr[i][1] - bulletarr[i][2] < enemyArr[x][1] + enemyArr[x][2] + enemyImg[enemyArr[x][3]].height
                     && bulletarr[i][1] - bulletarr[i][2] > enemyArr[x][1] + enemyArr[x][2]
                 )
                 {
-                    if( bulletarr[i][0] < enemyArr[x][0] + enemyall[enemyArr[x][3]].width )
+                    if( bulletarr[i][0] < enemyArr[x][0] + enemyImg[enemyArr[x][3]].width )
                     {
                         enemyArr[x][4]--;
                         if( enemyArr[x][4] == 0 )
@@ -409,22 +408,24 @@ let game = {
 };
 
 // 开始游戏
-game.start = () => {
+game.start = () =>
+{
     // 隐藏鼠标
     canvas.style.cursor = 'none';
-    if(game.state === 'home')
+    if( game.state === 'home' )
     {
         load.init();
         game.state = 'loading';
         $('.main .home').classList.add('hide');
     }
-    else if(game.state === 'pause')
+    else if( game.state === 'pause' )
         game.state = 'playing';
-}
+};
 
 // 暂停游戏
-game.pause = () => {
-    if(game.state !== 'playing')
+game.pause = () =>
+{
+    if( game.state !== 'playing' )
         return;
     game.state = 'pause';
     // 显示鼠标
@@ -432,9 +433,10 @@ game.pause = () => {
 }
 
 // 改变背景
-game.bgChange = () => {
+game.bgChange = () =>
+{
     // 判断当前场景是否生效
-    if(game.state === 'loading' || game.bossAttack)
+    if( game.state === 'loading' || game.bossAttack )
         return;
     // 渲染两次背景，进行拼接
     view.drawImage(bg, 0, game.bgY, 520, 854);
@@ -442,12 +444,12 @@ game.bgChange = () => {
     game.bgY++;
     if( game.bgY === 0 )
         game.bgY = -854;
-}
+};
 
 setInterval(function ()
 {
     // 暂停游戏
-    if(game.state === 'pause')
+    if( game.state === 'pause' )
         return;
     game.bgChange();
     if( game.state === 'home' )
@@ -505,26 +507,26 @@ canvas.onmousemove = function ( e )
 {
     console.log(game.state, game.dead);
     // 更新飞机位置（轨迹）
-    if(game.state === 'playing' && game.dead == 0 )
+    if( game.state === 'playing' && game.dead == 0 )
         game.myplane(e);
 };
 
-canvas.onmouseenter = (e) => canvas.isFocus = true;
+canvas.onmouseenter = ( e ) => canvas.isFocus = true;
 
-document.onkeydown = (e) =>
+document.onkeydown = ( e ) =>
 {
-    if(!canvas.isFocus)
+    if( !canvas.isFocus )
         return;
-    if(e.key === 'Escape')
+    if( e.key === 'Escape' )
     {
-        if(game.state === 'playing')
+        if( game.state === 'playing' )
             game.pause();
-        else if(game.state === 'pause')
+        else if( game.state === 'pause' )
             game.start();
     }
     else if( e.key === 'Backspace' )
     {
-        if(game.state === 'playing')
+        if( game.state === 'playing' )
             // 清除敌机（调试）
             game.gua();
     }
@@ -534,17 +536,18 @@ let allowLeft = (document.body.parentElement.offsetWidth / 2 - 260) - 50;
 let allowRight = (document.body.parentElement.offsetWidth / 2 + 260) - 50;
 
 // 因为不触发resize事件，只能定时获取
-setInterval(() => {
+setInterval(() =>
+{
     allowLeft = (document.body.parentElement.offsetWidth / 2 - 260) - 50;
     allowRight = (document.body.parentElement.offsetWidth / 2 + 260) + 50;
 }, 2000);
 
 // 当鼠标移出游戏界面时暂停游戏
-document.onmouseout = document.onmousemove = (e) =>
+document.onmouseout = document.onmousemove = ( e ) =>
 {
     canvas.isFocus = (allowLeft <= e.clientX && e.clientX <= allowRight);
-    if(!canvas.isFocus)
+    if( !canvas.isFocus )
         game.pause();
-}
+};
 
 game.reset();
