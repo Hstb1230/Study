@@ -14,7 +14,7 @@ $recharge_id = $_REQUEST['rid'];
 $final_pay = $_REQUEST['fp'];
 $pay_way = $_REQUEST['pw'];
 
-$resaon = '';
+$reason = '';
 
 if(recharge($recharge_id, $final_pay, $pay_way, $reason))
     createResponse(200, 'success');

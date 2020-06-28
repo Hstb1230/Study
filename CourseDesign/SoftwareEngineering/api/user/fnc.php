@@ -389,6 +389,31 @@ function getRechargeInfo($id)
 }
 
 /**
+ * 获取充值列表
+ * @return array
+ */
+function getRechargeList()
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT id, pay, amount FROM recharge_list');
+    $stmt->execute();
+    $stmt->store_result();
+    $i = [];
+    $stmt->bind_result($i['id'], $i['pay'], $i['amount']);
+    $list = [];
+    while($stmt->fetch())
+    {
+        $list[] = [
+            'id' => $i['id'],
+            'pay' => $i['pay'],
+            'amount' => $i['amount']
+        ];
+    }
+    $stmt->close();
+    return $list;
+}
+
+/**
  * 充值
  * @param int $recharge_id 充值商品ID
  * @param double $final 实际付款金额
@@ -399,8 +424,8 @@ function getRechargeInfo($id)
 function recharge($recharge_id, $final, $way, & $reason)
 {
     $success = false;
-    $info = getRechargeInfo($recharge_id);
-    if(empty($info))
+    $r = getRechargeInfo($recharge_id);
+    if(empty($r))
     {
         $reason = '充值商品类型非法';
         goto end;
@@ -408,11 +433,16 @@ function recharge($recharge_id, $final, $way, & $reason)
     global $conn;
     $stmt = $conn->prepare('INSERT INTO recharge_record (time, user_id, original_price, final_pay, pay_way, get_gold) VALUE (?, ?, ?, ?, ?, ?)');
     $time = time();
-    $stmt->bind_param('iiddii', $time, $_SESSION['user_id'], $info['pay'], $final, $way, $info['amount']);
+    $stmt->bind_param('iiddii', $time, $_SESSION['user_id'], $r['pay'], $final, $way, $r['amount']);
     $success = $stmt->execute();
     if(!$success)
         $reason = $stmt->error;
-
+    else
+    {
+        $w = getWarehouseInfo();
+        $w['gold'] += $r['amount'];
+        setWarehouse($w['gold'], $w['play_count'], $w['resurrection']);
+    }
     end:
     return $success;
 }
@@ -442,6 +472,11 @@ function getRechargeRecord()
     return $recordList;
 }
 
+/**
+ * 获取商品信息
+ * @param $id
+ * @return array
+ */
 function getCommodityInfo($id)
 {
     global $conn;
@@ -457,6 +492,33 @@ function getCommodityInfo($id)
     }
     $stmt->close();
     return $i;
+}
+
+/**
+ * 获取商品列表
+ * @return array
+ */
+function getCommodityList()
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT id, state, prop_type, amount, pay FROM commodity where state = 1');
+    $stmt->execute();
+    $stmt->store_result();
+    $i = [];
+    $stmt->bind_result($i['id'], $i['state'], $i['prop'], $i['amount'], $i['pay']);
+    $list = [];
+    while($stmt->fetch())
+    {
+        $list[] = [
+            'id' => $i['id'],
+            'state' => $i['state'],
+            'prop' => $i['prop'],
+            'amount' => $i['amount'],
+            'pay' => $i['pay']
+        ];
+    }
+    $stmt->close();
+    return $list;
 }
 
 /**
@@ -582,7 +644,9 @@ function getRank()
     while($stmt->fetch())
     {
         $seq++;
-        if($seq > 10 && ($i['id'] != $_SESSION['user_id']))
+        if($i['id'] == $_SESSION['user_id'])
+            $i['name'] = '我';
+        else if($seq > 10)
             continue;
         $rankList[] = [
             'seq' => $seq,
