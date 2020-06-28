@@ -1,0 +1,36 @@
+.main .game .header
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    /*width: -webkit-fill-available;*/
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+    padding: 8px 0;
+    animation: light .6s linear forwards;
+}
+
+.main .game .header:hover
+{
+    animation: deep .6s linear forwards;
+}
+
+.main .game .header .score,
+.main .game .header .heart
+{
+    display: flex;
+}
+
+.main .game .header [class^=i-]
+{
+    margin-right: 0;
+}
+
+.main .game .header .value
+{
+    margin: 0 8px;
+    color: white;
+    font-weight: bold;
+}

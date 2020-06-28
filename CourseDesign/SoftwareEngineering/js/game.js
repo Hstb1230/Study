@@ -15,7 +15,7 @@ let game = {
     {
     },
 
-    gameover : 0,
+    gameOver : false,
     dead : 0,
     score : 0,
     life : 3,
@@ -33,13 +33,13 @@ let game = {
         gradient.addColorStop(1, '#e92758');
         view.font = '30px  sans-serif';
         view.fillStyle = gradient;
-        view.fillText('SCORE:' + game.score, 10, 50);
+        // view.fillText('SCORE:' + game.score, 10, 50);
     },
     lifeing : function ()
     {
         view.font = '30px  sans-serif';
         view.fillStyle = '#D28140';
-        view.fillText('LIFE:' + game.life, 400, 50);
+        // view.fillText('LIFE:' + game.life, 400, 50);
         if( game.dead == 1 && myBoomSeq === myPlaneBoom.length - 1 && game.life > 0 )
         {
             game.dead = 0;
@@ -53,18 +53,12 @@ let game = {
             enemychangearr = [];
         }
         else if( game.dead == 1 && game.life == 0 )
-            game.gameover = 1;
-    },
-    gameOvering : function ()
-    {
-        if( game.gameover === 1 )
         {
-            game.reset();
-
-            game.gameover = 0;
-            game.dead = 0;
+            // game.gameOver = true;
+            game.state = 'over';
         }
     },
+    gameIsOver : () => {},
 
     // 开始新一轮游戏，重置游戏状态
     reset : function ()
@@ -73,7 +67,10 @@ let game = {
         // 显示鼠标，开始游戏按钮
         canvas.removeAttribute('style');
         if( account.isLogin )
+        {
+            $('.main .game').classList.add('hide');
             $('.main .home').classList.remove('hide');
+        }
 
         game.life = 3;
         game.score = 0;
@@ -102,6 +99,9 @@ let game = {
         game.bossTimeBlur = true;
         game.bossAttack = false;
 
+
+        game.gameOver = false;
+        game.dead = 0;
     },
 
     myplane : function ( e )
@@ -217,6 +217,7 @@ let game = {
         if( myBoomSeq === myPlaneBoom.length - 1 )
         {
             game.life -= 1;
+            $('.main .game .heart .value').innerText = game.life;
             bulletarr = [];
             enemyArr = [];
             myPlaneX = canvas.width / 2;
@@ -279,6 +280,8 @@ let game = {
         {
             for(let x = 0; x < enemyArr.length; x++)
             {
+                if( bulletarr.length <= i)
+                    break;
                 if(
                     bulletarr[i][0] < enemyArr[x][0]
                     && bulletarr[i][1] - bulletarr[i][2] < enemyArr[x][1] + enemyArr[x][2] + enemyImg[enemyArr[x][3]].height
@@ -422,6 +425,45 @@ game.start = () =>
         game.state = 'playing';
 };
 
+// 继续游戏
+game.continue = (time) =>
+{
+    if(game.life === 0)
+    {
+        // 没有生命，使用道具
+        if(warehouse.resurrection <= 0)
+        {
+            let e = $make('div');
+            e.innerHTML = `复活道具不足，<a onclick="floatOfStore()">立即购买</a>`;
+            setFloat(e, 'message');
+            // floatActionAfterClose = game.gameIsOver;
+            floatActionAfterClose = () => {
+                game.gameIsOver(true);
+            }
+            return;
+        }
+        game.life++;
+        fetch('/api/user/revive.php')
+            .then( res => res.json() )
+            .then( res => {
+                warehouse = res.data;
+            })
+    }
+    time = time || 768
+    closeFloat();
+    game.state = 'pause';
+    setTimeout(game.start, time);
+}
+
+// 退出游戏
+game.exit = (report) => {
+    closeFloat();
+    setTimeout(game.reset, 512);
+    report = report || false;
+    if(report)
+        fetch(`/api/user/addPlayRecord.php?score=${ game.score }`);
+}
+
 // 暂停游戏
 game.pause = () =>
 {
@@ -430,6 +472,81 @@ game.pause = () =>
     game.state = 'pause';
     // 显示鼠标
     canvas.removeAttribute('style');
+
+    let e = $make('div');
+    e.innerHTML = `
+        <h3>已暂停游戏</h3>
+        <ul>
+            <li>
+                <div class="score">
+                    <div class="i-score"></div>
+                    ${ game.score }
+                </div>
+                <div class="heart">
+                    <div class="i-heart"></div>
+                    ${ game.life }
+                </div>
+            </li>
+            <li>
+                <div class="continue" onclick="game.continue()">
+                    继续游戏
+                </div>
+            </li>
+            <li>
+                <div class="exit" onclick="game.exit()">
+                    退出游戏
+                </div>
+            </li>
+        </ul>
+    `;
+    setFloat(e, 'game-pause');
+    floatActionAfterClose = game.continue;
+};
+
+game.gameIsOver = function (force)
+{
+    force = force || false;
+    if( game.state === 'over' && (float.style.display === 'none' || force) )
+    {
+        // game.reset();
+        let e = $make('div');
+        let rank;
+        e.innerHTML = `
+            <ul>
+                <li>
+                    <div class="score">
+                        <div class="i-score"></div>
+                        ${ game.score }
+                    </div>
+                </li>
+                <!--
+                <li>
+                    <div class="rank">
+                        <div class="i-rank"></div>
+                        ${ rank }
+                    </div>
+                </li>
+                -->
+                <li>
+                    <div class="continue" onclick="game.continue()">
+                        复活
+                        <div class="i-heart">
+                            <div class="count">
+                                ${ warehouse.resurrection }
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="exit" onclick="game.exit(true)">
+                        结束游戏
+                    </div>
+                </li>
+            </ul>
+        `;
+        setFloat(e, 'game-over');
+        floatActionAfterClose = game.reset;
+    }
 }
 
 // 改变背景
@@ -446,6 +563,17 @@ game.bgChange = () =>
         game.bgY = -854;
 };
 
+setInterval(() => {
+    $('.main .game .heart .value').innerText = game.life;
+    $('.main .game .score .value').innerText = game.score;
+/*
+    if(game.state === 'over' && float.style.display === 'none')
+    {
+        game.gameIsOver();
+    }
+*/
+}, 1000)
+
 setInterval(function ()
 {
     // 暂停游戏
@@ -458,14 +586,17 @@ setInterval(function ()
     else if( game.state === 'loading' )
     {
         if( load.isFinish() )
+        {
             game.state = 'playing';
+            $('.main .game').classList.remove('hide');
+        }
         else
             load.playing();
     }
     else if( game.state === 'playing' )
     {
         // 设置Boss模式触发点
-        if( game.score >= 100 && game.bossTimeBlur )
+        if( game.score >= 300 && game.bossTimeBlur )
         {
             game.warnOn = true;
             game.gua();
@@ -495,7 +626,7 @@ setInterval(function ()
         game.enemyisbroke();
         game.enemyboom();
         game.lifeing();
-        game.gameOvering();
+        game.gameIsOver();
         game.scoring();
     }
 
@@ -505,7 +636,7 @@ startBtn.onclick = () => game.start();
 
 canvas.onmousemove = function ( e )
 {
-    console.log(game.state, game.dead);
+    // console.log(game.state, game.dead);
     // 更新飞机位置（轨迹）
     if( game.state === 'playing' && game.dead == 0 )
         game.myplane(e);
@@ -522,7 +653,7 @@ document.onkeydown = ( e ) =>
         if( game.state === 'playing' )
             game.pause();
         else if( game.state === 'pause' )
-            game.start();
+            game.continue(512);
     }
     else if( e.key === 'Backspace' )
     {

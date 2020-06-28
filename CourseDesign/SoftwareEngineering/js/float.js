@@ -1,4 +1,5 @@
 let float = $('.float');
+let floatActionAfterClose = null;
 
 float.addEventListener('transitionstart',
     function ()
@@ -23,6 +24,11 @@ float.querySelector('.close').addEventListener('click',
     function ()
     {
         closeFloat();
+        if(floatActionAfterClose !== null)
+        {
+            floatActionAfterClose();
+            floatActionAfterClose = null;
+        }
     }
 )
 

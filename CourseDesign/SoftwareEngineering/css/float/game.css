@@ -1,0 +1,88 @@
+.float .game-pause h3
+{
+    width: 100%;
+    text-align: center;
+    padding-bottom: 25px;
+    border-bottom: 1px solid gray;
+}
+
+.float .game-pause li,
+.float .game-over li
+{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 23px 19px;
+}
+
+.float .game-over li .rank,
+.float .game-over li .score,
+.float .game-pause li .score,
+.float .game-pause li .heart
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.float .game-pause li .score,
+.float .game-pause li .heart
+{
+    flex-flow: column wrap;
+}
+
+.float .game-over li [class^=i-],
+.float .game-pause li [class^=i-]
+{
+    width: 48px;
+    height: 48px;
+    margin-bottom: 8px;
+}
+
+.float .game-over .continue,
+.float .game-over .exit,
+.float .game-pause .continue,
+.float .game-pause .exit
+{
+    color: white;
+    border-radius: 15px;
+    padding: 13px 19px;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.float .game-over .continue,
+.float .game-pause .continue
+{
+    background: cornflowerblue;
+}
+
+.float .game-over .exit,
+.float .game-pause .exit
+{
+    background: #2C3E50;
+}
+
+.float .game-over .continue
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.float .game-over li .i-heart
+{
+    width: 24px;
+    height: 24px;
+    position: relative;
+    margin: 0 0 0 3px;
+}
+
+.float .game-over li .i-heart .count
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    font-size: 13px;
+}

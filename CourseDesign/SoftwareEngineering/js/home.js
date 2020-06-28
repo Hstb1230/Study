@@ -315,7 +315,7 @@ function floatOfStore()
                         </div>
                         <div class="detail">
                             <div class="i-stock">
-                                <div class="count">${ i['prop'] === 0 ? warehouse['play_count'] : warehouse['gold'] }</div>
+                                <div class="count">${ i['prop'] === 0 ? warehouse['play_count'] : warehouse.resurrection }</div>
                             </div>
                             <div class="i-gold">
                                 <div class="need">${ i['pay'] }</div>    
