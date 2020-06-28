@@ -34,7 +34,7 @@ let game = {
         view.font = '30px  sans-serif';
         view.fillStyle = '#D28140';
         view.fillText('LIFE:' + game.life, 400, 50);
-        if( game.dead == 1 && myboomnum == 9 && game.life > 0 )
+        if( game.dead == 1 && myBoomSeq === myPlaneBoom.length -1 && game.life > 0 )
         {
             game.dead = 0;
             bullettime = 0;
@@ -42,10 +42,10 @@ let game = {
             bulletarr = [];
             enemytime = 0;
             enemyArr = [];
-            myboomnum = 1;
+            myBoomSeq = 0;
             myboomtime = 0;
             enemychangearr = [];
-            myplane1boom.src = `img/myplane1boom${myboomnum}.png`;
+            // myplane1boom.src = `img/myplane1boom${myBoomSeq}.png`;
         }
         else if( game.dead == 1 && game.life == 0 )
             game.gameover = 1;
@@ -80,7 +80,7 @@ let game = {
         bulletarr = [];
         enemytime = 0;
         enemyArr = [];
-        myboomnum = 1;
+        myBoomSeq = 0;
         myboomtime = 0;
         enemychangearr = [];
 
@@ -212,12 +212,14 @@ let game = {
         myboomtime++;
         if( myboomtime >= 10 )
         {
-            myplane1boom.src = `img/myplane1boom${myboomnum}.png`;
-            myboomnum++;
+            // myplane1boom.src = `img/myplane1boom${myBoomSeq}.png`;
+            myBoomSeq = (myBoomSeq + 1) % myPlaneBoom.length;
             myboomtime = 0;
         }
-        view.drawImage(myplane1boom, myPlaneX - myPlane.width / 2, myPlaneY - myPlane.height / 2);
-        if( myboomnum == 9 )
+
+        // view.drawImage( myplane1boom, myPlaneX - myPlane.width / 2, myPlaneY - myPlane.height / 2);
+        view.drawImage( myPlaneBoom[myBoomSeq], myPlaneX - myPlane.width / 2, myPlaneY - myPlane.height / 2);
+        if( myBoomSeq === myPlaneBoom.length - 1 )
         {
             game.life -= 1;
             bulletarr = [];

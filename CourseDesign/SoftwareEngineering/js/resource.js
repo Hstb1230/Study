@@ -1,3 +1,22 @@
+if(localStorage.getItem('m-bg') === null)
+{
+    localStorage.setItem('m-bg', true);
+    localStorage.setItem('m-game', true);
+}
+
+let audioOfBG = $('#m-bg');
+
+document.addEventListener('click', playBGM);
+document.addEventListener('touchend', playBGM);
+
+function playBGM()
+{
+    if(localStorage.getItem('m-bg') === 'true' && audioOfBG.paused)
+    {
+        audioOfBG.volume = 0;
+        audioOfBG.play();
+    }
+}
 
 // 背景图片
 let bg = new Image();
@@ -7,9 +26,22 @@ bg.src = 'img/bg.jpg';
 let logo = new Image();
 logo.src = 'img/logo.png';
 
+function loadGameResource()
+{
+    myPlane.src = 'img/plane/my/plane.png';
+    myPlaneBoom = new Array(9);
+    for(i = 0; i < 9; i++)
+    {
+        myPlaneBoom[i] = new Image();
+        myPlaneBoom[i].src = `img/plane/my/boom/${i}.png`;
+    }
+
+}
+
 // 我方战斗机
 let myPlane = new Image();
-myPlane.src = 'img/plane/my/plane.png';
+let myPlaneBoom;
+loadGameResource();
 
 let myPlaneX = canvas.width / 2,
     myPlaneY = 730;
@@ -32,9 +64,11 @@ enemy3.src = `img/enemy3.png`;
 let enemy4 = new Image();
 enemy4.src = `img/enemy4.png`;
 let enemyall = [enemy1, enemy2, enemy3, enemy4];
+
 //战斗机爆炸
 let myplane1boom = new Image();
-let myboomnum = 1,
+
+let myBoomSeq = 0,
     myboomtime = 0;
 //敌机爆炸
 let enemychangearr = [];
