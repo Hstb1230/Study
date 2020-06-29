@@ -1,0 +1,63 @@
+.float .table h3
+{
+    width: 100%;
+    text-align: center;
+    padding-bottom: 25px;
+    border-bottom: 1px solid gray;
+}
+
+.float .table li
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.float .table li > div
+{
+    padding: 13px 23px 0 23px;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.float .table li .opt
+{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.float .table li .opt > div
+{
+    cursor: pointer;
+    padding: 5px 8px;
+    margin: 0 5px;
+    border-radius: 15px;
+    border: 1px solid darkgray;
+    background: rgba(255, 255, 255, .5);
+}
+
+/* 头部特殊样式 */
+.float .header
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 25px;
+    border-bottom: 1px solid gray;
+}
+
+.float .header h3
+{
+    width: auto;
+    text-align: left;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.float .header p
+{
+    cursor: pointer;
+}

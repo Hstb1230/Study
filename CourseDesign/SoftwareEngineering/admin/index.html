@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="icon" href="/img/plane/my/plane.png">
+</head>
+<body style="background-image: linear-gradient(#2C3E50, #4CA1AF);">
+    <div class="container">
+
+        <!-- 悬浮窗 -->
+        <div class="float" style="opacity: 0; display: none;">
+            <!--    <div class="float">-->
+            <div class="container">
+                <div class="content">
+                </div>
+            </div>
+            <div class="close">
+                ×
+            </div>
+        </div>
+
+        <div class="admin">
+
+            <div class="login hide">
+                <img class="logo" src="/img/logo.png" alt="logo">
+                <!--suppress HtmlUnknownTarget -->
+                <form action="/api/admin/call/portal" onsubmit="return login();">
+                    <div class="input-area">
+                        <label>
+                            <p>账号</p>
+                            <input type="text" name="u" required autofocus>
+                        </label>
+                        <label>
+                            <p>密码</p>
+                            <input type="password" name="p" required>
+                        </label>
+                    </div>
+                    <label class="submit">
+                        <input type="submit" style="display: none;">
+                        →
+                    </label>
+                </form>
+            </div>
+
+            <div class="index hide">
+
+                <div class="manager">
+                    <div class="i-manager"></div>
+                    <ul>
+                        <li onclick="floatOfChangePassword()">
+                            修改密码
+                        </li>
+                        <li>
+                            &nbsp;
+                        </li>
+                        <li onclick="floatOfLogout()">
+                            退出登录
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="menu">
+                    <ul>
+                        <li onclick="floatOfManageUser()">
+                            用户管理
+                        </li>
+                        <li onclick="floatOfManagerCommodity()">
+                            商品列表
+                        </li>
+                        <li onclick="floatOfManagerRecharge()">
+                            充值管理
+                        </li>
+                        <li onclick="floatOfRechargeRecord()">
+                            查看流水
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+<script src="/js/global.js"></script>
+<script src="/js/float.js"></script>
+<script src="/js/admin.js"></script>
+</html>

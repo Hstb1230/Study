@@ -10,12 +10,15 @@ $include = (e) => {
 $make = (e) => document.createElement(e);
 
 // https://zeit.co/blog/async-and-await
-function sleep (time) {
+function sleep (time)
+{
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 function objectToKeyValue(obj)
 {
+    if(obj === null)
+        return '';
     let kv = '';
     Object.keys(obj).forEach( k => {
         kv += `&${k}=${escape(obj[k])}`;
@@ -23,31 +26,36 @@ function objectToKeyValue(obj)
     return kv.substring(1);
 }
 
-Date.prototype.getFullMonth = function() {
+Date.prototype.getFullMonth = function()
+{
     if(this.getMonth() + 1 < 10)
         return `0${this.getMonth() + 1}`;
     return this.getMonth() + 1;
 }
 
-Date.prototype.getFullDate = function() {
+Date.prototype.getFullDate = function()
+{
     if(this.getDate() < 10)
         return `0${this.getDate()}`;
     return this.getDate();
 }
 
-Date.prototype.getFullHours = function() {
+Date.prototype.getFullHours = function()
+{
     if(this.getHours() < 10)
         return `0${this.getHours()}`;
     return this.getHours();
 }
 
-Date.prototype.getFullMinutes = function() {
+Date.prototype.getFullMinutes = function()
+{
     if(this.getMinutes() < 10)
         return `0${this.getMinutes()}`;
     return this.getMinutes();
 }
 
-function timestampToDate(timeStamp) {
+function timestampToDateOnly(timeStamp)
+{
     let fmt = '';
 
     let now = new Date();
@@ -67,6 +75,22 @@ function timestampToDate(timeStamp) {
         fmt = `${t.getFullMonth()}月${t.getFullDate()}日`;
     else if(now.getTime() / 1000 > Math.floor(timeStamp / 1000))
         fmt = `${t.getFullYear()}年${t.getFullMonth()}月${t.getFullDate()}日`;
+    return fmt;
+}
+
+function timestampToDate(timeStamp)
+{
+    if(timeStamp < 1e11)
+        timeStamp *= 1000;
+    let fmt = timestampToDateOnly(timeStamp);
+
+    let now = new Date();
+    now.setHours(0);
+    now.setMinutes(0);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+
+    let t = new Date(timeStamp);
     fmt += `${t.getFullHours()}:${t.getFullMinutes()}`;
     return fmt;
 }
@@ -78,4 +102,30 @@ function reportElement( e )
     {
         e.classList.remove('shake');
     }, 1800);
+}
+
+function reportInput( e, msg )
+{
+    e.value = '';
+    e.validationMessage = e.placeholder = msg;
+    e.reportValidity();
+    e.focus();
+    e.classList.add('shake');
+    e.classList.add('ph-hide');
+    setTimeout(function ()
+    {
+        e.placeholder = '';
+        e.validationMessage = '请填写该字段';
+        e.classList.remove('shake');
+        e.classList.remove('ph-hide');
+    }, 1800);
+}
+
+function getFetchInit(req)
+{
+    return {
+        method : 'post',
+        body : objectToKeyValue( req),
+        headers : { 'Content-Type' : 'application/x-www-form-urlencoded' },
+    };
 }

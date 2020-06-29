@@ -24,10 +24,12 @@ float.querySelector('.close').addEventListener('click',
     function ()
     {
         closeFloat();
-        if(floatActionAfterClose !== null)
+        if(floatActionAfterClose !== null && typeof floatActionAfterClose !== 'undefined')
         {
-            floatActionAfterClose();
-            floatActionAfterClose = null;
+            setTimeout(() => {
+                floatActionAfterClose();
+                floatActionAfterClose = null;
+            }, 800);
         }
     }
 )
@@ -90,7 +92,7 @@ function showFloat()
 }
 */
 
-function setFloat(e, className)
+function setFloat(e, className, actionAfterClose, delay)
 {
     let style = float.getAttribute("style") || '';
     if(style.indexOf('opacity') === -1 || float.style.opacity >= 1)
@@ -98,7 +100,7 @@ function setFloat(e, className)
         float.style.opacity = 0;
         // 用法
         sleep(800).then(() => {
-            setFloat(e, className);
+            setFloat(e, className, actionAfterClose, delay);
         });
         return;
     }
@@ -121,4 +123,31 @@ function setFloat(e, className)
     setTimeout(() => {
         float.style.opacity = 1;
     }, 100);
+    if(typeof delay !== 'undefined')
+    {
+        floatActionAfterClose = null;
+        setTimeout(actionAfterClose, delay);
+    }
+    else if(typeof actionAfterClose !== 'undefined')
+    {
+        floatActionAfterClose = actionAfterClose;
+    }
+}
+
+function showPassword( e )
+{
+    let label = $(`.float label[for=${e}]`);
+    console.log(`.float label[for=${e}]`, label);
+    let pwd = label.querySelector('input');
+    let icon = label.querySelector('i');
+    if( pwd.type === 'password' )
+    {
+        pwd.type = 'text';
+        icon.setAttribute('class', 'i-see');
+    }
+    else
+    {
+        pwd.type = 'password';
+        icon.setAttribute('class', 'i-hide');
+    }
 }

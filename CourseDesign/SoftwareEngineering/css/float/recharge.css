@@ -47,7 +47,7 @@
 
 .float .recharge li
 {
-    padding: 25px;
+    padding: 23px;
     border: 1px solid darkgray;
     border-radius: 15px;
     margin: 13px;
@@ -99,6 +99,12 @@
     font-size: 17px;
 }
 
+.float .recharge .detail .i-CNY
+{
+    margin-left: 0;
+    margin-right: 3px;
+}
+
 .float .recharge .detail .need
 {
     font-size: 16px;
@@ -114,4 +120,10 @@
 {
     width: auto;
     min-width: 32px;
+}
+
+.float .recharge li[onclick^=recharge]
+{
+    flex: 1;
+    padding: 45px 23px;
 }

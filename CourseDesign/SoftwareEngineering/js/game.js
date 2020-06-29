@@ -431,7 +431,7 @@ game.continue = (time) =>
     if(game.life === 0)
     {
         // 没有生命，使用道具
-        if(warehouse.resurrection <= 0)
+        if(warehouse['resurrection'] <= 0)
         {
             let e = $make('div');
             e.innerHTML = `复活道具不足，<a onclick="floatOfStore()">立即购买</a>`;
@@ -461,7 +461,12 @@ game.exit = (report) => {
     setTimeout(game.reset, 512);
     report = report || false;
     if(report)
-        fetch(`/api/user/addPlayRecord.php?score=${ game.score }`);
+        fetch(`/api/user/addPlayRecord.php?score=${ game.score }`)
+            .then( res => res.json() )
+            .then( res => {
+                if(res.code !== 200)
+                    console.log('report fail');
+            } )
 }
 
 // 暂停游戏
@@ -510,7 +515,6 @@ game.gameIsOver = function (force)
     {
         // game.reset();
         let e = $make('div');
-        let rank;
         e.innerHTML = `
             <ul>
                 <li>
@@ -523,7 +527,7 @@ game.gameIsOver = function (force)
                 <li>
                     <div class="rank">
                         <div class="i-rank"></div>
-                        ${ rank }
+                        排名
                     </div>
                 </li>
                 -->
@@ -532,7 +536,7 @@ game.gameIsOver = function (force)
                         复活
                         <div class="i-heart">
                             <div class="count">
-                                ${ warehouse.resurrection }
+                                ${ warehouse['resurrection'] }
                             </div>
                         </div>
                     </div>

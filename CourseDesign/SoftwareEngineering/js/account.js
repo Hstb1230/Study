@@ -92,23 +92,6 @@ function initDefaultResource()
          );
 }
 
-function showPassword( e )
-{
-    let label = $(`.float label[for=${e}]`);
-    let pwd = label.querySelector('input');
-    let icon = label.querySelector('i');
-    if( pwd.type === 'password' )
-    {
-        pwd.type = 'text';
-        icon.setAttribute('class', 'i-see');
-    }
-    else
-    {
-        pwd.type = 'password';
-        icon.setAttribute('class', 'i-hide');
-    }
-}
-
 function register()
 {
     let form = $('.float .register form');
@@ -176,23 +159,6 @@ function userExist( e )
             if( data.data )
                 reportInput(e, '用户已存在');
         });
-}
-
-function reportInput( e, msg )
-{
-    e.value = '';
-    e.validationMessage = e.placeholder = msg;
-    e.reportValidity();
-    e.focus();
-    e.classList.add('shake');
-    e.classList.add('ph-hide');
-    setTimeout(function ()
-    {
-        e.placeholder = '';
-        e.validationMessage = '请填写该字段';
-        e.classList.remove('shake');
-        e.classList.remove('ph-hide');
-    }, 1800);
 }
 
 function login()
@@ -307,12 +273,9 @@ function resetPassword()
 }
 
 let pact = $('.main .default .pact');
-let pactLink = pact.querySelector('a');
 let pactSelect = pact.querySelector('input');
 
 let acc = $('.main .default .account');
-let accReg = acc.querySelector('.register');
-let accLog = acc.querySelector('.login');
 
 function floatOfRegister()
 {
