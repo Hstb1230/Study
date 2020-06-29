@@ -161,7 +161,7 @@ function floatOfManageUser()
             let ul = '';
             list.forEach( u => {
                 ul += `
-                    <li>
+                    <li ${ u['state'] ? '' : 'style="color: gray"' }>
                         <div class="user" style="width: 100px;">${ u['username'] }</div>
                         <div class="time-reg" style="width: 100px;">${ timestampToDateOnly(u['create_time'] * 1000, false)  }</div>
                         <div class="time-log" style="width: 180px;">
@@ -172,7 +172,7 @@ function floatOfManageUser()
                             }
                         </div>
                         <div class="sum-recharge" style="width: 80px;">${ u['recharge_sum'] }</div>
-                        <div class="opt">
+                        <div class="opt"  ${ u['state'] ? '' : 'style="color: black"' }>
                             <div onclick="floatOfUserRechargeRecord(${ u['id'] }, '${ u['username'] }')">充值<br>记录</div>
                             <div onclick="floatOfUserConsumeRecord(${ u['id'] }, '${ u['username'] }')">消费<br>记录</div>
                             <div onclick="floatOfPlayRecord(${ u['id'] }, '${ u['username'] }')">游戏<br>记录</div>
@@ -600,7 +600,11 @@ function floatOfManagerRecharge()
     e.innerHTML = `
         <div class="header">
             <h3>充值管理</h3>
-            <p onclick="floatOfEditRecharge()">添加</p>
+            <div class="menu">
+                <p onclick="floatOfEditRecharge()">添加</p>
+                <div class="filter"></div>
+                <p onclick="floatOfRechargeRecord()">查看流水</p>
+            </div>
         </div>
         <ul>
             <li>

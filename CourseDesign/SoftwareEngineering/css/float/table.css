@@ -57,6 +57,20 @@
     border-bottom: none;
 }
 
+.float .header .menu
+{
+    display: flex;
+    align-items: center;
+}
+
+.float .header .menu .filter
+{
+    margin: 0 5px;
+    width: 3px;
+    height: 13px;
+    background: rgba(0, 0, 0, .15);
+}
+
 .float .header p
 {
     cursor: pointer;

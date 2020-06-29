@@ -40,10 +40,10 @@
 
 .float .store li
 {
-    padding: 12px 25px;
+    padding: 12px 23px;
     border: 1px solid darkgray;
     border-radius: 15px;
-    margin: 13px auto;
+    margin: 13px 0;
 }
 
 .float .store .info
