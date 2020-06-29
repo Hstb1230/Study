@@ -612,8 +612,7 @@ function addPlayRecord($score, & $reason)
 {
     $success = false;
     $wInfo = getWarehouseInfo();
-    $wInfo['play_count']--;
-    if($wInfo['play_count']-- <= 0)
+    if(--$wInfo['play_count'] < 0)
     {
         $reason = '没有体力了';
         goto end;
