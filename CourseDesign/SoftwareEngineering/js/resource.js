@@ -1,3 +1,7 @@
+
+let canvas = $('#game');
+let view = canvas.getContext('2d');
+
 if(localStorage.getItem('m-bg') === null)
 {
     localStorage.setItem('m-bg', true);

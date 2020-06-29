@@ -79,6 +79,3 @@ function reportElement( e )
         e.classList.remove('shake');
     }, 1800);
 }
-
-let canvas = $('#game');
-let view = canvas.getContext('2d');

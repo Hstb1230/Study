@@ -1,12 +1,3 @@
-@import 'pact.css';
-@import 'account.css';
-@import 'setting.css';
-@import 'rank.css';
-@import 'store.css';
-@import 'record.css';
-@import 'recharge.css';
-@import 'game.css';
-
 /*
  * 悬浮窗
  * 需要绝对定位并显示在更高层
