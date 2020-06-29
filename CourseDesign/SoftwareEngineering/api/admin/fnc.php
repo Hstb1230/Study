@@ -20,42 +20,6 @@ function addVerifyProblem($content, & $reason)
     return $success;
 }
 
-/**
- * 增加充值定价信息
- * @param double $pay 所需金额
- * @param int $amount 金币数量
- * @return bool
- */
-function addRechargeInfo($pay, $amount)
-{
-    global $conn;
-    $stmt = $conn->prepare('INSERT INTO recharge_list (pay, amount) VALUE (?, ?)');
-    $stmt->bind_param('di', $pay, $amount);
-    $stmt->execute();
-    $stmt->close();
-    return true;
-}
-
-/**
- * 增加商品
- * @param int $prop 商品类型：0/体力，1/金币
- * @param int $amount 数量
- * @param int $pay 所需金币
- * @param $reason
- * @return bool
- */
-function addCommodity($prop, $amount, $pay, & $reason)
-{
-    global $conn;
-    $stmt = $conn->prepare('INSERT INTO commodity (publish_time, prop_type, amount, pay) VALUE (?, ?, ?, ?)');
-    $time = time();
-    $stmt->bind_param('iiii', $time, $prop, $amount, $pay);
-    $success = $stmt->execute();
-    if(!$success)
-        $reason = $stmt->error;
-    return $success;
-}
-
 function getManagerAccount()
 {
     $acc = [];
@@ -442,6 +406,13 @@ function unBanCommodity($id, & $reason)
     return chooseBanCommodity($id, true, $reason);
 }
 
+/**
+ * @param int $id 如果为0，则代表新增
+ * @param int $prop 商品类型：0/体力，1/金币
+ * @param int $amount 数量
+ * @param int $gold 所需金币
+ * @return bool
+ */
 function setCommodity($id, $prop, $amount, $gold)
 {
     global $conn;

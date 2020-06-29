@@ -5,7 +5,7 @@ function getUserInfo($username)
 {
     global $conn;
 
-    $stmt = $conn->prepare('SELECT id, password, create_time, verify_problem_id, problem_answer FROM account WHERE username = ?');
+    $stmt = $conn->prepare('SELECT id, state, password, create_time, verify_problem_id, problem_answer FROM account WHERE username = ?');
     $stmt->bind_param('s', $username);
     $stmt->execute();
     $stmt->store_result();
@@ -16,6 +16,7 @@ function getUserInfo($username)
         $info['username'] = $username;
         $stmt->bind_result(
             $info['id'],
+            $info['state'],
             $info['password'],
             $info['create_time'],
             $info['verify_problem_id'],
@@ -298,6 +299,10 @@ function login($username, $password, & $factor)
     else if($info['password'] != md5($password))
     {
         $factor = '密码错误';
+    }
+    else if(!$info['state'])
+    {
+        $factor = '账户被封禁';
     }
     else
         goto success;

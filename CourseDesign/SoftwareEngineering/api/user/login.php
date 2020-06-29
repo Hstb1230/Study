@@ -11,7 +11,7 @@ include_once 'fnc.php';
 $username = $_REQUEST['u'];
 $password = $_REQUEST['p'];
 
-if(login($username, $password, $factor))
+if(login($username, $password, $reason))
     createResponse(200, 'success');
 else
-    createResponse(400, $factor);
+    createResponse(400, $reason);
