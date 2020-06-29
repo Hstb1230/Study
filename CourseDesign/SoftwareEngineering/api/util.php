@@ -20,7 +20,7 @@ function arrIsset($arr, $keyList)
 {
     foreach($keyList as $key)
     {
-        if(!isset($arr[$key]) || is_array($arr[$key]) || $arr[$key] === '')
+        if($key === '' || !isset($arr[$key]) || is_array($arr[$key]) || $arr[$key] === '')
             return false;
     }
     return true;

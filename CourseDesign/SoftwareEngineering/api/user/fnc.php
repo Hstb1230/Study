@@ -280,7 +280,10 @@ function newLoginRecord()
     global $conn;
     $stmt = $conn->prepare('INSERT INTO login_record (time, user_id, ip) VALUE (?, ?, ?)');
     $time = time();
-    $stmt->bind_param('iis', $time, $_SESSION['user_id'], $_SERVER['HTTP_X_FORWARDED_FOR']);
+    $ip = $_SERVER['REMOTE_ADDR'];
+    if( isset($_SERVER['HTTP_X_FORWARDED_FOR']) )
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    $stmt->bind_param('iis', $time, $_SESSION['user_id'], $ip);
     $stmt->execute();
     $stmt->close();
 }
