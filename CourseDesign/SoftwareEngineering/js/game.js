@@ -548,7 +548,7 @@ game.gameIsOver = function (force)
                 </li>
             </ul>
         `;
-        setFloat(e, 'game-over');
+        setFloat(e, 'game-over', 'game.exit(true)');
         floatActionAfterClose = game.reset;
     }
 }

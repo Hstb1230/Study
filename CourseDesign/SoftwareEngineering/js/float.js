@@ -26,10 +26,8 @@ float.querySelector('.close').addEventListener('click',
         closeFloat();
         if(floatActionAfterClose !== null && typeof floatActionAfterClose !== 'undefined')
         {
-            setTimeout(() => {
-                floatActionAfterClose();
-                floatActionAfterClose = null;
-            }, 800);
+            setTimeout(floatActionAfterClose, 800);
+            floatActionAfterClose = null;
         }
     }
 )
