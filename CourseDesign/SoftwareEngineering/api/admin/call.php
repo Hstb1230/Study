@@ -1,13 +1,9 @@
 <?php
 
-include_once '../util.php';
+include_once '../inc.php';
+include_once 'fnc.php';
 
 $fun = @$_REQUEST['to'];
-
-include_once '../db.php';
-
-if(!defined('SQL_SERVER')) exit;
-include_once 'fnc.php';
 
 $success = true;
 $reason = null;
@@ -23,9 +19,9 @@ if($fun === 'portal')
 }
 else if($fun === 'isLogin')
 {
-    $data = isLogin();
+    $data = isPortal();
 }
-else if(!isLogin())
+else if(!isPortal())
 {
     $success = false;
     $reason = '请先登录';
@@ -40,7 +36,7 @@ else if($fun === 'changePassword')
         goto fail;
     $password = $_REQUEST['p'];
     $newPassword = $_REQUEST['np'];
-    $success = changePassword($password, $newPassword, $reason, $data);
+    $success = changeAdminPassword($password, $newPassword, $reason, $data);
 }
 else if($fun === 'getUserList')
 {
@@ -51,7 +47,7 @@ else if($fun === 'getUserRechargeRecord')
     if(!arrIsset($_REQUEST, ['u']))
         goto fail;
     $u = $_REQUEST['u'];
-    $data = getRechargeRecord($u);
+    $data = getUserRechargeRecord($u);
 }
 else if($fun === 'getUserConsumeRecord')
 {
@@ -72,14 +68,14 @@ else if($fun === 'banUser')
     if(!arrIsset($_REQUEST, ['u']))
         goto fail;
     $u = $_REQUEST['u'];
-    $success = banUser($u, $reason);
+    $success = setUserState($u, false, $reason);
 }
 else if($fun === 'unBanUser')
 {
     if(!arrIsset($_REQUEST, ['u']))
         goto fail;
     $u = $_REQUEST['u'];
-    $success = unBanUser($u, $reason);
+    $success = setUserState($u, true, $reason);
 }
 else if($fun === 'resetUserPassword')
 {
@@ -91,7 +87,7 @@ else if($fun === 'resetUserPassword')
 }
 else if($fun === 'getRechargeRecord')
 {
-    $data = getRechargeRecord();
+    $data = getUserRechargeRecord();
 }
 else if($fun === 'getCommodityList')
 {
@@ -102,20 +98,20 @@ else if($fun === 'banCommodity')
     if(!arrIsset($_REQUEST, ['id']))
         goto fail;
     $id = $_REQUEST['id'];
-    $success = banCommodity($id, $reason);
+    $success = setCommodityState($id, false, $reason);
 }
 else if($fun === 'unBanCommodity')
 {
     if(!arrIsset($_REQUEST, ['id']))
         goto fail;
     $id = $_REQUEST['id'];
-    $success = unBanCommodity($id, $reason);
+    $success = setCommodityState($id, true, $reason);
 }
 else if($fun === 'setCommodity')
 {
     if(!arrIsset($_REQUEST, ['id', 'prop', 'amount', 'gold']))
         goto fail;
-    $success = setCommodity(intval($_REQUEST['id']), $_REQUEST['prop'], $_REQUEST['amount'], $_REQUEST['gold']);
+    $success = setCommodityInfo(intval($_REQUEST['id']), $_REQUEST['prop'], $_REQUEST['amount'], $_REQUEST['gold'], $reason);
 }
 else if($fun === 'getRechargeList')
 {
@@ -124,7 +120,13 @@ else if($fun === 'getRechargeList')
 else if($fun === 'setRecharge') {
     if(!arrIsset($_REQUEST, ['id', 'amount', 'pay']))
         goto fail;
-    $success = setRecharge(intval($_REQUEST['id']), $_REQUEST['amount'], $_REQUEST['pay']);
+    $success = setRechargeInfo(intval($_REQUEST['id']), $_REQUEST['amount'], $_REQUEST['pay'], $reason);
+}
+else if($fun === 'setVerifyProblem')
+{
+    if(!arrIsset($_REQUEST, ['id', 'content']))
+        goto fail;
+    $success = setVerifyProblem(intval($_REQUEST['id']), $_REQUEST['content'], $reason);
 }
 else
 {

@@ -1,57 +1,13 @@
 <?php
 if(!isset($conn)) exit;
 
-function getUserInfo($username)
+/**
+ * 是否已登录
+ * @return bool
+ */
+function isLogin()
 {
-    global $conn;
-
-    $stmt = $conn->prepare('SELECT id, state, password, create_time, verify_problem_id, problem_answer FROM account WHERE username = ?');
-    $stmt->bind_param('s', $username);
-    $stmt->execute();
-    $stmt->store_result();
-
-    $info = [];
-    if($stmt->num_rows > 0)
-    {
-        $info['username'] = $username;
-        $stmt->bind_result(
-            $info['id'],
-            $info['state'],
-            $info['password'],
-            $info['create_time'],
-            $info['verify_problem_id'],
-            $info['problem_answer']
-        );
-        $stmt->fetch();
-    }
-    $stmt->close();
-    return $info;
-}
-
-function getUserInfoByID($id)
-{
-    global $conn;
-
-    $stmt = $conn->prepare('SELECT username, password, create_time, verify_problem_id, problem_answer FROM account WHERE id = ?');
-    $stmt->bind_param('s', $id);
-    $stmt->execute();
-    $stmt->store_result();
-
-    $info = [];
-    if($stmt->num_rows > 0)
-    {
-        $info['id'] = $id;
-        $stmt->bind_result(
-            $info['username'],
-            $info['password'],
-            $info['create_time'],
-            $info['verify_problem_id'],
-            $info['problem_answer']
-        );
-        $stmt->fetch();
-    }
-    $stmt->close();
-    return $info;
+    return @$_SESSION['role'] === 0;
 }
 
 /**
@@ -61,33 +17,7 @@ function getUserInfoByID($id)
  */
 function existUser($username)
 {
-    return !empty(getUserInfo($username));
-}
-
-function getUserID($username)
-{
-    return (int)(@getUserInfo($username)['id']);
-}
-
-/**
- * 验证问题是否存在
- * @param int $problem_id 问题id
- * @return bool
- */
-function existVerifyProblem($problem_id)
-{
-    global $conn;
-    $stmt = $conn->prepare('SELECT count(*) FROM verify_problem WHERE id = ?');
-    $stmt->bind_param('i', $problem_id);
-    $stmt->execute();
-    $stmt->store_result();
-
-    $count = 0;
-    $stmt->bind_result($count);
-    $stmt->fetch();
-    $stmt->close();
-
-    return $count === 1;
+    return getUserID($username) != 0;
 }
 
 /**
@@ -96,29 +26,29 @@ function existVerifyProblem($problem_id)
  * @param string $password 密码
  * @param integer $verify_problem_id 验证问题id
  * @param string $verify_answer 验证问题答案
- * @param string $factor 失败原因
+ * @param string $reason 失败原因
  * @return bool 注册结果
  */
-function register($username, $password, $verify_problem_id, $verify_answer, &$factor)
+function register($username, $password, $verify_problem_id, $verify_answer, &$reason)
 {
     if(existUser($username))
     {
-        $factor = '已存在用户';
+        $reason = '已存在用户';
         return false;
     }
     if(!existVerifyProblem($verify_problem_id))
     {
-        $factor = '问题ID非法';
+        $reason = '问题ID非法';
         return false;
     }
     if(strlen($username) < 3)
     {
-        $factor = '用户名太短';
+        $reason = '用户名太短';
         return false;
     }
     if(strlen($password) < 3)
     {
-        $factor = '密码太短';
+        $reason = '密码太短';
         return false;
     }
     $create_time = time();
@@ -135,7 +65,7 @@ function register($username, $password, $verify_problem_id, $verify_answer, &$fa
         logout();
     }
     else
-        $factor = $stmt->error;
+        $reason = $stmt->error;
     $stmt->close();
     return $isSuccess;
 }
@@ -145,10 +75,18 @@ function logout()
     unset($_SESSION['role'], $_SESSION['user_id']);
 }
 
-function changePassword($password, $newPassword, & $reason, & $value)
+/**
+ * 修改用户密码
+ * @param $password
+ * @param $newPassword
+ * @param $reason
+ * @param $value
+ * @return bool
+ */
+function changeUserPassword($password, $newPassword, & $reason, & $value)
 {
     $success = false;
-    $info = getUserInfoByID($_SESSION['user_id']);
+    $info = getUserInfo($_SESSION['user_id']);
     if(empty($info))
     {
         $reason = '不存在用户';
@@ -162,15 +100,15 @@ function changePassword($password, $newPassword, & $reason, & $value)
         goto end;
     }
 
-    $newPassword = md5($newPassword);
-    global $conn;
-    $stmt = $conn->prepare('UPDATE account SET password = ? WHERE id = ?');
-    $stmt->bind_param('si', $newPassword, $info['id']);
-    $stmt->execute();
-    if($stmt->affected_rows > 0)
-        $success = true;
-    else
-        $reason = '没有对应用户';
+    if($password === md5($newPassword))
+    {
+        $reason = '新旧密码一致';
+        $value = 'np';
+        goto end;
+    }
+
+    $success = resetUserPassword($_SESSION['user_id'], $newPassword, $reason);
+
     end:
     return $success;
 }
@@ -182,34 +120,42 @@ function changePassword($password, $newPassword, & $reason, & $value)
  * @param string $verify_ans 密保问题答案
  * @param string $new_password 新密码
  * @param string $reason 失败原因
- * @param string $value 错误值
+ * @param string $data 错误字段
  * @return bool
  */
-function resetPassword($username, $verify_problem_id, $verify_ans, $new_password, & $reason, & $value)
+function resetPassword($username, $verify_problem_id, $verify_ans, $new_password, & $reason, & $data)
 {
     $success = false;
-    $info = getUserInfo($username);
+    $info = getUserInfo(null, $username);
     if(empty($info))
     {
-        $reason = '不存在用户';
+        $data = 'u';
+        $reason = '用户不存在';
         goto end;
     }
 
     if($info['verify_problem_id'] != (int)$verify_problem_id)
     {
-        $value = 'vid';
+        $data = 'vans';
         $reason = '问题或答案错误';
         goto end;
     }
 
     if($info['problem_answer'] != $verify_ans)
     {
-        $value = 'vans';
+        $data = 'vans';
         $reason = '问题或答案错误';
         goto end;
     }
 
-    $success = changePassword($info['password'], $new_password, $reason, $value);
+    if($info['password'] === md5($new_password))
+    {
+        $data = 'np';
+        $reason = '新旧密码一样';
+        goto end;
+    }
+
+    $success = resetUserPassword($info['id'], $new_password, $reason);
     end:
     return $success;
 }
@@ -226,12 +172,7 @@ function resetPassword($username, $verify_problem_id, $verify_ans, $new_password
 function changeVerifyProblem($ans, $new_verify_problem, $new_verify_ans, & $reason, & $value)
 {
     $success = true;
-    if(!isset($_SESSION['user_id']))
-    {
-        $reason = '请先登录';
-        goto fail;
-    }
-    $info = getUserInfoByID($_SESSION['user_id']);
+    $info = getUserInfo($_SESSION['user_id']);
     if(empty($info))
     {
         $reason = '用户不存在';
@@ -289,20 +230,30 @@ function newLoginRecord()
     $stmt->close();
 }
 
-function login($username, $password, & $factor)
+/**
+ * 用户登录
+ * @param $username
+ * @param $password
+ * @param $reason
+ * @param $data
+ * @return bool
+ */
+function login($username, $password, & $reason, & $data)
 {
-    $info = getUserInfo($username);
+    $info = getUserInfo(null, $username);
     if(empty($info))
     {
-        $factor = '用户不存在';
+        $data = 'u';
+        $reason = '用户不存在';
     }
     else if($info['password'] != md5($password))
     {
-        $factor = '密码错误';
+        $data = 'p';
+        $reason = '密码错误';
     }
     else if(!$info['state'])
     {
-        $factor = '账户被封禁';
+        $reason = '账户被封禁';
     }
     else
         goto success;
@@ -397,31 +348,6 @@ function getRechargeInfo($id)
 }
 
 /**
- * 获取充值列表
- * @return array
- */
-function getRechargeList()
-{
-    global $conn;
-    $stmt = $conn->prepare('SELECT id, pay, amount FROM recharge_list');
-    $stmt->execute();
-    $stmt->store_result();
-    $i = [];
-    $stmt->bind_result($i['id'], $i['pay'], $i['amount']);
-    $list = [];
-    while($stmt->fetch())
-    {
-        $list[] = [
-            'id' => $i['id'],
-            'pay' => $i['pay'],
-            'amount' => $i['amount']
-        ];
-    }
-    $stmt->close();
-    return $list;
-}
-
-/**
  * 充值
  * @param int $recharge_id 充值商品ID
  * @param double $final 实际付款金额
@@ -453,80 +379,6 @@ function recharge($recharge_id, $final, $way, & $reason)
     }
     end:
     return $success;
-}
-
-/**
- * 获取充值记录
- * @return array
- */
-function getRechargeRecord()
-{
-    $recordList = [];
-    global $conn;
-    $stmt = $conn->prepare('SELECT time, original_price, final_pay, pay_way, get_gold FROM recharge_record WHERE user_id = ?');
-    $stmt->bind_param('i', $_SESSION['user_id']);
-    $stmt->execute();
-    $stmt->bind_result($time, $ori_price, $fin_pay, $pay_way, $gold);
-    while($stmt->fetch())
-    {
-        $recordList[] = [
-            'time' => $time,
-            'ori_price' => $ori_price,
-            'final_pay' => $fin_pay,
-            'pay_way' => $pay_way,
-            'gold' => $gold
-        ];
-    }
-    return $recordList;
-}
-
-/**
- * 获取商品信息
- * @param $id
- * @return array
- */
-function getCommodityInfo($id)
-{
-    global $conn;
-    $stmt = $conn->prepare('SELECT state, prop_type, amount, pay FROM commodity WHERE id = ?');
-    $stmt->bind_param('i', $id);
-    $stmt->execute();
-    $stmt->store_result();
-    $i = [];
-    if($stmt->num_rows > 0)
-    {
-        $stmt->bind_result($i['state'], $i['prop'], $i['amount'], $i['pay']);
-        $stmt->fetch();
-    }
-    $stmt->close();
-    return $i;
-}
-
-/**
- * 获取商品列表
- * @return array
- */
-function getCommodityList()
-{
-    global $conn;
-    $stmt = $conn->prepare('SELECT id, state, prop_type, amount, pay FROM commodity where state = 1');
-    $stmt->execute();
-    $stmt->store_result();
-    $i = [];
-    $stmt->bind_result($i['id'], $i['state'], $i['prop'], $i['amount'], $i['pay']);
-    $list = [];
-    while($stmt->fetch())
-    {
-        $list[] = [
-            'id' => $i['id'],
-            'state' => $i['state'],
-            'prop' => $i['prop'],
-            'amount' => $i['amount'],
-            'pay' => $i['pay']
-        ];
-    }
-    $stmt->close();
-    return $list;
 }
 
 /**
@@ -580,35 +432,8 @@ function buyCommodity($id, & $reason)
     return $success;
 }
 
-
 /**
- * 获取消费记录
- * @return array
- */
-function getConsumeRecord()
-{
-    $recordList = [];
-    global $conn;
-    $stmt = $conn->prepare('SELECT time, amount, commodity_id FROM consume_record WHERE user_id = ?');
-    $stmt->bind_param('i', $_SESSION['user_id']);
-    $stmt->execute();
-    $stmt->store_result();
-    $stmt->bind_result($time, $amount, $com_id);
-    while($stmt->fetch())
-    {
-        $cInfo = getCommodityInfo($com_id);
-        $recordList[] = [
-            'time' => $time,
-            'pay' => $amount,
-            'prop' => $cInfo['prop'],
-            'amount' => $cInfo['amount']
-        ];
-    }
-    return $recordList;
-}
-
-/**
- * 添加分数
+ * 添加游戏记录
  * @param int $score 分数
  * @param string $reason
  * @return bool
@@ -636,6 +461,10 @@ function addPlayRecord($score, & $reason)
     return $success;
 }
 
+/**
+ * 获取排行榜
+ * @return array
+ */
 function getRank()
 {
     $lastWeek = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 6 * 24 * 60 * 60;
@@ -682,30 +511,18 @@ function getPactContent()
     return $content;
 }
 
-function getVerifyProblemList()
-{
-    global $conn;
-    $stmt = $conn->prepare('SELECT id, content FROM verify_problem');
-    $stmt->execute();
-    $stmt->store_result();
-    $i = [];
-    $list = [];
-    $stmt->bind_result($i['id'], $i['content']);
-    while($stmt->fetch())
-        $list[] = [
-            'id' => $i['id'],
-            'content' => $i['content'],
-        ];
-    $stmt->close();
-    return $list;
-}
-
 function getVerifyProblemID()
 {
-    $i = getUserInfoByID($_SESSION['user_id']);
+    $i = getUserInfo($_SESSION['user_id']);
     return $i['verify_problem_id'];
 }
 
+/**
+ * 复活
+ * @param array $data 新仓库数据
+ * @param $reason
+ * @return bool
+ */
 function revive(& $data, & $reason)
 {
     $w = getWarehouseInfo();
