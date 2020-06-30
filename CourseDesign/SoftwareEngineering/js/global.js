@@ -19,9 +19,11 @@ function objectToKeyValue(obj)
 {
     if(obj === null)
         return '';
+    else if(typeof obj === 'string')
+        return obj;
     let kv = '';
     Object.keys(obj).forEach( k => {
-        kv += `&${k}=${escape(obj[k])}`;
+        kv += `&${k}=${encodeURI(obj[k])}`;
     });
     return kv.substring(1);
 }
@@ -129,3 +131,58 @@ function getFetchInit(req)
         headers : { 'Content-Type' : 'application/x-www-form-urlencoded' },
     };
 }
+
+function submit( req, form, callbackOfSuccess, callbackOfFail )
+{
+    if( typeof form !== 'string' )
+    {
+        // 禁止二次点击
+        form.style.opacity = 0.5;
+        form.style.pointerEvents = 'none';
+    }
+
+    sleep(800).then(() =>
+    {
+        let action;
+        if( typeof form === 'string' )
+            action = form;
+        else
+            action = form.action;
+        fetch(action, {
+            method : 'post',
+            headers : { 'Content-Type' : 'application/x-www-form-urlencoded' },
+            body : objectToKeyValue(req),
+        })
+            .then(res => res.json())
+            .then(data =>
+                {
+                    if( typeof form !== 'string' )
+                    {
+                        form.style.opacity = 1;
+                        form.style.pointerEvents = '';
+                    }
+                    // console.log(data);
+                    // 状态码为200时表示调用成功
+                    if( data.code === 200 )
+                    {
+                        // 进行成功回调
+                        if( typeof callbackOfSuccess !== 'undefined' && callbackOfSuccess !== null )
+                            callbackOfSuccess();
+                    }
+                    else if( typeof callbackOfFail !== 'undefined' && callbackOfFail !== null )
+                    {
+                        callbackOfFail(data);
+                    }
+                    else if( typeof form !== 'string' && typeof data['data'] === 'string' && data['data'] !== '')
+                    {
+                        reportInput(form[data['data']], data['err_msg']);
+                    }
+                    else
+                    {
+                        setFloat(data['err_msg']);
+                    }
+                },
+            );
+    });
+}
+

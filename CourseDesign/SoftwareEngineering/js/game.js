@@ -443,7 +443,7 @@ game.continue = (time) =>
             return;
         }
         game.life++;
-        fetch('/api/user/revive.php')
+        fetch('/api/user/call/revive')
             .then( res => res.json() )
             .then( res => {
                 warehouse = res.data;
@@ -460,13 +460,9 @@ game.exit = (report) => {
     closeFloat();
     setTimeout(game.reset, 512);
     report = report || false;
+    // 上报分数
     if(report)
-        fetch(`/api/user/addPlayRecord.php?score=${ game.score }`)
-            .then( res => res.json() )
-            .then( res => {
-                if(res.code !== 200)
-                    console.log('report fail');
-            } )
+        submit({ score : game.score }, '/api/user/call/addPlayRecord')
 }
 
 // 暂停游戏
@@ -636,7 +632,13 @@ setInterval(function ()
 
 }, 10);
 
-startBtn.onclick = () => game.start();
+startBtn.onclick = () =>
+{
+    if(warehouse['play_count'] > 0)
+        game.start();
+    else
+        setFloat('体力不足，请先<a onclick="floatOfStore()">购买</a>');
+}
 
 canvas.onmousemove = function ( e )
 {

@@ -75,3 +75,14 @@
 {
     cursor: pointer;
 }
+
+.float .table.verify-problem-manage .vfy-content
+{
+    flex: 1;
+}
+
+.float .table.verify-problem-manage .opt
+{
+    flex: none;
+    width: 50px;
+}

@@ -10,7 +10,7 @@
 {
     display: flex;
     justify-content: space-around;
-    margin: 19px;
+    margin: 19px 13px;
 }
 
 .float .record .time

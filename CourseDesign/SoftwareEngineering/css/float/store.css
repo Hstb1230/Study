@@ -46,6 +46,11 @@
     margin: 13px 0;
 }
 
+.float .store li:hover
+{
+    background: rgba(0, 0, 0, .15);
+}
+
 .float .store .info
 {
     display: flex;

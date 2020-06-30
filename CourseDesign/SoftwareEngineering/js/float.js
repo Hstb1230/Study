@@ -93,24 +93,33 @@ function showFloat()
 function setFloat(e, className, actionAfterClose, delay)
 {
     let style = float.getAttribute("style") || '';
+    // 如果悬浮窗已经弹出，则先关闭再延迟显示
     if(style.indexOf('opacity') === -1 || float.style.opacity >= 1)
     {
         float.style.opacity = 0;
-        // 用法
         sleep(800).then(() => {
             setFloat(e, className, actionAfterClose, delay);
         });
         return;
     }
+    // 设置样式
     className = className || '';
     float.style.display = '';
-    let content = float.querySelector('.content');
     if(className !== '')
     {
+        // 如果是字符串但是需要设置样式，则创建一个div再设置样式
+        if(typeof e === 'string')
+        {
+            let div = $make('div');
+            div.innerHTML = e;
+            e = div;
+        }
         className.split(' ').forEach( s => {
             e.classList.add(s);
         })
     }
+    // 设置悬浮窗内容
+    let content = float.querySelector('.content');
     content.innerHTML = '';
     if(typeof e === 'string')
         content.innerHTML = e;
@@ -121,10 +130,14 @@ function setFloat(e, className, actionAfterClose, delay)
     setTimeout(() => {
         float.style.opacity = 1;
     }, 100);
+    // 延迟执行与关闭后的回调
     if(typeof delay !== 'undefined')
     {
         floatActionAfterClose = null;
-        setTimeout(actionAfterClose, delay);
+        if(typeof actionAfterClose !== 'undefined')
+            setTimeout(actionAfterClose, delay);
+        else
+            setTimeout(closeFloat, delay);
     }
     else if(typeof actionAfterClose !== 'undefined')
     {

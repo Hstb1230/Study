@@ -127,3 +127,8 @@
     flex: 1;
     padding: 45px 23px;
 }
+
+.float .recharge li[onclick^=recharge]:hover
+{
+    background: rgba(0, 0, 0, .15);
+}

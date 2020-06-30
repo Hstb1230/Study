@@ -9,7 +9,7 @@ let listOfRecharge;
 
 function flushWarehouse()
 {
-    axios.get('/api/user/getWarehouseInfo.php')
+    axios.get('/api/user/call/getWarehouseInfo')
         .then( res => res.data )
         .then( res => {
             warehouse = res.data;
@@ -21,7 +21,7 @@ function flushWarehouse()
 
 function loadHomeResource()
 {
-    let getWarehouseInfo = () => axios.get('/api/user/getWarehouseInfo.php');
+    let getWarehouseInfo = () => axios.get('/api/user/call/getWarehouseInfo');
     let getSettingView = () => axios.get('/view/setting.html');
     axios.all(
         [
@@ -49,8 +49,8 @@ function loadSettingResource()
 {
     let getChangePasswordView = () => axios.get('/view/changePassword.html');
     let getChangeVerifyProblemView = () => axios.get('/view/changeVerifyProblem.html');
-    let getVerifyProblemList = () => axios.get('/api/user/getVerifyProblemList.php');
-    let getVerifyProblemID = () => axios.get('/api/user/getVerifyProblemID.php');
+    let getVerifyProblemList = () => axios.get('/api/user/call/getVerifyProblemList');
+    let getVerifyProblemID = () => axios.get('/api/user/call/getVerifyProblemID');
     axios.all(
         [
             getChangePasswordView(),
@@ -105,15 +105,12 @@ function floatOfSetting()
 
 function logout()
 {
-    fetch('/api/user/logout.php')
+    fetch('/api/user/call/logout')
         .then(() => {
             initDefaultResource();
             $('.main .home').classList.add('hide');
             $('.main .default').classList.remove('hide');
-            setFloat('已退出登录，3s后自动关闭');
-            setTimeout(() => {
-                closeFloat();
-            }, 3000);
+            setFloat('已退出登录，3s后自动关闭', null, closeFloat, 3000);
         })
 }
 
@@ -121,18 +118,25 @@ function changePassword()
 {
     let form = $('.float .account form');
     let req = {
-        p : escape(form.p.value),
-        np : escape(form.np.value),
+        p : (form.p.value),
+        np : (form.np.value),
     };
 
-    if( form.sp.value !== '' && form.sp.value !== form.np.value )
+    if( form.sp.value !== form.np.value )
     {
         reportInput(form.sp, '密码不一致');
         reportInput(form.np, '');
         return false;
     }
 
-    submit(req, form)
+    if( form.p.value === form.np.value )
+    {
+        reportInput(form.sp, '');
+        reportInput(form.np, '新旧密码一样');
+        return false;
+    }
+
+    submit(req, form, () => { setFloat('修改成功，3s后自动关闭', null, floatOfSetting, 3000); })
 
     return false;
 }
@@ -141,54 +145,20 @@ function floatOfChangePassword()
 {
     let e = $make('div');
     e.innerHTML = viewOfChangePassword;
-    setFloat(e, 'account change-password');
+    setFloat(e, 'account change-password', floatOfSetting);
     return false;
-}
-
-function submit(req, form)
-{
-    // 禁止二次点击
-    form.style.opacity = 0.5;
-    form.style.userSelect = 'none';
-
-    sleep(800).then(() =>
-    {
-        fetch(form.action, {
-            method : 'post',
-            headers : { 'Content-Type' : 'application/x-www-form-urlencoded' },
-            body : objectToKeyValue(req),
-        })
-            .then(res => res.json())
-            .then(data =>
-                {
-                    form.style.opacity = 1;
-                    form.style.userSelect = '';
-                    // console.log(data);
-                    if( data.code === 200 )
-                    {
-                        setFloat('修改成功，3s后自动关闭');
-                        setTimeout(() => {
-                            floatOfSetting();
-                        }, 3000);
-                    }
-                    else
-                    {
-                        reportInput(form[data['data']], data['err_msg']);
-                    }
-                },
-            );
-    });
 }
 
 function changeVerifyProblem()
 {
     let form = $('.float .account form');
+    // noinspection SpellCheckingInspection
     let req = {
-        vans : escape(form.vans.value),
-        nvp : escape(form.nvp.value),
-        nvans : escape(form.nvans.value),
+        vans : (form.vans.value),
+        nvp : (form.nvp.value),
+        nvans : (form.nvans.value),
     };
-    submit(req, form);
+    submit(req, form, () => { setFloat('修改成功，3s后自动关闭', null, floatOfSetting, 3000); })
     return false;
 }
 
@@ -208,7 +178,7 @@ function floatOfChangeVerifyProblem()
             i.id,
         ));
     });
-    setFloat(div, 'account change-verify-problem');
+    setFloat(div, 'account change-verify-problem', floatOfSetting);
     return false;
 }
 
@@ -224,7 +194,7 @@ function floatOfRank()
         </ul>
     `;
     setFloat(e, 'rank');
-    fetch('/api/user/rank.php')
+    fetch('/api/user/call/rank')
         .then( res => res.json() )
         .then( res => res.data )
         .then( arr => {
@@ -259,32 +229,24 @@ function floatOfRank()
 
 function buyProp(id)
 {
-    fetch(
-        '/api/user/buyCommodity.php',
-        {
-            method : 'post',
-            headers : { 'Content-Type' : 'application/x-www-form-urlencoded' },
-            body : objectToKeyValue({ cid : id }),
+    submit(
+        { cid : id },
+        '/api/user/call/buyCommodity',
+        () => {
+            flushWarehouse();
+            setFloat('购买成功', null, floatOfStore, 3000);
+        },
+        (res) => {
+            setFloat(
+                `
+                    <h3>购买失败</h3>
+                    <p>${res['err_msg']}</p>
+                `,
+                'message',
+                floatOfStore, 3000
+            );
         }
-    ).then( res => res.json() )
-     .then( res => {
-         let e;
-         if( res.code === 200 )
-         {
-             e = '购买成功，<a onclick="floatOfStore()">继续购买</a>';
-             flushWarehouse();
-             setFloat(e);
-         }
-         else
-         {
-             e = $make('div');
-             e.innerHTML = `
-                <h3>购买失败</h3>
-                <p>${res['err_msg']}，<a onclick="floatOfStore()">继续购买</a></p>
-             `;
-             setFloat(e, 'message');
-         }
-     })
+    )
 }
 
 function floatOfStore()
@@ -301,7 +263,7 @@ function floatOfStore()
     `;
     setFloat(e, 'store');
     let ul = '';
-    fetch('/api/user/getCommodityList.php')
+    fetch('/api/user/call/getCommodityList')
         .then( res => res.json() )
         .then( res => res.data )
         .then( list => {
@@ -315,7 +277,7 @@ function floatOfStore()
                         </div>
                         <div class="detail">
                             <div class="i-stock">
-                                <div class="count">${ i['prop'] === 0 ? warehouse['play_count'] : warehouse.resurrection }</div>
+                                <div class="count">${ i['prop'] === 0 ? warehouse['play_count'] : warehouse['resurrection'] }</div>
                             </div>
                             <div class="i-gold">
                                 <div class="need">${ i['pay'] }</div>    
@@ -337,23 +299,23 @@ function floatOfConsumeRecord()
         <ul>
         </ul>
     `;
-    setFloat(e, 'record');
+    setFloat(e, 'record', floatOfStore);
     let ul = '';
-    fetch('/api/user/getConsumeRecord.php')
+    fetch('/api/user/call/getConsumeRecord')
         .then( res => res.json() )
         .then( res => res.data )
         .then( list => {
             list.forEach( i => {
                 ul += `
                     <li>
-                        <div class="time">${ timestampToDate(i.time * 1000) }</div>
+                        <div class="time" style="width: 120px; text-align: center;">${ timestampToDate(i.time * 1000) }</div>
                         花费
                         <div class="i-gold">
-                            <div class="need">${ i['pay'] }</div>
+                            <div class="need">${ i['gold_amount'] }</div>
                         </div>
                         购买
-                        <div class="${ i['prop'] === 0 ? 'i-power' : 'i-heart' }">
-                            <div class="count">${ i['amount'] }</div>
+                        <div class="${ i['prop_type'] === 0 ? 'i-power' : 'i-heart' }">
+                            <div class="count">${ i['prop_amount'] }</div>
                         </div>
                     </li>
                 `;
@@ -371,16 +333,16 @@ function floatOfRechargeRecord()
         <ul>
         </ul>
     `;
-    setFloat(e, 'record');
+    setFloat(e, 'record', floatOfRecharge);
     let ul = '';
-    fetch('/api/user/getRechargeRecord.php')
+    fetch('/api/user/call/getRechargeRecord')
         .then( res => res.json() )
         .then( res => res.data )
         .then( list => {
             list.forEach( i => {
                 ul += `
                     <li>
-                        <div class="time">${ timestampToDate(i.time * 1000) }</div>
+                        <div class="time" style="width: 120px; text-align: center">${ timestampToDate(i.time * 1000) }</div>
                         通过
                         <div class="i-${ i['pay_way'] === 1 ? 'alipay' : 'wechat' }"></div>
                         充值
@@ -389,7 +351,7 @@ function floatOfRechargeRecord()
                         </div>
                         获得
                         <div class="i-gold">
-                            <div class="count">${ i['gold'] }</div>
+                            <div class="count">${ i['get_gold'] }</div>
                         </div>
                     </li>
                 `;
@@ -412,33 +374,23 @@ function recharge(way)
         fp: listOfRecharge[radio.value]['pay'],
         pw : way
     };
-    fetch(
-        '/api/user/recharge.php',
+    submit(
+        req, '/api/user/call/recharge',
+        () =>
         {
-            method: 'post',
-            headers : { 'Content-Type' : 'application/x-www-form-urlencoded' },
-            body : objectToKeyValue(req),
-        }
-    )   .then( res => res.json() )
-        .then( res => {
-            if(res.code === 200)
-            {
-                flushWarehouse();
-                setFloat('充值成功，<a onclick="floatOfRecharge()">继续充值</a>');
-            }
-            else
-            {
-                let e = $make('div');
-                e.innerHTML = `
+            flushWarehouse();
+            setFloat('充值成功', null, floatOfRecharge, 3000);
+        },
+        res => {
+            setFloat(
+                `
                     <h3>充值失败</h3>
-                    <p>
-                        ${ res['err_msg'] }
-                        ，<a onclick="floatOfRecharge()">继续充值</a>
-                    </p>
-                `;
-                setFloat(e, 'message');
-            }
-        })
+                    <p>${ res['err_msg'] }</p>
+                `,
+                'message', floatOfRecharge, 3000
+            );
+        }
+    )
 }
 
 function floatOfRecharge()
@@ -466,7 +418,7 @@ function floatOfRecharge()
     `;
     setFloat(e, 'recharge');
     let ul = '';
-    fetch('/api/user/getRechargeList.php')
+    fetch('/api/user/call/getRechargeList')
         .then( res => res.json() )
         .then( res => res.data )
         .then( list => {

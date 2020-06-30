@@ -14,11 +14,11 @@ let contentOfPact = '';
 let verifyProblem = [];
 
 // 获取登录状态
-let waitAccount = fetch('/api/user/isLogin.php')
+let waitAccount = fetch('/api/user/call/isLogin')
     .then(data => data.json())
     .then(data =>
         {
-            account.isLogin = (data.code === 200 && data.msg);
+            account.isLogin = (data.code === 200);
             return account.isLogin;
         },
     );
@@ -59,10 +59,10 @@ waitAccount.then(state =>
 function initDefaultResource()
 {
     let getLoginView = () => axios.get('/view/login.html');
-    let getPactContent = () => axios.get('/api/user/getPactContent.php');
+    let getPactContent = () => axios.get('/api/user/call/getPactContent');
     let getRegisterView = () => axios.get('/view/register.html');
     let getResetPasswordView = () => axios.get('/view/resetPassword.html');
-    let getVerifyProblemList = () => axios.get('/api/user/getVerifyProblemList.php');
+    let getVerifyProblemList = () => axios.get('/api/user/call/getVerifyProblemList');
     axios.all(
         [
             getPactContent(),
@@ -95,9 +95,6 @@ function initDefaultResource()
 function register()
 {
     let form = $('.float .register form');
-    // 禁止二次点击
-    form.style.opacity = 0.5;
-    form.style.userSelect = 'none';
     if( form.p.value !== form.sp.value )
     {
         form.sp.value = '';
@@ -106,53 +103,32 @@ function register()
         return false;
     }
     let req = {
-        u : escape(form.u.value),
-        p : escape(form.p.value),
-        vid : escape(form.vid.value),
-        vans : escape(form.vans.value),
+        u : (form.u.value),
+        p : (form.p.value),
+        vid : (form.vid.value),
+        vans : (form.vans.value),
     };
-    // console.log(objectToKeyValue(req));
-    sleep(800).then(() =>
-    {
-        fetch('/api/user/register.php', {
-            method : 'post',
-            headers : {
-                'Content-Type' : 'application/x-www-form-urlencoded',
-            },
-            body : objectToKeyValue(req),
-        })
-            .then(res => res.json())
-            .then(data =>
-                {
-                    form.style.opacity = 1;
-                    form.style.userSelect = '';
-                    // console.log(data);
-                    if( data.code === 200 )
-                    {
-                        let div = $make('div');
-                        div.innerHTML = `
-                            注册成功，<a onclick="return floatOfLogin()">现在登录</a>
-                        `;
-                        setFloat(div);
-                    }
-                    else
-                    {
-                        let div = $make('div');
-                        div.innerHTML = `
-                            <h3>注册失败</h3>
-                            <p>${data['err_msg']}，<a onclick="return floatOfRegister()">重新注册</a></p>
-                        `;
-                        setFloat(div, 'error');
-                    }
-                },
+    submit(
+        req, form,
+        () => {
+            setFloat('注册成功，<a onclick="return floatOfLogin()">现在登录</a>');
+        },
+        data => {
+            setFloat(
+                `
+                    <h3>注册失败</h3>
+                    <p>${data['err_msg']}，<a onclick="return floatOfRegister()">重新注册</a></p>
+                `,
+                'error'
             );
-    });
+        }
+    )
     return false;
 }
 
 function userExist( e )
 {
-    fetch(`/api/user/userExist.php?u=${escape(e.value)}`)
+    fetch(`/api/user/call/userExist`, getFetchInit({ u : e.value }))
         .then(res => res.json())
         .then(data =>
         {
@@ -164,111 +140,42 @@ function userExist( e )
 function login()
 {
     let form = $('.float .login form');
-    // 禁止二次点击
-    form.style.opacity = 0.5;
-    form.style.userSelect = 'none';
     let req = {
-        u : escape(form.u.value),
-        p : escape(form.p.value),
+        u : (form.u.value),
+        p : (form.p.value),
     };
-    sleep(800).then(() =>
-    {
-        fetch('/api/user/login.php', {
-            method : 'post',
-            headers : {
-                'Content-Type' : 'application/x-www-form-urlencoded',
-            },
-            body : objectToKeyValue(req),
-        })
-            .then(res => res.json())
-            .then(data =>
-                {
-                    form.style.opacity = 1;
-                    form.style.userSelect = '';
-                    // console.log(data);
-                    if( data.code === 200 )
-                    {
-                        let div = $make('div');
-                        div.innerHTML = `
-                            登录成功，3s后自动关闭
-                        `;
-                        setFloat(div);
-                        setTimeout(() => {
-                            $('.main .default').classList.add('hide');
-                            $('.main .home').classList.remove('hide');
-                            closeFloat();
-                            loadHomeResource();
-                        }, 3000);
-                    }
-                    else
-                    {
-                        let div = $make('div');
-                        div.innerHTML = `
-                            <h3>登录失败</h3>
-                            <p>
-                                ${data['err_msg']}，
-                                请<a onclick="return floatOfLogin()">重新登录</a>
-                                或尝试
-                                <a onclick="return floatOfResetPassword()">重置密码</a>
-                            </p>
-                        `;
-                        setFloat(div, 'error');
-                    }
+    submit(
+        req, form,
+        () => {
+            setFloat(
+                '登录成功，3s后自动关闭',
+                null,
+                () => {
+                    $('.main .default').classList.add('hide');
+                    $('.main .home').classList.remove('hide');
+                    closeFloat();
+                    loadHomeResource();
                 },
+                3000
             );
-    });
-
+        }
+    );
     return false;
 }
 
 function resetPassword()
 {
     let form = $('.float .reset-password form');
-    // 禁止二次点击
-    form.style.opacity = 0.5;
-    form.style.userSelect = 'none';
     let req = {
-        u : escape(form.u.value),
-        vid : escape(form.vid.value),
-        vans : escape(form.vans.value),
-        np : escape(form.np.value),
+        u : (form.u.value),
+        vid : (form.vid.value),
+        vans : (form.vans.value),
+        np : (form.np.value),
     };
-    // console.log(objectToKeyValue(req));
-    sleep(800).then(() =>
-    {
-        fetch('/api/user/resetPassword.php', {
-            method : 'post',
-            headers : {
-                'Content-Type' : 'application/x-www-form-urlencoded',
-            },
-            body : objectToKeyValue(req),
-        })
-            .then(res => res.json())
-            .then(data =>
-                {
-                    form.style.opacity = 1;
-                    form.style.userSelect = '';
-                    // console.log(data);
-                    if( data.code === 200 )
-                    {
-                        let div = $make('div');
-                        div.innerHTML = `
-                            重置成功，<a onclick="return floatOfLogin()">现在登录</a>
-                        `;
-                        setFloat(div);
-                    }
-                    else
-                    {
-                        let div = $make('div');
-                        div.innerHTML = `
-                            <h3>重置失败</h3>
-                            <p>${data['err_msg']}，<a onclick="return floatOfResetPassword()">重新操作</a></p>
-                        `;
-                        setFloat(div, 'error');
-                    }
-                },
-            );
-    });
+    submit(
+        req, form,
+        () => { setFloat('重置成功，<a onclick="return floatOfLogin()">现在登录</a>'); }
+    );
     return false;
 }
 
@@ -351,7 +258,7 @@ function floatOfResetPassword()
     }
     let div = $make('div');
     div.innerHTML = viewOfResetPassword;
-    setFloat(div, 'account reset-password');
+    setFloat(div, 'account reset-password', floatOfLogin);
 
     let select = div.querySelector('form select');
     while( select.options.length > 0 )
