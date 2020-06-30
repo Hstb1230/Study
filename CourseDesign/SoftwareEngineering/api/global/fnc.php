@@ -8,9 +8,9 @@
 function getRechargeList($id = 0)
 {
     $uInfo = null;
-    $query = 'select id, pay, amount from recharge_list';
+    $query = 'select id, pay, amount from recharge_list ';
     if($id > 0)
-        $query .= 'where id = ?';
+        $query .= ' where id = ?';
     global $conn;
     $stmt = $conn->prepare($query);
     if($id > 0)
@@ -46,7 +46,7 @@ function getCommodityList($id = 0)
 {
     $query = 'SELECT id, state, prop_type, amount, pay FROM commodity ';
     if($id !== 0)
-        $query .= 'WHERE id = ?';
+        $query .= ' WHERE id = ?';
     global $conn;
     $stmt = $conn->prepare($query);
     if($id !== 0)
@@ -77,7 +77,7 @@ function getCommodityList($id = 0)
 function getUserRechargeRecord($user_id = 0)
 {
     $uInfo = null;
-    $query = 'select id, user_id, time, original_price, final_pay, pay_way, get_gold from recharge_record order by time desc';
+    $query = 'select id, user_id, time, original_price, final_pay, pay_way, get_gold from recharge_record order by time desc ';
     if($user_id > 0)
         $query = substr_replace($query, ' where user_id = ? ', strpos($query, 'order by'), 0);
     else
@@ -128,7 +128,7 @@ function getVerifyProblemList($id = 0)
 {
     $query = 'SELECT id, content FROM verify_problem ';
     if($id > 0)
-        $query .= 'WHERE id = ?';
+        $query .= ' WHERE id = ?';
     global $conn;
     $stmt = $conn->prepare($query);
     if($id > 0)
@@ -166,7 +166,7 @@ function getUserID($username)
 {
     $id = 0;
     global $conn;
-    $stmt = $conn->prepare('SELECT id FROM account WHERE username = ?');
+    $stmt = $conn->prepare('SELECT id FROM account WHERE username = ? ');
     $stmt->bind_param('s', $username);
     $stmt->execute();
     $stmt->store_result();
@@ -188,7 +188,7 @@ function resetUserPassword($id, $newPassword, & $reason)
 {
     $newPassword = md5($newPassword);
     global $conn;
-    $stmt = $conn->prepare('UPDATE account SET password = ? WHERE id = ?');
+    $stmt = $conn->prepare('UPDATE account SET password = ? WHERE id = ? ');
     $stmt->bind_param('si', $newPassword, $id);
     $stmt->execute();
     $success = ($stmt->affected_rows > 0);
@@ -205,7 +205,10 @@ function resetUserPassword($id, $newPassword, & $reason)
  */
 function getCommodityInfo($id)
 {
-    return getCommodityList($id)[0];
+    $i = getCommodityList($id);
+    if(count($i) === 0)
+        return [];
+    return $i[0];
 }
 
 /**
@@ -267,13 +270,42 @@ function getUserInfo($id = null, $username = null)
         'last_login_time' => 0,
         'recharge_sum' => 0
     ];
-    $query = 'select id, username, state, create_time, password, verify_problem_id, problem_answer from account ';
+/*
+    $query = "SELECT a.id, a.username, a.state, a.create_time, a.password, a.verify_problem_id, a.problem_answer, MAX(b.time), SUM(c.final_pay)
+                FROM (SELECT id, username, state, create_time, password, verify_problem_id, problem_answer FROM account WHERE id = 0) a,
+                     login_record b, recharge_record c
+                WHERE a.id = b.user_id and b.user_id = c.user_id;";
+    */
+    $query = "
+        SELECT ab.* , SUM(c.final_pay) as recharge_sum 
+        FROM (
+            SELECT a.*, MAX(b.time) as last_login_time 
+            FROM ( SELECT * FROM account  WHERE id = 0 ) as a LEFT JOIN login_record as b 
+            on b.user_id = a.id
+        ) as ab LEFT JOIN recharge_record as c
+        on ab.id = c.user_id
+        GROUP BY c.user_id
+    ";
+/*
+    $query = "
+        SELECT ab.user_id, username, state, create_time, password, verify_problem_id, problem_answer, last_login_time, SUM(c.final_pay)
+            FROM (
+                SELECT user_id, username, state, create_time, password, verify_problem_id, problem_answer, MAX(b.time) as last_login_time
+                    FROM (SELECT id, username, state, create_time, password, verify_problem_id, problem_answer FROM account WHERE id = 0) as a,
+                        login_record as b
+                    WHERE b.user_id = a.id || true
+            ) as ab, recharge_record as c
+            WHERE c.user_id = ab.user_id || true
+            GROUP BY c.user_id;
+    ";
+*/
     if($id !== null)
-        $query .= 'where id = ?';
+        $query = str_replace('WHERE id = 0', ' WHERE id = ? ', $query);
     else if($username !== null)
-        $query .= 'where username = ?';
+        $query = str_replace('WHERE id = 0', ' WHERE username = ? ', $query);
     else
         return [];
+//    print_r($query);
     global $conn;
     // 查询基本信息
     $stmt = $conn->prepare($query);
@@ -290,7 +322,9 @@ function getUserInfo($id = null, $username = null)
         $i['create_time'],
         $i['password'],
         $i['verify_problem_id'],
-        $i['problem_answer']
+        $i['problem_answer'],
+        $i['last_login_time'],
+        $i['recharge_sum']
     );
     if($stmt->num_rows === 0)
     {
@@ -299,31 +333,38 @@ function getUserInfo($id = null, $username = null)
     }
     $stmt->fetch();
     $i['state'] = ($i['state'] !== 0);
-    $stmt->close();
-    // 查询登录时间
-    $stmt = $conn->prepare('select time from login_record where user_id = ? order by time desc ');
-    $stmt->bind_param('i', $id);
-    $stmt->execute();
-    $stmt->store_result();
-    if($stmt->num_rows > 0)
-    {
-        $stmt->bind_result($i['last_login_time']);
-        $stmt->fetch();
-    }
-    $stmt->close();
-    // 统计充值金额
-    $stmt = $conn->prepare('SELECT SUM(final_pay) FROM `recharge_record` WHERE user_id = ?');
-    $stmt->bind_param('i', $id);
-    $stmt->execute();
-    $stmt->store_result();
-    if($stmt->num_rows > 0)
-    {
-        $stmt->bind_result($i['recharge_sum']);
-        $stmt->fetch();
-        if($i['recharge_sum'] === null)
-            $i['recharge_sum'] = 0;
-    }
+    if($i['recharge_sum'] === null)
+        $i['recharge_sum'] = 0;
     end:
     $stmt->close();
     return $i;
+}
+
+/**
+ * 获取指定用户的游戏记录
+ * @param $id
+ * @return array
+ */
+function getUserPlayRecord($id)
+{
+    global $conn;
+    $stmt = $conn->prepare('select play_time, score from play_record where user_id = ? order by play_time desc ');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $stmt->store_result();
+    $i = [
+        'user_id' => $id,
+        'time' => 0,
+        'score' => 0,
+    ];
+    $stmt->bind_result($i['time'], $i['score']);
+    $list = [];
+    while($stmt->fetch())
+        $list[] = [
+            'user_id' => $i['user_id'],
+            'time' => $i['time'],
+            'score' => $i['score'],
+        ];
+    $stmt->close();
+    return $list;
 }

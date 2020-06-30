@@ -10,7 +10,7 @@ function getManagerAccount()
 {
     $acc = [];
     global $conn;
-    $stmt = $conn->prepare('SELECT content FROM `setting` WHERE name = ? UNION SELECT content FROM `setting` WHERE name = ?');
+    $stmt = $conn->prepare('SELECT content FROM `setting` WHERE name = ? UNION SELECT content FROM `setting` WHERE name = ? ');
     $var1 = 'username';
     $var2 = 'password';
     $stmt->bind_param('ss', $var1, $var2);
@@ -75,7 +75,7 @@ function changeAdminPassword($password, $newPassword, & $reason, & $report)
         return false;
     }
     global $conn;
-    $stmt = $conn->prepare('UPDATE setting SET content = ? WHERE name = ?');
+    $stmt = $conn->prepare('UPDATE setting SET content = ? WHERE name = ? ');
     $var2 = 'password';
     $stmt->bind_param('ss', $newPassword, $var2);
     $stmt->execute();
@@ -100,42 +100,13 @@ function logout()
 function getUserList()
 {
     global $conn;
-    $stmt = $conn->prepare('select id from account');
+    $stmt = $conn->prepare('select id from account ');
     $stmt->execute();
     $stmt->store_result();
     $stmt->bind_result($id);
     $list = [];
     while($stmt->fetch())
         $list[] = getUserInfo($id);
-    $stmt->close();
-    return $list;
-}
-
-/**
- * 获取指定用户的游戏记录
- * @param $id
- * @return array
- */
-function getUserPlayRecord($id)
-{
-    global $conn;
-    $stmt = $conn->prepare('select play_time, score from play_record where user_id = ? order by play_time desc ');
-    $stmt->bind_param('i', $id);
-    $stmt->execute();
-    $stmt->store_result();
-    $i = [
-        'user_id' => $id,
-        'time' => 0,
-        'score' => 0,
-    ];
-    $stmt->bind_result($i['time'], $i['score']);
-    $list = [];
-    while($stmt->fetch())
-        $list[] = [
-            'user_id' => $i['user_id'],
-            'time' => $i['time'],
-            'score' => $i['score'],
-        ];
     $stmt->close();
     return $list;
 }
@@ -150,7 +121,7 @@ function getUserPlayRecord($id)
 function setUserState($id, $state, & $reason)
 {
     global $conn;
-    $stmt = $conn->prepare('UPDATE account SET state = ? WHERE id = ?');
+    $stmt = $conn->prepare('UPDATE account SET state = ? WHERE id = ? ');
     $state = ($state ? 1 : 0);
     $stmt->bind_param('ii', $state, $id);
     $stmt->execute();
@@ -172,7 +143,7 @@ function setCommodityState($id, $state, & $reason)
 {
     $state = ($state ? 1 : 0);
     global $conn;
-    $stmt = $conn->prepare('UPDATE commodity SET state = ? WHERE id = ?');
+    $stmt = $conn->prepare('UPDATE commodity SET state = ? WHERE id = ? ');
     $stmt->bind_param('ii', $state, $id);
     $stmt->execute();
     $success = ($stmt->affected_rows > 0);
@@ -196,7 +167,7 @@ function setCommodityInfo($id, $prop, $amount, $gold, & $reason)
     global $conn;
     $query = null;
     if($id === 0)
-        $query = 'INSERT INTO commodity (publish_time, prop_type, amount, pay) VALUE (?, ?, ?, ?)';
+        $query = 'INSERT INTO commodity (publish_time, prop_type, amount, pay) VALUE (?, ?, ?, ?) ';
     else
         $query = 'UPDATE commodity SET prop_type = ?, amount = ?, pay = ? WHERE id = ?';
     $stmt = $conn->prepare($query);
@@ -229,9 +200,9 @@ function setRechargeInfo($id, $amount, $pay, & $reason)
     global $conn;
     $query = null;
     if($id === 0)
-        $query = 'INSERT INTO recharge_list (amount, pay) VALUE (?, ?)';
+        $query = 'INSERT INTO recharge_list (amount, pay) VALUE (?, ?) ';
     else
-        $query = 'UPDATE recharge_list SET amount = ?, pay = ? WHERE id = ?';
+        $query = 'UPDATE recharge_list SET amount = ?, pay = ? WHERE id = ? ';
     $stmt = $conn->prepare($query);
     if($id === 0)
         $stmt->bind_param('id', $amount, $pay);
@@ -255,9 +226,9 @@ function setVerifyProblem($id, $content, & $reason)
 {
     $query = null;
     if($id === 0)
-        $query = 'INSERT INTO verify_problem (content) VALUE (?)';
+        $query = 'INSERT INTO verify_problem (content) VALUE (?) ';
     else
-        $query = 'UPDATE verify_problem SET content = ? WHERE id = ?';
+        $query = 'UPDATE verify_problem SET content = ? WHERE id = ? ';
     global $conn;
     $stmt = $conn->prepare($query);
     if($id === 0)

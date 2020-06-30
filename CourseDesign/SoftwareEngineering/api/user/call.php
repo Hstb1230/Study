@@ -87,7 +87,7 @@ else if($fun === 'changeVerifyProblem')
 }
 else if($fun === 'getVerifyProblemID')
 {
-    $data = getVerifyProblemID();
+    $data = getUserVerifyProblemID();
 }
 else if($fun === 'getWarehouseInfo')
 {

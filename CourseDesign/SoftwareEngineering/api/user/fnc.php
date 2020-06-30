@@ -202,7 +202,7 @@ function changeVerifyProblem($ans, $new_verify_problem, $new_verify_ans, & $reas
     
     success:
     global $conn;
-    $stmt = $conn->prepare('UPDATE account SET verify_problem_id = ?, problem_answer = ? WHERE id = ?');
+    $stmt = $conn->prepare('UPDATE account SET verify_problem_id = ?, problem_answer = ? WHERE id = ? ');
     $stmt->bind_param('isi', $new_verify_problem, $new_verify_ans, $_SESSION['user_id']);
     $stmt->execute();
     if($stmt->affected_rows > 0)
@@ -220,7 +220,7 @@ function changeVerifyProblem($ans, $new_verify_problem, $new_verify_ans, & $reas
 function newLoginRecord()
 {
     global $conn;
-    $stmt = $conn->prepare('INSERT INTO login_record (time, user_id, ip) VALUE (?, ?, ?)');
+    $stmt = $conn->prepare('INSERT INTO login_record (time, user_id, ip) VALUE (?, ?, ?) ');
     $time = time();
     $ip = $_SERVER['REMOTE_ADDR'];
     if( isset($_SERVER['HTTP_X_FORWARDED_FOR']) )
@@ -262,9 +262,9 @@ function login($username, $password, & $reason, & $data)
     return false;
 
     success:
-    newLoginRecord();
     $_SESSION['role'] = 0;
     $_SESSION['user_id'] = $info['id'];
+    newLoginRecord();
     return true;
 }
 
@@ -278,7 +278,7 @@ function getWarehouseInfo()
     if(!isset($_SESSION['user_id']))
         return $i;
     global $conn;
-    $stmt = $conn->prepare('SELECT gold, play_count, resurrection FROM warehouse WHERE user_id = ?');
+    $stmt = $conn->prepare('SELECT gold, play_count, resurrection FROM warehouse WHERE user_id = ? ');
     $stmt->bind_param('i', $_SESSION['user_id']);
     $stmt->execute();
     $stmt->store_result();
@@ -307,7 +307,7 @@ function setWarehouse($gold, $play_count, $resurrection)
     if(empty(getWarehouseInfo()))
     {
         // 新用户
-        $stmt = $conn->prepare('INSERT INTO warehouse (user_id, gold, play_count, resurrection) VALUE (?, ?, ?, ?)');
+        $stmt = $conn->prepare('INSERT INTO warehouse (user_id, gold, play_count, resurrection) VALUE (?, ?, ?, ?) ');
         $stmt->bind_param('idii', $_SESSION['user_id'], $gold, $play_count, $resurrection);
         $stmt->execute();
         $success = ($stmt->affected_rows > 0);
@@ -315,7 +315,7 @@ function setWarehouse($gold, $play_count, $resurrection)
     }
     else
     {
-        $stmt = $conn->prepare('UPDATE warehouse SET gold = ?, play_count = ?, resurrection = ? WHERE user_id = ?');
+        $stmt = $conn->prepare('UPDATE warehouse SET gold = ?, play_count = ?, resurrection = ? WHERE user_id = ? ');
         $stmt->bind_param('diii', $gold, $play_count, $resurrection, $_SESSION['user_id']);
         $stmt->execute();
         $success = ($stmt->affected_rows > 0);
@@ -323,28 +323,6 @@ function setWarehouse($gold, $play_count, $resurrection)
     }
     end:
     return $success;
-}
-
-/**
- * 获取充值商品信息
- * @param int $id
- * @return array
- */
-function getRechargeInfo($id)
-{
-    global $conn;
-    $stmt = $conn->prepare('SELECT pay, amount FROM recharge_list WHERE id = ?');
-    $stmt->bind_param('i', $id);
-    $stmt->execute();
-    $stmt->store_result();
-    $info = [];
-    if($stmt->num_rows > 0)
-    {
-        $stmt->bind_result($info['pay'], $info['amount']);
-        $stmt->fetch();
-    }
-    $stmt->close();
-    return $info;
 }
 
 /**
@@ -358,14 +336,15 @@ function getRechargeInfo($id)
 function recharge($recharge_id, $final, $way, & $reason)
 {
     $success = false;
-    $r = getRechargeInfo($recharge_id);
-    if(empty($r))
+    $r = getRechargeList($recharge_id);
+    if(count($r) === 0)
     {
         $reason = '充值商品类型非法';
         goto end;
     }
+    $r = $r[0];
     global $conn;
-    $stmt = $conn->prepare('INSERT INTO recharge_record (time, user_id, original_price, final_pay, pay_way, get_gold) VALUE (?, ?, ?, ?, ?, ?)');
+    $stmt = $conn->prepare('INSERT INTO recharge_record (time, user_id, original_price, final_pay, pay_way, get_gold) VALUE (?, ?, ?, ?, ?, ?) ');
     $time = time();
     $stmt->bind_param('iiddii', $time, $_SESSION['user_id'], $r['pay'], $final, $way, $r['amount']);
     $success = $stmt->execute();
@@ -419,7 +398,7 @@ function buyCommodity($id, & $reason)
     }
     // 添加消费记录
     global $conn;
-    $stmt = $conn->prepare('INSERT INTO consume_record (time, user_id, amount, commodity_id) VALUE (?, ?, ?, ?)');
+    $stmt = $conn->prepare('INSERT INTO consume_record (time, user_id, amount, commodity_id) VALUE (?, ?, ?, ?) ');
     $time = time();
     $stmt->bind_param('iiii', $time, $_SESSION['user_id'], $info['pay'], $id);
     $success = $stmt->execute();
@@ -449,7 +428,7 @@ function addPlayRecord($score, & $reason)
     }
     $time = time();
     global $conn;
-    $stmt = $conn->prepare("INSERT INTO play_record (user_id, play_time, score) VALUE (?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO play_record (user_id, play_time, score) VALUE (?, ?, ?) ");
     $stmt->bind_param('iii', $_SESSION['user_id'], $time, $score);
     $success = $stmt->execute();
     $stmt->close();
@@ -469,7 +448,7 @@ function getRank()
 {
     $lastWeek = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 6 * 24 * 60 * 60;
     global $conn;
-    $stmt = $conn->prepare('SELECT user_id, username, score from account, (SELECT user_id, MAX(score) as score FROM play_record WHERE play_time > ? GROUP BY user_id) tmp WHERE tmp.user_id = account.id ORDER BY tmp.score DESC');
+    $stmt = $conn->prepare('SELECT user_id, username, score from account, (SELECT user_id, MAX(score) as score FROM play_record WHERE play_time > ? GROUP BY user_id) tmp WHERE tmp.user_id = account.id ORDER BY tmp.score DESC ');
     $stmt->bind_param('i', $lastWeek);
     $stmt->execute();
     $stmt->store_result();
@@ -500,7 +479,7 @@ function getRank()
 function getPactContent()
 {
     global $conn;
-    $stmt = $conn->prepare('SELECT content FROM setting WHERE name = ?');
+    $stmt = $conn->prepare('SELECT content FROM setting WHERE name = ? ');
     $str = 'pact';
     $stmt->bind_param('s', $str);
     $stmt->execute();
@@ -511,7 +490,7 @@ function getPactContent()
     return $content;
 }
 
-function getVerifyProblemID()
+function getUserVerifyProblemID()
 {
     $i = getUserInfo($_SESSION['user_id']);
     return $i['verify_problem_id'];

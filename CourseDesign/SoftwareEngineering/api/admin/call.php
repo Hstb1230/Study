@@ -122,6 +122,10 @@ else if($fun === 'setRecharge') {
         goto fail;
     $success = setRechargeInfo(intval($_REQUEST['id']), $_REQUEST['amount'], $_REQUEST['pay'], $reason);
 }
+else if($fun === 'getVerifyProblem')
+{
+    $data = getVerifyProblemList();
+}
 else if($fun === 'setVerifyProblem')
 {
     if(!arrIsset($_REQUEST, ['id', 'content']))
