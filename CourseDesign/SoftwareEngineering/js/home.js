@@ -320,7 +320,10 @@ function floatOfConsumeRecord()
                     </li>
                 `;
             } )
-            e.querySelector('ul').innerHTML = ul;
+            if(list.length > 0)
+                e.querySelector('ul').innerHTML = ul;
+            else
+                e.querySelector('ul').innerHTML = '<li>无</li>';
         } )
     return false;
 }
@@ -356,7 +359,10 @@ function floatOfRechargeRecord()
                     </li>
                 `;
             } )
-            e.querySelector('ul').innerHTML = ul;
+            if(list.length > 0)
+                e.querySelector('ul').innerHTML = ul;
+            else
+                e.querySelector('ul').innerHTML = '<li>无</li>';
         } )
     return false;
 }
