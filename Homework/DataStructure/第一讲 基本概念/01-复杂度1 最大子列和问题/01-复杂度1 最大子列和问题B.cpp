@@ -2,7 +2,7 @@
 #include <algorithm>
 using namespace std;
 
-int d(int a[], int beg, int end)
+int d(int a[], const int & beg, const int & end)
 {
 	if(beg == end)
 		return a[beg];
