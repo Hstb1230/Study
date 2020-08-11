@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="title">50sp</dimen>
+    <dimen name="title_down">50sp</dimen>
+    <dimen name="form_key">25sp</dimen>
+    <dimen name="login_button_font">25sp</dimen>
+    <dimen name="login_button_width">85sp</dimen>
+    <dimen name="form_margin_top">20sp</dimen>
+</resources>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:paddingHorizontal="@dimen/padding_horizontal"
+        android:paddingVertical="@dimen/padding_vertical"
+        >
+
+        <Button
+            android:id="@+id/btnMS"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            android:background="@drawable/bg_shape_blue"
+            android:text="@string/ms_login" />
+
+        <Button
+            android:id="@+id/btnSkype"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:layout_above="@id/btnMS"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            android:background="@drawable/bg_shape_blue"
+            android:layout_marginVertical="15sp"
+            android:text="@string/skype_login" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:textColor="@android:color/white"
+            android:layout_above="@id/btnSkype"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:text="@string/login" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/textView"
+            app:srcCompat="@drawable/logo"
+            android:contentDescription="@string/logo" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:paddingHorizontal="@dimen/padding_horizontal"
+        android:paddingVertical="@dimen/padding_vertical"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            android:background="#00000000"
+            android:text="@string/create_account" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageWindows"
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+                android:layout_marginHorizontal="5sp"
+                app:srcCompat="@drawable/windows" />
+
+            <ImageView
+                android:id="@+id/imageMail"
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+                android:layout_marginHorizontal="5sp"
+                app:srcCompat="@drawable/mail" />
+
+            <ImageView
+                android:id="@+id/imageSkype"
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+                android:layout_marginHorizontal="5sp"
+                app:srcCompat="@drawable/skype" />
+
+            <ImageView
+                android:id="@+id/imageXbox"
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+                android:layout_marginHorizontal="5sp"
+                app:srcCompat="@drawable/xbox" />
+
+            <ImageView
+                android:id="@+id/imageOneDrive"
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+                android:layout_marginHorizontal="5sp"
+                app:srcCompat="@drawable/one_drive" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

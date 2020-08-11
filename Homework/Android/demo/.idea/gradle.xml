@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="testRunner" value="PLATFORM" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Calculate" />
+            <option value="$PROJECT_DIR$/array_adapter" />
+            <option value="$PROJECT_DIR$/broadcast_test" />
+            <option value="$PROJECT_DIR$/calendar" />
+            <option value="$PROJECT_DIR$/content_provide" />
+            <option value="$PROJECT_DIR$/dialog" />
+            <option value="$PROJECT_DIR$/file_opt" />
+            <option value="$PROJECT_DIR$/frame" />
+            <option value="$PROJECT_DIR$/frame_animation" />
+            <option value="$PROJECT_DIR$/hyper_link" />
+            <option value="$PROJECT_DIR$/image_with_transparent" />
+            <option value="$PROJECT_DIR$/intent_demo" />
+            <option value="$PROJECT_DIR$/internet" />
+            <option value="$PROJECT_DIR$/multi_thread" />
+            <option value="$PROJECT_DIR$/my_media_player" />
+            <option value="$PROJECT_DIR$/name_and_sex" />
+            <option value="$PROJECT_DIR$/process_test" />
+            <option value="$PROJECT_DIR$/relative_about_center" />
+            <option value="$PROJECT_DIR$/relative_layout" />
+            <option value="$PROJECT_DIR$/second_app" />
+            <option value="$PROJECT_DIR$/sex_and_color" />
+            <option value="$PROJECT_DIR$/shared_preferences" />
+            <option value="$PROJECT_DIR$/simple_adapter" />
+            <option value="$PROJECT_DIR$/socket" />
+            <option value="$PROJECT_DIR$/spinner_and_auto_complete" />
+            <option value="$PROJECT_DIR$/sqlite_test" />
+            <option value="$PROJECT_DIR$/table_layout" />
+            <option value="$PROJECT_DIR$/vertical_and_horizontal" />
+          </set>
+        </option>
+        <option name="resolveModulePerSourceSet" value="false" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    tools:context=".RegisterSuccessActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120sp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_red_light"
+            android:gravity="center_horizontal"
+            android:textSize="30sp"
+            android:layout_marginVertical="20sp"
+            android:text="恭喜您, 报名成功!" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_blue_light"
+                android:textSize="25sp"
+                android:text="请牢记报名号：" />
+
+            <TextView
+                android:id="@+id/registerSuccessID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="12345678"
+                android:textColor="@android:color/holo_blue_light"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|center_horizontal"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/registerSuccessReturn"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:layout_marginBottom="20sp"
+            android:background="@drawable/bg_shape_red"
+            android:gravity="center|center_horizontal"
+            android:paddingStart="0sp"
+            android:paddingEnd="5sp"
+            android:text="@string/home_return"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/login_button_font" />
+    </LinearLayout>
+
+</LinearLayout>

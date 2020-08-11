@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="label_size">25sp</dimen>
+    <dimen name="input_font_size">20sp</dimen>
+    <dimen name="padding_horizontal">18sp</dimen>
+    <dimen name="register_button_width">115sp</dimen>
+</resources>

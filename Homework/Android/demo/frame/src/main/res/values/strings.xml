@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">frame</string>
+    <string name="sea">sea</string>
+    <string name="frame_text">帧文本</string>
+</resources>

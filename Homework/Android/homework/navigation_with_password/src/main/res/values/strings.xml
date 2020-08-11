@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">navigation_with_password</string>
+    <string name="password">Password</string>
+    <string name="test">test</string>
+    <string name="password_has">●</string>
+    <string name="password_none">○</string>
+    <string name="link">link</string>
+</resources>

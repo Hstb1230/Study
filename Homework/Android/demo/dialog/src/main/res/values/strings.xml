@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Dialog</string>
+    <string name="menu1">menu1</string>
+    <string name="menu2">menu2</string>
+    <string name="menu3">menu3</string>
+    <string name="menu4">menu4</string>
+    <string name="menu5">menu5</string>
+    <string name="menu6">menu6</string>
+    <string name="menu7">menu7</string>
+    <string name="red">red</string>
+    <string name="green">green</string>
+    <string name="blue">blue</string>
+    <string name="normal">normal</string>
+</resources>

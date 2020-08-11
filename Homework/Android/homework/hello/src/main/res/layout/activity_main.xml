@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/liukanshan"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/button_text_size"
+        android:textColor="@android:color/white"
+        android:background="@android:color/holo_red_light"
+        android:text="@string/button1" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/button_margin_top"
+        android:textSize="@dimen/button_text_size"
+        android:textColor="@android:color/white"
+        android:background="@android:color/holo_green_light"
+        android:text="@string/button2" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/button_margin_top"
+        android:textSize="@dimen/button_text_size"
+        android:textColor="@android:color/white"
+        android:background="@android:color/holo_blue_light"
+        android:onClick="hello_2020"
+        android:text="@string/button3" />
+</LinearLayout>

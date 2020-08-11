@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="edu_list">
+        <item>中专</item>
+        <item>高考</item>
+        <item>大专</item>
+        <item>专升本</item>
+        <item>大学</item>
+        <item>硕士</item>
+        <item>博士</item>
+    </string-array>
+    <string-array name="edu_list_pinyin">
+        <item>zhong zhuan</item>
+        <item>gao kao</item>
+        <item>da zhuan</item>
+        <item>zhuan sheng ben</item>
+        <item>da xue</item>
+        <item>shuo shi</item>
+        <item>bo shi</item>
+    </string-array>
+</resources>

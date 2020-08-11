@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:id="@+id/record_viewRecord"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/record_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/record_viewMore"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:background="@color/transparent_none"
+            android:gravity="bottom|end"
+            android:orientation="vertical"
+            android:padding="10sp">
+
+            <LinearLayout
+                android:id="@+id/record_moreFunctions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5sp"
+                android:gravity="end|bottom"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="50sp"
+                        android:layout_height="50sp"
+                        android:layout_marginVertical="5sp"
+                        android:background="@drawable/bg_shape_light_gray"
+                        android:contentDescription="@string/none"
+                        android:onClick="showMoreFunctionsButton"
+                        android:layout_gravity="bottom|end"
+                        app:srcCompat="@drawable/more" />
+
+                    <LinearLayout
+                        android:id="@+id/record_moreFunctionsFold"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="end"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="50sp"
+                                android:layout_height="50sp"
+                                android:layout_marginVertical="5sp"
+                                android:background="@drawable/bg_shape_light_gray"
+                                android:contentDescription="@string/none"
+                                android:onClick="setting"
+                                android:paddingHorizontal="8sp"
+                                app:srcCompat="@drawable/setting" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="end"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="50sp"
+                                android:layout_height="50sp"
+                                android:layout_marginVertical="5sp"
+                                android:background="@drawable/bg_shape_light_gray"
+                                android:contentDescription="@string/none"
+                                android:onClick="plan"
+                                android:paddingHorizontal="3sp"
+                                app:srcCompat="@drawable/plan" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="end"
+                            android:visibility="gone"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="50sp"
+                                android:layout_height="50sp"
+                                android:layout_marginVertical="5sp"
+                                android:background="@drawable/bg_shape_light_gray"
+                                android:contentDescription="@string/none"
+                                android:onClick="clock"
+                                android:paddingHorizontal="8sp"
+                                app:srcCompat="@drawable/clock" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="end"
+                            android:visibility="gone"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="50sp"
+                                android:layout_height="50sp"
+                                android:layout_marginVertical="5sp"
+                                android:background="@drawable/bg_shape_light_gray"
+                                android:contentDescription="@string/none"
+                                android:onClick="calendar"
+                                android:paddingHorizontal="3sp"
+                                app:srcCompat="@drawable/calendar" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="end"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="50sp"
+                                android:layout_height="50sp"
+                                android:layout_marginVertical="5sp"
+                                android:background="@drawable/bg_shape_light_gray"
+                                android:contentDescription="@string/none"
+                                android:onClick="calculate"
+                                android:paddingHorizontal="12sp"
+                                app:srcCompat="@drawable/calculate" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="end"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="50sp"
+                                android:layout_height="50sp"
+                                android:layout_marginVertical="5sp"
+                                android:background="@drawable/bg_shape_light_gray"
+                                android:contentDescription="@string/none"
+                                android:onClick="laugh"
+                                app:srcCompat="@drawable/laugh" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="end"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="50sp"
+                                android:layout_height="50sp"
+                                android:layout_marginVertical="5sp"
+                                android:background="@drawable/bg_shape_light_gray"
+                                android:contentDescription="@string/none"
+                                android:onClick="sing"
+                                android:paddingHorizontal="8sp"
+                                app:srcCompat="@drawable/sing" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/weather"
+                        android:layout_width="50sp"
+                        android:layout_height="50sp"
+                        android:layout_marginVertical="5sp"
+                        android:background="@drawable/bg_shape_light_gray"
+                        android:contentDescription="@string/none"
+                        android:onClick="queryWeather"
+                        app:srcCompat="@drawable/weather" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/chat"
+                        android:layout_width="50sp"
+                        android:layout_height="50sp"
+                        android:layout_marginVertical="5sp"
+                        android:background="@drawable/bg_shape_light_gray"
+                        android:contentDescription="@string/none"
+                        android:onClick="chat"
+                        android:paddingHorizontal="8sp"
+                        android:paddingTop="5sp"
+                        app:srcCompat="@drawable/chat" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/record_btnAdd"
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+                android:background="@drawable/bg_shape_darker_gray"
+                android:onClick="more"
+                android:text="@string/more"
+                android:textColor="@android:color/white"
+                android:textSize="23sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Hyper-Link</string>
+    <string name="text1">I don\'t like Java</string>
+    <string name="text2">Like Like Like Likeeeee like Like Like Like Like to hate Java.</string>
+    <string name="text3">mail: admin@qq.com, phone: +8613805000000</string>
+    <string name="text4">Shadow Text</string>
+    <string name="text5">This is Checked Text</string>
+    <string name="text6">The text has background with no color</string>
+    <string name="text7">This is an input text, and has beautiful colors.</string>
+</resources>

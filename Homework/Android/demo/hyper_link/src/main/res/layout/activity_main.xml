@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="start|center_vertical"
+    tools:context=".MainActivity">
+
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text1"
+        android:textSize="25sp"
+        android:drawableStart="@drawable/emmm"
+        android:drawableEnd="@drawable/emmm"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:singleLine="true"
+        android:ellipsize="middle"
+        android:textAllCaps="true"
+        android:text="@string/text2" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:autoLink="email|phone"
+        android:text="@string/text3" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shadowColor="#000"
+        android:shadowDx="10.0"
+        android:shadowDy="5.0"
+        android:textSize="30sp"
+        android:shadowRadius="2.0"
+        android:textColor="#0FF"
+        android:textAlignment="center"
+        android:text="@string/text4" />
+
+    <CheckedTextView
+        android:id="@+id/checkedTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="35sp"
+        android:text="@string/text5"
+        android:checkMark="@drawable/no_check"
+        android:checked="@drawable/mark"
+        />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text6"
+        android:textSize="25sp"
+        android:background="@drawable/background"
+        />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="none"
+        android:textSize="30sp"
+        android:background="@drawable/background2"
+        android:hint="@string/text7"
+        android:autofillHints=""
+        />
+</LinearLayout>

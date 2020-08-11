@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Calculate</string>
+    <string name="cal_result">0</string>
+    <string name="button_clear">清除</string>
+</resources>

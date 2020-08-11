@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="testRunner" value="PLATFORM" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Simple Chat" />
+            <option value="$PROJECT_DIR$/array_adapter" />
+            <option value="$PROJECT_DIR$/birthday" />
+            <option value="$PROJECT_DIR$/dynamic_fragment" />
+            <option value="$PROJECT_DIR$/exam_reg" />
+            <option value="$PROJECT_DIR$/gallery" />
+            <option value="$PROJECT_DIR$/hello" />
+            <option value="$PROJECT_DIR$/light" />
+            <option value="$PROJECT_DIR$/list_alert" />
+            <option value="$PROJECT_DIR$/login_1th" />
+            <option value="$PROJECT_DIR$/login_2th" />
+            <option value="$PROJECT_DIR$/movie_and_hobby" />
+            <option value="$PROJECT_DIR$/navigation_with_password" />
+            <option value="$PROJECT_DIR$/normal_weight" />
+            <option value="$PROJECT_DIR$/relative_location" />
+            <option value="$PROJECT_DIR$/skype" />
+            <option value="$PROJECT_DIR$/stable_fragment" />
+            <option value="$PROJECT_DIR$/tts" />
+          </set>
+        </option>
+        <option name="resolveModulePerSourceSet" value="false" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">skype</string>
+    <string name="ms_login">MS账号</string>
+    <string name="skype_login">Skype账号</string>
+    <string name="login">登录</string>
+    <string name="logo">logo</string>
+    <string name="create_account">创建账号</string>
+</resources>

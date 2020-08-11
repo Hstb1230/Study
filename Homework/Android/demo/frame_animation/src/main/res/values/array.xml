@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    // 这样获到的item值均为0
+<!--    <integer-array name="textViewArray">-->
+<!--        <item>@id/textView</item>-->
+<!--        <item>@id/textView2</item>-->
+<!--        <item>@id/textView3</item>-->
+<!--        <item>@id/textView4</item>-->
+<!--        <item>@id/textView5</item>-->
+<!--        <item>@id/textView6</item>-->
+<!--    </integer-array>-->
+
+    <array name="colorArray">
+        <item>@color/color1</item>
+        <item>@color/color2</item>
+        <item>@color/color3</item>
+        <item>@color/color4</item>
+        <item>@color/color5</item>
+        <item>@color/color6</item>
+    </array>
+</resources>

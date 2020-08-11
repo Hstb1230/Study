@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">movie_and_hobby</string>
+    <string name="movie">您喜欢的电影是</string>
+    <string name="movie1">AAA</string>
+    <string name="movie2">BBB</string>
+    <string name="movie3">CCC</string>
+    <string name="sure">确 定</string>
+    <string name="hobby">您的爱好：</string>
+</resources>

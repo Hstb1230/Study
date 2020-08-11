@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="12sp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    tools:context=".ExamListActivity">
+
+    <ImageView
+        android:id="@+id/edu_img"
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        app:srcCompat="@drawable/edu_zhong_zhuan"
+        android:layout_marginEnd="12sp"
+        android:contentDescription="@string/image" />
+
+    <LinearLayout
+        android:layout_width="125sp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="12sp"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/edu_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:text="中考" />
+
+        <TextView
+            android:id="@+id/edu_people"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_blue_light"
+            android:text="已报名xxxx人" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/edu_start"
+        android:background="@drawable/bg_shape_orange"
+        android:layout_width="100sp"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="在线报名" />
+
+</LinearLayout>

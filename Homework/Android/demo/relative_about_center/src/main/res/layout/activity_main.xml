@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/image_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/a"
+            android:layout_centerInParent="true"
+            android:layout_margin="18sp"
+            android:contentDescription="@string/image_description" />
+
+
+        <ImageView
+            android:id="@+id/image_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/a"
+            android:layout_alignTop="@id/image_center"
+            android:layout_toStartOf="@id/image_center"
+            android:contentDescription="@string/image_description" />
+
+        <ImageView
+            android:id="@+id/image_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/a"
+            android:layout_alignTop="@id/image_center"
+            android:layout_toEndOf="@id/image_center"
+            android:contentDescription="@string/image_description" />
+        <ImageView
+            android:id="@+id/image_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/a"
+            android:layout_alignStart="@id/image_center"
+            android:layout_above="@id/image_center"
+            android:contentDescription="@string/image_description" />
+        <ImageView
+            android:id="@+id/image_below"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/a"
+            android:layout_alignStart="@id/image_center"
+            android:layout_below="@id/image_center"
+            android:contentDescription="@string/image_description" />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,198 @@
+@startuml
+
+title __SIMPLE_CHAT's Class Diagram__\n
+
+  namespace com.example.simple_chat {
+    class com.example.simple_chat.DBHelper {
+        {static} + TABLE_NAME : String
+        {static} - DB_VERSION : int
+        + DBHelper()
+        + onCreate()
+        + onUpgrade()
+    }
+  }
+  
+
+  namespace com.example.simple_chat {
+    class com.example.simple_chat.ImageViewActivity {
+        - background : LinearLayout
+        - image : ImageView
+        - imgSrc : String
+        # onCreate()
+        - bindData()
+        - bindEvent()
+        - initData()
+        - initView()
+    }
+  }
+  
+
+  namespace com.example.simple_chat {
+    class com.example.simple_chat.LoginActivity {
+        - accountInfo : SharedPreferences
+        - btnLogin : Button
+        - checkRememberPassword : CheckBox
+        - inputPassword : View
+        - inputUsername : View
+        - password : String
+        - username : String
+        + animationDown()
+        + animationUp()
+        + login()
+        # onCreate()
+        ~ getInputValue()
+        ~ setBtnLoginClickable()
+        - bindData()
+        - bindEvent()
+        - initData()
+        - initInputArea()
+        - initView()
+    }
+  }
+  
+
+  namespace com.example.simple_chat {
+    class com.example.simple_chat.MainActivity {
+        {static} + handler : HandleMe
+        {static} - CHANGE_MY_HEADER : int
+        {static} - CHANGE_SYSTEM_HEADER : int
+        - accountInfo : SharedPreferences
+        - btnMore : Button
+        - lastInput : String
+        - myHead : ImageView
+        - recordList : ArrayList<RecordInfo>
+        - recyclerView : RecyclerView
+        - robotHead : ImageView
+        - settingInfo : SharedPreferences
+        - timeList : ArrayList<Integer>
+        - username : String
+        - viewMore : LinearLayout
+        - viewMoreFunctions : LinearLayout
+        - viewMoreFunctionsFold : LinearLayout
+        + calculate()
+        + calendar()
+        + chat()
+        + clock()
+        + downloadFile()
+        + laugh()
+        + more()
+        + plan()
+        + queryWeather()
+        + setting()
+        + showMoreFunctionsButton()
+        + sing()
+        # onActivityResult()
+        # onCreate()
+        ~ closeInput()
+        ~ createInput()
+        {static} ~ getCurrentTime()
+        ~ httpPost()
+        ~ isCreateInput()
+        ~ isLogin()
+        ~ newChatMessage()
+        - bindData()
+        - bindEvent()
+        - initData()
+        - initView()
+        - judgeReadableDate()
+        - saveMessageToDatabase()
+        - saveMessageToDatabase()
+    }
+  }
+  
+
+  namespace com.example.simple_chat {
+    class com.example.simple_chat.MainActivity.HandleMe {
+        + handleMessage()
+    }
+  }
+  
+
+  namespace com.example.simple_chat {
+    class com.example.simple_chat.MyService {
+        ~ mediaPlayer : MediaPlayer
+        ~ nowPlaying : String
+        + MyService()
+        + onBind()
+        + onCreate()
+        + onDestroy()
+    }
+  }
+  
+
+  namespace com.example.simple_chat {
+    class com.example.simple_chat.MyService.MusicInfoBinder {
+        + getNowLocation()
+        + getNowPlaying()
+        + isPlaying()
+        + pause()
+        + playing()
+        + setPlaying()
+        + setTime()
+    }
+  }
+  
+
+  namespace com.example.simple_chat {
+    class com.example.simple_chat.RecordContentProvider {
+        {static} + DB_NAME : String
+        {static} + match : UriMatcher
+        {static} ~ DEFAULT : int
+        {static} ~ RECORD_ID : int
+        {static} - accountInfo : SharedPreferences
+        {static} - db : SQLiteDatabase
+        {static} - dbHelper : DBHelper
+        + RecordContentProvider()
+        + delete()
+        {static} + freshDB()
+        + getType()
+        + insert()
+        + onCreate()
+        + query()
+        + update()
+    }
+  }
+  
+
+  namespace com.example.simple_chat {
+    class com.example.simple_chat.RecordContract {
+        {static} ~ AUTHORITY : String
+    }
+  }
+  
+
+  namespace com.example.simple_chat {
+    class com.example.simple_chat.RecordContract.Record {
+        {static} + CONTENT : String
+        {static} + CONTENT_URI : Uri
+        {static} + OWNER : String
+        {static} + RESOURCE : String
+        {static} + TYPE : String
+        {static} ~ PATH : String
+        {static} ~ _ID : String
+    }
+  }
+  
+
+  com.example.simple_chat.DBHelper -up-|> android.database.sqlite.SQLiteOpenHelper
+  com.example.simple_chat.ImageViewActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.simple_chat.LoginActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.simple_chat.MainActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.simple_chat.MainActivity o-- com.example.simple_chat.recycler_view_adapter.ChatAdapter : recordAdapter
+  com.example.simple_chat.MainActivity +-down- com.example.simple_chat.MainActivity.HandleMe
+  com.example.simple_chat.MainActivity.HandleMe -up-|> android.os.Handler
+  com.example.simple_chat.MyService -up-|> android.app.Service
+  com.example.simple_chat.MyService +-down- com.example.simple_chat.MyService.MusicInfoBinder
+  com.example.simple_chat.MyService.MusicInfoBinder -up-|> android.os.Binder
+  com.example.simple_chat.RecordContentProvider -up-|> android.content.ContentProvider
+  com.example.simple_chat.RecordContract +-down- com.example.simple_chat.RecordContract.Record
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

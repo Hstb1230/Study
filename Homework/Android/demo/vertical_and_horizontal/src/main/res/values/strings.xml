@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">vertical &amp; horizontal</string>
+    <string name="toggle_off">横向排列</string>
+    <string name="toggle_on">纵向排列</string>
+    <string name="button1">测试按钮1</string>
+    <string name="button2">测试按钮2</string>
+    <string name="button3">测试按钮3</string>
+</resources>

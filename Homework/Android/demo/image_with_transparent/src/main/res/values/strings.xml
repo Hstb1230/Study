@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">image_with_transparent</string>
+    <string name="button_add">增大透明度</string>
+    <string name="button_sub">减小透明度</string>
+    <string name="button_next">下一张</string>
+    <string name="image_description">图片</string>
+</resources>

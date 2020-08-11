@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeActivity"
+    android:background="@drawable/home"
+    android:gravity="center_horizontal"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:paddingHorizontal="20sp"
+        android:paddingBottom="195sp">
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="horizontal">-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/textView5"-->
+<!--                android:layout_width="180sp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/username"-->
+<!--                android:textSize="@dimen/label_size" />-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/home_username"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:autofillHints=""-->
+<!--                android:ems="10"-->
+<!--                android:inputType="none"-->
+<!--                tools:ignore="LabelFor" />-->
+<!--        </LinearLayout>-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="8sp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="180sp"
+                android:layout_height="wrap_content"
+                android:text="@string/new_username"
+                android:textSize="@dimen/label_size" />
+
+            <EditText
+                android:id="@+id/home_new_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:ems="10"
+                android:inputType="text"
+                tools:ignore="LabelFor" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="105sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@drawable/bg_shape_black"
+            android:textSize="18sp"
+            android:onClick="changeUsername"
+            android:text="@string/finish" />
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btnReturn"
+        android:background="@drawable/bg_shape_red"
+        android:layout_marginBottom="20sp"
+        android:paddingStart="0sp"
+        android:paddingEnd="5sp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="center|center_horizontal"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/login_button_font"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:text="@string/home_return"
+        />
+
+</RelativeLayout>

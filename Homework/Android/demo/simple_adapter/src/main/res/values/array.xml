@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="name">
+        <item>虎牙</item>
+        <item>李白</item>
+        <item>李清照</item>
+        <item>弄玉</item>
+    </string-array>
+    <string-array name="description">
+        <item>可爱的小孩</item>
+        <item>有才华的诗人</item>
+        <item>一个擅长文学的女性</item>
+        <item>一个擅长音乐的女孩</item>
+    </string-array>
+</resources>

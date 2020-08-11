@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeActivity"
+    android:background="@drawable/home"
+    android:gravity="bottom|center_horizontal"
+    >
+
+    <Button
+        android:id="@+id/btnReturn"
+        android:background="@drawable/bg_shape_red"
+        android:layout_marginBottom="10sp"
+        android:paddingStart="0sp"
+        android:paddingEnd="5sp"
+        android:gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/login_button_font"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:text="@string/home_return"
+        />
+
+</LinearLayout>

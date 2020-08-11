@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">name_and_sex</string>
+    <string name="input_hint">请输入您的姓名</string>
+    <string name="edit_hint">您的姓名</string>
+    <string name="sex_man">男</string>
+    <string name="sex_woman">女</string>
+    <string name="button_continue">确定</string>
+</resources>

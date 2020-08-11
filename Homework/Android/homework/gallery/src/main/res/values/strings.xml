@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">gallery</string>
+    <string name="imageDescription">It is a image.</string>
+    <string name="last_image">上一张</string>
+    <string name="next_image">下一张</string>
+    <string name="image_seq">这是第 %d 张图片</string>
+</resources>
