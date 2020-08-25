@@ -4,20 +4,20 @@ using namespace std;
 int main()
 {
 	double bet[3][3];
-	int m[3] = { 0 };
+	int m;
+	double best = 1;
+	char r[] = "WTL";
 	for(int i = 0; i < 3; i++)
+	{
+		m = 0;
 		for(int j = 0; j < 3; j++)
 		{
 			cin >> bet[i][j];
-			if(bet[i][j] > bet[i][m[i]])
-				m[i] = j;
+			if(bet[i][j] > bet[i][m])
+				m = j;
 		}
-	char r[] = "WTL";
-	double best = 1;
-	for(int i = 0; i < 3; i++)
-	{
-		printf("%c ", r[m[i]]);
-		best *= bet[ i ][ m[i] ];
+		printf("%c ", r[m]);
+		best *= bet[i][m];
 	}
 	best = (best * 0.65 - 1) * 2;
 
