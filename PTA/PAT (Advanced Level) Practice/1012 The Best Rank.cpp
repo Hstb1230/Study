@@ -1,112 +1,74 @@
 #include <iostream>
+#include <cstdio>
+#include <algorithm>
 #include <map>
+#include <vector>
 using namespace std;
+
+struct Student
+{
+	int c, m, e, avg;
+	int rank, best;
+};
+
+typedef pair<int, Student> PIS;
+map<int, Student> mScore;
+vector<PIS> aScore;
+
+int diff = 4;
+
+const char * T = "ACME";
+
+bool cmp(PIS a, PIS b)
+{
+	int x[4] = { a.second.avg, a.second.c, a.second.m, a.second.e };
+	int y[4] = { b.second.avg, b.second.c, b.second.m, b.second.e };
+	return x[diff] > y[diff];
+}
 
 int main()
 {
-	int n, m;
-	cin >> n >> m;
-	int si, sc, sm, se, sa;                  // sc = score of x
-	int mc = 0, mm = 0, me = 0, ma = 0;      // mx = max of x
-	map<int, bool> vc[101], vm[101], ve[101], va[101], vi;
-	for(int i = 0; i < n; i++)
+	int N, M;
+	scanf("%d%d", &N, &M);
+	while(N--)
 	{
-		scanf("%d%d%d%d", &si, &sc, &sm, &se);
-		sa = (sc + sm + se) / 3.0 + 0.5;
-		vi[si] = true;
-		vc[sc][si] = vm[sm][si] = ve[se][si] = va[sa][si] = true;
-		if(sc > mc) mc = sc;
-		if(sm > mm) mm = sm;
-		if(se > me) me = se;
-		if(sa > ma) ma = sa;
+		int id, c, m, e;
+		scanf("%d%d%d%d", &id, &c, &m, &e);
+		int avg = (c + m + e);
+		mScore[id] = { c, m, e, avg, 0, 0 };
 	}
+
+	aScore.assign(mScore.begin(), mScore.end());
 	
-	int rr = m, rt = 0, rc = 0; // result of rank, res of type
-	char rts[] = "ACME";
-	for(int i = 0; i < m; i++)
+ 	while(diff--)
 	{
-		scanf("%d", &si);
-		if(vi.count(si) == 0)
+		sort(aScore.begin(), aScore.end(), cmp);
+		int rank = 0, lastScore = 0;
+		for(int j = 0; j < aScore.size(); j++)
 		{
-			printf("N/A\n");
-			continue;
-		}
-
-  		rr = m, rt = 0;
-
-		// еп╤о avg
-		rc = 0;
-		for(int t = ma; t >= 0; t--)
-		{
-			if(va[t].size() == 0)
-				continue;
-			if(va[t].count(si) > 0)
+			Student * s = &(aScore[j].second);
+			int x[] = { s->avg, s->c, s->m, s->e };
+			if(lastScore != x[diff])
 			{
-				if(++rc < rr)
-				{
-					rr = rc;
-					rt = 0;
-				}
-				break;
+				rank = j + 1;
+				lastScore = x[diff];
 			}
-			rc += va[t].size();
+			if(rank <= s->rank || s->rank == 0)
+				s->rank = rank, s->best = diff;
 		}
+	}
 
-		// еп╤о c lang
-		rc = 0;
-		for(int t = mc; t >= 0; t--)
-		{
-			if(vc[t].size() == 0)
-				continue;
-			if(vc[t].count(si) > 0)
-			{
-				if(++rc < rr)
-				{
-					rr = rc;
-					rt = 1;
-				}
-				break;
-			}
-			rc += vc[t].size();
-		}
+	for(auto s : aScore)
+		mScore[s.first] = s.second;
 
-		// еп╤о math
-		rc = 0;
-		for(int t = mm; t >= 0; t--)
-		{
-			if(vm[t].size() == 0)
-				continue;
-			if(vm[t].count(si) > 0)
-			{
-				if(++rc < rr)
-				{
-					rr = rc;
-					rt = 2;
-				}
-				break;
-			}
-			rc += vm[t].size();
-		}
-
-		// еп╤о english
-		rc = 0;
-		for(int t = me; t >= 0; t--)
-		{
-			if(ve[t].size() == 0)
-				continue;
-			if(ve[t].count(si) > 0)
-			{
-				if(++rc < rr)
-				{
-					rr = rc;
-					rt = 3;
-				}
-				break;
-			}
-			rc += ve[t].size();
-		}
-
-		printf("%d %c\n", rr, rts[rt]);
+	while(M--)
+	{
+		int id;
+		scanf("%d", &id);
+		if(mScore.count(id) == 0)
+			puts("N/A");
+		else
+			printf("%d %c\n", mScore[id].rank, T[mScore[id].best]);
 	}
 }
 
