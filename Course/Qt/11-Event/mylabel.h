@@ -17,6 +17,7 @@ public:
     void mousePressEvent(QMouseEvent *ev) override;
     void mouseReleaseEvent(QMouseEvent *ev) override;
 
+    bool event(QEvent *e) override;
 
 signals:
 

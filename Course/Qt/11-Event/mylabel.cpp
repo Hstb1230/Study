@@ -22,7 +22,7 @@ void MyLabel::mouseMoveEvent(QMouseEvent *ev)
 //    if(ev->buttons() & Qt::LeftButton)  // 鼠标按键中有左键
 //        qDebug() << __FUNCTION__ << QString("x = %1 , y = %2").arg(ev->x()).arg(ev->y());
 
-    qDebug() << __FUNCTION__ << QString("x = %1 , y = %2").arg(ev->x()).arg(ev->y());
+//    qDebug() << __FUNCTION__ << QString("x = %1 , y = %2").arg(ev->x()).arg(ev->y());
 }
 
 void MyLabel::mousePressEvent(QMouseEvent *ev)
@@ -33,5 +33,16 @@ void MyLabel::mousePressEvent(QMouseEvent *ev)
 
 void MyLabel::mouseReleaseEvent(QMouseEvent *ev)
 {
-//    qDebug() << __func__;
+        qDebug() << __func__;
+}
+
+bool MyLabel::event(QEvent *e)
+{
+    if(e->type() == QEvent::MouseButtonPress)
+    {
+        QMouseEvent * ev = static_cast<QMouseEvent *>(e);
+        qDebug() << __FUNCTION__ << QString("x = %1 , y = %2").arg(ev->x()).arg(ev->y());
+        return true;  // 拦截事件
+    }
+    return QLabel::event(e);
 }

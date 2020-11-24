@@ -15,6 +15,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    bool eventFilter(QObject *watched, QEvent *event);
+
 private:
     Ui::MainWindow *ui;
 };
