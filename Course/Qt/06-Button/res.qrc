@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/Coin0001.png</file>
+        <file>img/Coin0006.png</file>
+        <file>img/MenuSceneStartButton.png</file>
+    </qresource>
+</RCC>
