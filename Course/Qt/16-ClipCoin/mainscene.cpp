@@ -18,16 +18,22 @@ MainScene::MainScene(QWidget *parent)
 
     AnimationButton * btnStart = new AnimationButton(this, ":/res/MenuSceneStartButton.png");
     btnStart->move((this->width() - btnStart->width()) / 2, (this->height() - btnStart->height()) * 0.8);
+
+
+    ChooseLevelScene * chooseLevelScene = new ChooseLevelScene(this);
+
     connect(btnStart, &AnimationButton::clicked, [=]{
         btnStart->animationUp();
         btnStart->animationDown();
 
-
         QTimer::singleShot(500, this, [=]{
             this->hide();
-            ChooseLevelScene * chooseLevelScene = new ChooseLevelScene(this);
             chooseLevelScene->show();
         });
+    });
+
+    connect(chooseLevelScene, &ChooseLevelScene::chooseSceneBack, [=]{
+        this->show();
     });
 }
 

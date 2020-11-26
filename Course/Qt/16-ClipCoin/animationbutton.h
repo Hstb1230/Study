@@ -19,6 +19,9 @@ public:
     void animationUp();
     void animationDown();
 
+    void mousePressEvent(QMouseEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
+
 signals:
 
 };

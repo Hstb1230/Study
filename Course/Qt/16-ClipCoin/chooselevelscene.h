@@ -11,8 +11,10 @@ public:
 
     void paintEvent(QPaintEvent *) override;
 
-signals:
 
+
+signals:
+    void chooseSceneBack();
 };
 
 #endif // CHOOSELEVELSCENE_H

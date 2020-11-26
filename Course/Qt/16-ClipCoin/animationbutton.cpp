@@ -48,3 +48,34 @@ void AnimationButton::animationDown()
     animation->start();
 }
 
+void AnimationButton::mousePressEvent(QMouseEvent * e)
+{
+    if(this->mPressImage.length())
+    {
+        QPixmap pix(mPressImage);
+        if(pix.isNull())
+        {
+            qDebug() << "图片加载失败";
+            return;
+        }
+        this->setIcon(pix);
+    }
+    // 如果不添加，就会失去动画效果
+    return QPushButton::mousePressEvent(e);
+}
+
+void AnimationButton::mouseReleaseEvent(QMouseEvent * e)
+{
+    if(this->mPressImage.length())
+    {
+        QPixmap pix(mDefaultImage);
+        if(pix.isNull())
+        {
+            qDebug() << "图片加载失败";
+            return;
+        }
+        this->setIcon(pix);
+    }
+    return QPushButton::mouseReleaseEvent(e);
+}
+
