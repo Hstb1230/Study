@@ -1,6 +1,9 @@
 #ifndef PLAYSCENE_H
 #define PLAYSCENE_H
 
+#include "coin.h"
+
+#include <QLabel>
 #include <QMainWindow>
 
 class PlayScene : public QMainWindow
@@ -15,6 +18,9 @@ signals:
 
 private:
     int mLevel;
+    Coin * coin[4][4];
+    bool isWin = false;
+    QLabel * winLabel;
 };
 
 #endif // PLAYSCENE_H
