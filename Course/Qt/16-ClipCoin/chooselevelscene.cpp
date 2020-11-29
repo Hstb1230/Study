@@ -1,5 +1,6 @@
 #include "chooselevelscene.h"
 #include "animationbutton.h"
+#include "playscene.h"
 
 #include <QPainter>
 #include <QTimer>
@@ -28,6 +29,15 @@ ChooseLevelScene::ChooseLevelScene(QWidget *parent) : QMainWindow(parent)
         btnLevel->move(15 + i % 4 * 75, 125 + i / 4 * 75);
         connect(btnLevel, &AnimationButton::clicked, [=]{
             qDebug() << QString("点击了关卡 %1").arg(i + 1);
+
+            this->hide();
+            PlayScene * play = new PlayScene(this, i + 1);
+            play->show();
+
+            connect(play, &PlayScene::backToChooseScene, [=] {
+                delete play;
+                this->show();
+            });
         });
 
         QLabel * labelLevel = new QLabel(btnLevel);

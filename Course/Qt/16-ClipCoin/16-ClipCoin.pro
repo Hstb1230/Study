@@ -19,12 +19,14 @@ SOURCES += \
     animationbutton.cpp \
     chooselevelscene.cpp \
     main.cpp \
-    mainscene.cpp
+    mainscene.cpp \
+    playscene.cpp
 
 HEADERS += \
     animationbutton.h \
     chooselevelscene.h \
-    mainscene.h
+    mainscene.h \
+    playscene.h
 
 FORMS += \
     mainscene.ui
